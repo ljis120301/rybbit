@@ -109,9 +109,9 @@ class PageviewQueue {
         vpn: dataForIp?.vpn || "",
         crawler: dataForIp?.crawler || "",
         datacenter: dataForIp?.datacenter || "",
-        is_proxy: dataForIp?.isProxy || null,
-        is_tor: dataForIp?.isTor || null,
-        is_satellite: dataForIp?.isSatellite || null,
+        is_proxy: dataForIp?.isProxy === undefined ? null : dataForIp?.isProxy,
+        is_tor: dataForIp?.isTor === undefined ? null : dataForIp?.isTor,
+        is_satellite: dataForIp?.isSatellite === undefined ? null : dataForIp?.isSatellite,
       };
     });
 
