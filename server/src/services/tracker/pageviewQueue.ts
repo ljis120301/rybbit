@@ -61,6 +61,14 @@ class PageviewQueue {
       // Get all URL parameters for the url_parameters map
       const allUrlParams = getAllUrlParams(pv.querystring || "");
 
+      console.info({
+        country: countryCode,
+        region: countryCode && regionCode ? countryCode + "-" + regionCode : "",
+        city: city || "",
+        lat: latitude || 0,
+        lon: longitude || 0,
+        timezone: timezone,
+      });
       return {
         site_id: pv.site_id,
         timestamp: DateTime.fromISO(pv.timestamp).toFormat("yyyy-MM-dd HH:mm:ss"),

@@ -1,5 +1,6 @@
 "use client";
 import { useSetPageTitle } from "../../../hooks/useSetPageTitle";
+import { IS_CLOUD } from "../../../lib/const";
 import { useStore } from "../../../lib/store";
 import { SubHeader } from "../components/SubHeader/SubHeader";
 import { MainSection } from "./components/MainSection/MainSection";
@@ -33,7 +34,7 @@ function MainPageContent() {
         <Pages />
         <Referrers />
         <Countries />
-        <Network />
+        {IS_CLOUD && <Network />}
         <Events />
         <Weekdays />
       </div>

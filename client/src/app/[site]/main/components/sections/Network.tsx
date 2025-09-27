@@ -1,14 +1,13 @@
 "use client";
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
-import { Card, CardContent } from "../../../../../components/ui/card";
-import { useSubdivisions } from "../../../../../lib/geo";
-import { StandardSection } from "../../../components/shared/StandardSection/StandardSection";
 import { Expand } from "lucide-react";
-import { Button } from "../../../../../components/ui/button";
+import { useState } from "react";
 import { Favicon } from "../../../../../components/Favicon";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
+import { Button } from "../../../../../components/ui/button";
+import { Card, CardContent } from "../../../../../components/ui/card";
 import { Crawler } from "../../../components/shared/icons/Crawler";
 import { VPN } from "../../../components/shared/icons/VPN";
+import { StandardSection } from "../../../components/shared/StandardSection/StandardSection";
 
 type Tab =
   | "vpn"
