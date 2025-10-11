@@ -63,6 +63,7 @@ import { handleWebhook } from "./api/stripe/webhook.js";
 import { addUserToOrganization } from "./api/user/addUserToOrganization.js";
 import { getUserOrganizations } from "./api/user/getUserOrganizations.js";
 import { listOrganizationMembers } from "./api/user/listOrganizationMembers.js";
+import { updateAccountSettings } from "./api/user/updateAccountSettings.js";
 import { initializeClickhouse } from "./db/clickhouse/clickhouse.js";
 import { initPostgres } from "./db/postgres/initPostgres.js";
 import { getSessionFromReq, mapHeaders } from "./lib/auth-utils.js";
@@ -342,6 +343,7 @@ server.get("/api/site/:siteId/excluded-ips", getSiteExcludedIPs);
 server.get("/api/list-organization-members/:organizationId", listOrganizationMembers);
 server.get("/api/user/organizations", getUserOrganizations);
 server.post("/api/add-user-to-organization", addUserToOrganization);
+server.post("/api/user/account-settings", updateAccountSettings);
 
 // UPTIME MONITORING
 // Only register uptime routes when IS_CLOUD is true (Redis is available)

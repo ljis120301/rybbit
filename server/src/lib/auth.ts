@@ -110,6 +110,14 @@ export let auth: AuthType | null = betterAuth({
     },
   },
   user: {
+    additionalFields: {
+      sendAutoEmailReports: {
+        type: "boolean",
+        required: true,
+        defaultValue: true,
+        input: true,
+      },
+    },
     deleteUser: {
       enabled: true,
     },
