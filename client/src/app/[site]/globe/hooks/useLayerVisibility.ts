@@ -45,12 +45,6 @@ export function useLayerVisibility(
         mapView === "coordinates" ? "visible" : "none"
       );
     }
-    if (map.current.getLayer("timeline-sessions-layer")) {
-      map.current.setLayoutProperty(
-        "timeline-sessions-layer",
-        "visibility",
-        mapView === "timeline" ? "visible" : "none"
-      );
-    }
+    // Note: Timeline view uses HTML markers instead of layers, visibility is handled in useTimelineLayer
   }, [mapView, mapLoaded, map]);
 }

@@ -24,6 +24,10 @@ export default function MapViewSelector() {
             <Radio className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
             Coordinates
           </TabsTrigger>
+          <TabsTrigger value="tab-4" className="group" onClick={() => setMapView("timeline")}>
+            <Clock className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+            Timeline
+          </TabsTrigger>
           <TabsTrigger value="tab-2" onClick={() => setMapView("countries")}>
             <Globe2 className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
             Countries
@@ -31,10 +35,6 @@ export default function MapViewSelector() {
           <TabsTrigger value="tab-3" className="group" onClick={() => setMapView("subdivisions")}>
             <HouseIcon className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
             Subdivisions
-          </TabsTrigger>
-          <TabsTrigger value="tab-4" className="group" onClick={() => setMapView("timeline")}>
-            <Clock className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
-            Timeline
           </TabsTrigger>
         </TabsList>
         <ScrollBar orientation="horizontal" />
