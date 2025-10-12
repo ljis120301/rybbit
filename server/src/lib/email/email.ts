@@ -4,7 +4,7 @@ import { IS_CLOUD } from "../const.js";
 import { InvitationEmail } from "./templates/InvitationEmail.js";
 import { LimitExceededEmail } from "./templates/LimitExceededEmail.js";
 import { WeeklyReportEmail } from "./templates/WeeklyReportEmail.js";
-import type { OrganizationReport } from "../../services/weeklyReportTypes.js";
+import type { OrganizationReport } from "../../services/weekyReports/weeklyReportTypes.js";
 
 let resend: Resend | undefined;
 

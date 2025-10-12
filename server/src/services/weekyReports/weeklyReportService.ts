@@ -1,13 +1,13 @@
 import * as cron from "node-cron";
 import { DateTime } from "luxon";
 import { eq } from "drizzle-orm";
-import { db } from "../db/postgres/postgres.js";
-import { organization, member, user, sites } from "../db/postgres/schema.js";
-import { clickhouse } from "../db/clickhouse/clickhouse.js";
-import { processResults } from "../api/analytics/utils.js";
-import { createServiceLogger } from "../lib/logger/logger.js";
-import { sendWeeklyReportEmail } from "../lib/email/email.js";
-import { IS_CLOUD } from "../lib/const.js";
+import { db } from "../../db/postgres/postgres.js";
+import { organization, member, user, sites } from "../../db/postgres/schema.js";
+import { clickhouse } from "../../db/clickhouse/clickhouse.js";
+import { processResults } from "../../api/analytics/utils.js";
+import { createServiceLogger } from "../../lib/logger/logger.js";
+import { sendWeeklyReportEmail } from "../../lib/email/email.js";
+import { IS_CLOUD } from "../../lib/const.js";
 import type { OverviewData, SingleColData, SiteReport, OrganizationReport } from "./weeklyReportTypes.js";
 
 class WeeklyReportService {
@@ -330,6 +330,7 @@ class WeeklyReportService {
           userId: member.userId,
           email: user.email,
           name: user.name,
+          sendAutoEmailReports: user.sendAutoEmailReports,
         })
         .from(member)
         .innerJoin(user, eq(member.userId, user.id))
@@ -342,7 +343,12 @@ class WeeklyReportService {
 
       // Send a separate email for each site to each member
       for (const memberData of members) {
-        if (memberData.email !== "bill2@gmail.com") {
+        // Skip users who have disabled email reports
+        if (memberData.sendAutoEmailReports === false) {
+          this.logger.info(
+            { email: memberData.email, organizationId: report.organizationId },
+            "Skipping user with email reports disabled"
+          );
           continue;
         }
 

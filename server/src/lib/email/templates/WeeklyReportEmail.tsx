@@ -12,7 +12,7 @@ import {
   pixelBasedPreset,
 } from "@react-email/components";
 import * as React from "react";
-import type { OrganizationReport, SingleColData } from "../../../services/weeklyReportTypes.js";
+import type { OrganizationReport, SingleColData } from "../../../services/weekyReports/weeklyReportTypes.js";
 
 interface WeeklyReportEmailProps {
   userName: string;
@@ -335,6 +335,11 @@ export const WeeklyReportEmail = ({ userName, organizationReport }: WeeklyReport
             <Section className="text-center border-t border-borderColor pt-5">
               <Text className="text-mutedText text-xs mb-2">
                 This weekly report covers the last 7 days of analytics data.
+              </Text>
+              <Text className="text-mutedText text-xs mb-3">
+                <Link href="https://rybbit.io/settings/account" className="text-brand no-underline">
+                  Unsubscribe from weekly reports
+                </Link>
               </Text>
               <Text className="text-mutedText text-xs">© {currentYear} Rybbit Analytics</Text>
             </Section>
