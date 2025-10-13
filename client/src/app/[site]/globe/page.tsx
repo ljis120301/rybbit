@@ -56,7 +56,7 @@ export default function GlobePage() {
 
   return (
     <DisabledOverlay message="Globe" featurePath="globe">
-      <div className="relative w-full h-dvh">
+      <div className="relative w-full h-dvh overflow-hidden">
         <div className="p-2 md:p-4 relative z-50">
           <SubHeader />
         </div>
@@ -88,7 +88,7 @@ export default function GlobePage() {
               />
             </div>
           )}
-          <div className="absolute bottom-4 left-4 z-99999 w-full flex flex-col gap-2">
+          <div className="absolute bottom-2 left-4 z-99999 w-full flex flex-col gap-2">
             <GlobeSessions />
             <MapViewSelector />
             {mapView === "timeline" && <TimelineScrubber />}

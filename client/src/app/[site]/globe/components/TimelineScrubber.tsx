@@ -2,10 +2,10 @@ import { debounce } from "lodash";
 import { Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select";
-import { Slider } from "../../../../components/ui/slider";
+import { TimelineSlider } from "../../../../components/ui/timeline-slider";
 import { useTimelineSessions } from "../hooks/useTimelineSessions";
 import { useTimelineStore } from "../timelineStore";
-import { formatTimelineTime, generateTimeWindows, WINDOW_SIZE_OPTIONS } from "../timelineUtils";
+import { formatTimelineTime, generateTimeWindows, getActiveSessions, WINDOW_SIZE_OPTIONS } from "../timelineUtils";
 
 export function TimelineScrubber() {
   const { currentTime, timeRange, windowSize, setCurrentTime, setManualWindowSize } = useTimelineStore();
@@ -92,19 +92,49 @@ export function TimelineScrubber() {
     return timeWindows[localSliderIndex] || currentTime;
   }, [timeWindows, localSliderIndex, currentTime]);
 
+  // Calculate session counts per time window for histogram
+  const sessionCounts = useMemo(() => {
+    if (timeWindows.length === 0 || allSessions.length === 0) return [];
+
+    return timeWindows.map(windowStart => {
+      const sessionsInWindow = getActiveSessions(allSessions, windowStart, windowSize);
+      return sessionsInWindow.length;
+    });
+  }, [timeWindows, allSessions, windowSize]);
+
+  // Get max count for scaling the histogram
+  const maxCount = useMemo(() => {
+    return sessionCounts.length > 0 ? Math.max(...sessionCounts, 1) : 1;
+  }, [sessionCounts]);
+
   if (isLoading || !timeRange || timeWindows.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-[calc(100%-32px)] flex flex-col gap-1">
-      <Slider
-        value={[localSliderIndex]}
-        max={timeWindows.length - 1}
-        step={1}
-        onValueChange={handleSliderChange}
-        className="flex-1"
-      />
+    <div className="w-[calc(100%-32px)] flex flex-col">
+      {/* Session histogram */}
+      <div className="w-full h-8 flex items-end gap-[1px]">
+        {sessionCounts.map((count, index) => {
+          const heightPercentage = (count / maxCount) * 100;
+          const isActive = index === localSliderIndex;
+
+          return (
+            <div
+              key={index}
+              className="flex-1 transition-all duration-150"
+              style={{
+                height: `${heightPercentage}%`,
+                backgroundColor: isActive ? "hsl(var(--accent-600))" : "rgba(115, 115, 115, 0.4)",
+                minHeight: count > 0 ? "2px" : "0px",
+              }}
+              title={`${count} session${count !== 1 ? "s" : ""}`}
+            />
+          );
+        })}
+      </div>
+      <TimelineSlider value={[localSliderIndex]} max={timeWindows.length - 1} onValueChange={handleSliderChange} />
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 w-full">
           <button
@@ -120,7 +150,7 @@ export function TimelineScrubber() {
         </div>
         <div className="flex items-center gap-3">
           <Select value={windowSize.toString()} onValueChange={handleWindowSizeChange}>
-            <SelectTrigger className="w-[130px] h-8 text-xs">
+            <SelectTrigger className="w-[100px] h-8 text-xs" size="sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
