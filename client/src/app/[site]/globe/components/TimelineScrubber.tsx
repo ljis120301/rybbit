@@ -122,13 +122,19 @@ export function TimelineScrubber() {
           return (
             <div
               key={index}
-              className="flex-1 transition-all duration-150"
+              className="flex-1 transition-all duration-150 cursor-pointer hover:opacity-80"
               style={{
                 height: `${heightPercentage}%`,
                 backgroundColor: isActive ? "hsl(var(--accent-600))" : "rgba(115, 115, 115, 0.4)",
                 minHeight: count > 0 ? "2px" : "0px",
               }}
               title={`${count} session${count !== 1 ? "s" : ""}`}
+              onClick={() => {
+                setLocalSliderIndex(index);
+                if (timeWindows[index]) {
+                  setCurrentTime(timeWindows[index]);
+                }
+              }}
             />
           );
         })}
@@ -136,7 +142,7 @@ export function TimelineScrubber() {
       <TimelineSlider value={[localSliderIndex]} max={timeWindows.length - 1} onValueChange={handleSliderChange} />
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 w-full">
+        <div className="flex items-center gap-1 w-full">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="p-1.5 rounded hover:bg-neutral-800 transition-colors"
