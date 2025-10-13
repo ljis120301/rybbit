@@ -371,13 +371,12 @@ export function useTimelineLayer({
                     <span>${referrerText}</span>
                   </span>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-neutral-400 pt-1.5 border-t border-neutral-700">
+                <div class="flex items-center justify-between gap-2 text-xs text-neutral-400 pt-1.5 border-t border-neutral-700">
                   <span>${startTime}</span>
-                  <span class="text-neutral-500">•</span>
-                  <span>${durationDisplay}</span>
+                  <span class="text-neutral-200">${durationDisplay}</span>
                 </div>
                 <button
-                  class="view-session-btn w-full mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors"
+                  class="view-session-btn w-full px-2 py-1 bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium rounded transition-colors"
                   data-session-id="${session.session_id}"
                 >
                   View Details
@@ -390,7 +389,7 @@ export function useTimelineLayer({
             // Add click handler to the button
             const button = document.querySelector(`[data-session-id="${session.session_id}"]`);
             if (button) {
-              button.addEventListener("click", (e) => {
+              button.addEventListener("click", e => {
                 e.stopPropagation();
                 setSelectedSession(session);
                 popupRef.current?.remove();
