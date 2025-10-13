@@ -304,7 +304,7 @@ export function useTimelineLayer({
             const name = generateName(session.user_id);
 
             const html = `
-              <div class="flex flex-col gap-3 p-1">
+              <div class="flex flex-col gap-3 p-3 bg-neutral-850 border border-neutral-700 rounded-lg">
                 <div class="flex items-start gap-2.5">
                   <div class="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden">
                     ${avatarSVG}
