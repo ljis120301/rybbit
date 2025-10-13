@@ -1,5 +1,6 @@
+import { debounce } from "lodash";
 import { Pause, Play } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select";
 import { Slider } from "../../../../components/ui/slider";
 import { useTimelineSessions } from "../hooks/useTimelineSessions";
@@ -10,6 +11,7 @@ export function TimelineScrubber() {
   const { currentTime, timeRange, windowSize, setCurrentTime, setManualWindowSize } = useTimelineStore();
   const { activeSessions, allSessions, isLoading } = useTimelineSessions();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [localSliderIndex, setLocalSliderIndex] = useState(0);
 
   // Handle window size change
   const handleWindowSizeChange = (value: string) => {
@@ -23,20 +25,49 @@ export function TimelineScrubber() {
     return generateTimeWindows(timeRange.start, timeRange.end, windowSize);
   }, [timeRange, windowSize]);
 
-  // Get current window index
+  // Get current window index from store
   const currentIndex = useMemo(() => {
     if (!currentTime || timeWindows.length === 0) return 0;
     const index = timeWindows.findIndex(w => w.equals(currentTime));
     return index >= 0 ? index : 0;
   }, [currentTime, timeWindows]);
 
-  // Handle slider change
-  const handleSliderChange = (value: number[]) => {
-    const index = value[0];
-    if (timeWindows[index]) {
-      setCurrentTime(timeWindows[index]);
+  // Sync local slider index with store (on initial load and during playback)
+  const isInitialMount = useRef(true);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      setLocalSliderIndex(currentIndex);
+      isInitialMount.current = false;
+    } else if (isPlaying) {
+      setLocalSliderIndex(currentIndex);
     }
-  };
+  }, [currentIndex, isPlaying]);
+
+  // Create debounced update function
+  const debouncedUpdateTime = useRef(
+    debounce((index: number, windows: ReturnType<typeof generateTimeWindows>) => {
+      if (windows[index]) {
+        setCurrentTime(windows[index]);
+      }
+    }, 100)
+  ).current;
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      debouncedUpdateTime.cancel();
+    };
+  }, [debouncedUpdateTime]);
+
+  // Handle slider change - update local state immediately, debounce the expensive update
+  const handleSliderChange = useCallback(
+    (value: number[]) => {
+      const index = value[0];
+      setLocalSliderIndex(index);
+      debouncedUpdateTime(index, timeWindows);
+    },
+    [timeWindows, debouncedUpdateTime]
+  );
 
   // Auto-play functionality
   useEffect(() => {
@@ -56,6 +87,11 @@ export function TimelineScrubber() {
     return () => clearInterval(interval);
   }, [isPlaying, currentIndex, timeWindows, setCurrentTime]);
 
+  // Get the display time based on local slider position
+  const displayTime = useMemo(() => {
+    return timeWindows[localSliderIndex] || currentTime;
+  }, [timeWindows, localSliderIndex, currentTime]);
+
   if (isLoading || !timeRange || timeWindows.length === 0) {
     return null;
   }
@@ -63,7 +99,7 @@ export function TimelineScrubber() {
   return (
     <div className="w-[calc(100%-32px)] flex flex-col gap-1">
       <Slider
-        value={[currentIndex]}
+        value={[localSliderIndex]}
         max={timeWindows.length - 1}
         step={1}
         onValueChange={handleSliderChange}
@@ -79,7 +115,7 @@ export function TimelineScrubber() {
             {isPlaying ? <Pause className="w-4 h-4 text-neutral-300" /> : <Play className="w-4 h-4 text-neutral-300" />}
           </button>
           <span className="text-xs text-neutral-400 min-w-[80px]">
-            {currentTime ? formatTimelineTime(currentTime, windowSize) : ""}
+            {displayTime ? formatTimelineTime(displayTime, windowSize) : ""}
           </span>
         </div>
         <div className="flex items-center gap-3">
