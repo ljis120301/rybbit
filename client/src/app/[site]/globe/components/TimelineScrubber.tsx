@@ -113,6 +113,16 @@ export function TimelineScrubber() {
     };
   }, [debouncedCalculateCounts]);
 
+  // Reset to start time when window size changes
+  const prevWindowSizeRef = useRef(windowSize);
+  useEffect(() => {
+    if (prevWindowSizeRef.current !== windowSize && timeWindows.length > 0) {
+      setCurrentTime(timeWindows[0]);
+      setLocalSliderIndex(0);
+    }
+    prevWindowSizeRef.current = windowSize;
+  }, [windowSize, timeWindows, setCurrentTime]);
+
   // Trigger calculation when dependencies change
   useEffect(() => {
     if (timeWindows.length > 0 && allSessions.length > 0) {
@@ -178,7 +188,7 @@ export function TimelineScrubber() {
       </div>
       <TimelineSlider value={[localSliderIndex]} max={timeWindows.length - 1} onValueChange={handleSliderChange} />
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mt-1">
         <div className="flex items-center gap-1 w-full">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
