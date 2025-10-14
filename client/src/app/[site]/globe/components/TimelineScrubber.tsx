@@ -1,24 +1,17 @@
 import { debounce } from "lodash";
 import { AlertTriangle, Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select";
 import { TimelineSlider } from "../../../../components/ui/timeline-slider";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../components/ui/tooltip";
 import { useTimelineSessions } from "../hooks/useTimelineSessions";
 import { useTimelineStore } from "../timelineStore";
-import { formatTimelineTime, generateTimeWindows, getActiveSessions, WINDOW_SIZE_OPTIONS } from "../timelineUtils";
+import { formatTimelineTime, generateTimeWindows, getActiveSessions } from "../timelineUtils";
 
 export function TimelineScrubber() {
-  const { currentTime, timeRange, windowSize, setCurrentTime, setManualWindowSize } = useTimelineStore();
+  const { currentTime, timeRange, windowSize, setCurrentTime } = useTimelineStore();
   const { activeSessions, allSessions, isLoading, hasMoreData } = useTimelineSessions();
   const [isPlaying, setIsPlaying] = useState(false);
   const [localSliderIndex, setLocalSliderIndex] = useState(0);
-
-  // Handle window size change
-  const handleWindowSizeChange = (value: string) => {
-    const newSize = parseInt(value, 10);
-    setManualWindowSize(newSize);
-  };
 
   // Generate time windows for the slider
   const timeWindows = useMemo(() => {
@@ -165,18 +158,6 @@ export function TimelineScrubber() {
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={windowSize.toString()} onValueChange={handleWindowSizeChange}>
-            <SelectTrigger className="w-[100px] h-8 text-xs" size="sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {WINDOW_SIZE_OPTIONS.map(option => (
-                <SelectItem key={option.value} value={option.value.toString()}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
           <div className="text-xs text-neutral-400 flex items-center gap-1 whitespace-nowrap">
             <span className="font-bold text-accent-400">
               {activeSessions.length} / {allSessions.length}

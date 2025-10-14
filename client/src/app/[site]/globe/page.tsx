@@ -4,6 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useRef } from "react";
 import "./globe.css";
 
+import { VisuallyHidden } from "radix-ui";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { NothingFound } from "../../../components/NothingFound";
 import { SessionCard } from "../../../components/Sessions/SessionCard";
@@ -14,17 +15,26 @@ import { GlobeSessions } from "./components/GlobeSessions";
 import MapViewSelector from "./components/ModeSelector";
 import { TimelineScrubber } from "./components/TimelineScrubber";
 import { useGlobeStore } from "./globeStore";
+import { useTimelineLayer } from "./hooks/timelineLayer/useTimelineLayer";
 import { useCoordinatesLayer } from "./hooks/useCoordinatesLayer";
 import { useCountriesLayer } from "./hooks/useCountriesLayer";
 import { useLayerVisibility } from "./hooks/useLayerVisibility";
 import { useMapbox } from "./hooks/useMapbox";
 import { useSubdivisionsLayer } from "./hooks/useSubdivisionsLayer";
-import { useTimelineLayer } from "./hooks/timelineLayer/useTimelineLayer";
-import { VisuallyHidden } from "radix-ui";
+import { useTimelineStore } from "./timelineStore";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
+import { WINDOW_SIZE_OPTIONS } from "./timelineUtils";
 
 export default function GlobePage() {
   useSetPageTitle("Rybbit · Globe");
   const mapContainer = useRef<HTMLDivElement>(null);
+  const { currentTime, timeRange, windowSize, setCurrentTime, setManualWindowSize } = useTimelineStore();
+
+  // Handle window size change
+  const handleWindowSizeChange = (value: string) => {
+    const newSize = parseInt(value, 10);
+    setManualWindowSize(newSize);
+  };
 
   const mapView = useGlobeStore(state => state.mapView);
 
@@ -96,7 +106,22 @@ export default function GlobePage() {
               <div className="pointer-events-auto">
                 <MapViewSelector />
               </div>
-              {mapView !== "timeline" && (
+              {mapView === "timeline" ? (
+                <div className="pointer-events-auto">
+                  <Select value={windowSize.toString()} onValueChange={handleWindowSizeChange}>
+                    <SelectTrigger className="w-[100px]" size="sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {WINDOW_SIZE_OPTIONS.map(option => (
+                        <SelectItem key={option.value} value={option.value.toString()}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
                 <div className="pointer-events-auto">
                   <GlobeSessions />
                 </div>
