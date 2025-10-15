@@ -2,14 +2,25 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { useConfigs } from "../../../../lib/configs";
 
-export function useMapbox(containerRef: React.RefObject<HTMLDivElement | null>) {
+export function useMapbox(containerRef: React.RefObject<HTMLDivElement | null>, enabled: boolean = true) {
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
 
   const { configs } = useConfigs();
 
   useEffect(() => {
-    if (!containerRef.current || !configs?.mapboxToken) {
+    if (!enabled || !containerRef.current || !configs?.mapboxToken) {
+      // Clean up if disabled or no container
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+        setMapLoaded(false);
+      }
+      return;
+    }
+
+    // Don't reinitialize if already exists
+    if (map.current) {
       return;
     }
 
@@ -49,10 +60,13 @@ export function useMapbox(containerRef: React.RefObject<HTMLDivElement | null>) 
     });
 
     return () => {
-      map.current?.remove();
-      map.current = null;
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+        setMapLoaded(false);
+      }
     };
-  }, [containerRef, configs?.mapboxToken]);
+  }, [enabled, containerRef, configs?.mapboxToken]);
 
   return { map, mapLoaded };
 }

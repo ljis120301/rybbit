@@ -1,7 +1,7 @@
 "use client";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 import "./globe.css";
 
 import { VisuallyHidden } from "radix-ui";
@@ -14,6 +14,7 @@ import { SubHeader } from "../components/SubHeader/SubHeader";
 import { GlobeSessions } from "./components/GlobeSessions";
 import MapViewSelector from "./components/ModeSelector";
 import { TimelineScrubber } from "./components/TimelineScrubber";
+import { OpenLayersMap } from "./components/OpenLayersMap";
 import { useGlobeStore } from "./globeStore";
 import { useTimelineLayer } from "./hooks/timelineLayer/useTimelineLayer";
 import { useCoordinatesLayer } from "./hooks/useCoordinatesLayer";
@@ -27,6 +28,42 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { WINDOW_SIZE_OPTIONS } from "./timelineUtils";
 import { useConfigs } from "../../../lib/configs";
 
+const MapboxMap = ({ mapContainer }: { mapContainer: RefObject<HTMLDivElement | null> }) => {
+  const { configs, isLoading } = useConfigs();
+
+  return (
+    <>
+      {configs?.mapboxToken ? (
+        <div
+          ref={mapContainer}
+          className="w-full h-full [&_.mapboxgl-ctrl-bottom-left]:!hidden [&_.mapboxgl-ctrl-logo]:!hidden"
+        />
+      ) : isLoading ? null : (
+        <div className="w-full h-full flex items-center justify-center">
+          <NothingFound
+            title="Mapbox access token not found"
+            description={
+              <p className="text-sm max-w-[600px] text-center">
+                Please set the <code>MAPBOX_TOKEN</code> environment variable and rebuild all containers. To get a
+                Mapbox token, please visit{" "}
+                <a
+                  href="https://docs.mapbox.com/help/dive-deeper/access-tokens/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:underline"
+                >
+                  Mapbox
+                </a>{" "}
+                and create an account.
+              </p>
+            }
+          />
+        </div>
+      )}
+    </>
+  );
+};
+
 export default function GlobePage() {
   useSetPageTitle("Rybbit · Globe");
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -35,44 +72,36 @@ export default function GlobePage() {
   // Fetch timeline sessions and update store
   useTimelineSessions();
 
-  // Handle window size change
-  const handleWindowSizeChange = (value: string) => {
-    const newSize = parseInt(value, 10);
-    setManualWindowSize(newSize);
-  };
+  const { mapView, mapMode } = useGlobeStore();
 
-  const mapView = useGlobeStore(state => state.mapView);
-
-  const { map, mapLoaded } = useMapbox(mapContainer);
+  const { map, mapLoaded } = useMapbox(mapContainer, mapMode === "3D");
 
   useCountriesLayer({
     map,
-    mapLoaded,
+    mapLoaded: mapMode === "3D" && mapLoaded,
     mapView,
   });
 
   useSubdivisionsLayer({
     map,
-    mapLoaded,
+    mapLoaded: mapMode === "3D" && mapLoaded,
     mapView,
   });
 
   useCoordinatesLayer({
     map,
-    mapLoaded,
+    mapLoaded: mapMode === "3D" && mapLoaded,
     minutes: 30,
     mapView,
   });
 
   const { selectedSession, setSelectedSession } = useTimelineLayer({
     map,
-    mapLoaded,
+    mapLoaded: mapMode === "3D" && mapLoaded,
     mapView,
   });
 
-  useLayerVisibility(map, mapView, mapLoaded);
-
-  const { configs, isLoading } = useConfigs();
+  useLayerVisibility(map, mapView, mapMode === "3D" && mapLoaded);
 
   return (
     <DisabledOverlay message="Globe" featurePath="globe">
@@ -81,32 +110,10 @@ export default function GlobePage() {
           <SubHeader />
         </div>
         <div className="absolute top-0 left-0 right-0 bottom-0 z-10">
-          {configs?.mapboxToken ? (
-            <div
-              ref={mapContainer}
-              className="w-full h-full [&_.mapboxgl-ctrl-bottom-left]:!hidden [&_.mapboxgl-ctrl-logo]:!hidden"
-            />
-          ) : isLoading ? null : (
-            <div className="w-full h-full flex items-center justify-center">
-              <NothingFound
-                title="Mapbox access token not found"
-                description={
-                  <p className="text-sm max-w-[600px] text-center">
-                    Please set the <code>MAPBOX_TOKEN</code> environment variable and rebuild all containers. To get a
-                    Mapbox token, please visit{" "}
-                    <a
-                      href="https://docs.mapbox.com/help/dive-deeper/access-tokens/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:underline"
-                    >
-                      Mapbox
-                    </a>{" "}
-                    and create an account.
-                  </p>
-                }
-              />
-            </div>
+          {mapMode === "3D" ? (
+            <MapboxMap mapContainer={mapContainer} />
+          ) : (
+            <OpenLayersMap mapView={mapView} />
           )}
           <div className="absolute bottom-2 left-4 z-99999 right-4 flex flex-col gap-2 pointer-events-none">
             <div className="flex items-end gap-2 justify-between">
@@ -115,7 +122,13 @@ export default function GlobePage() {
               </div>
               {mapView === "timeline" ? (
                 <div className="pointer-events-auto">
-                  <Select value={windowSize.toString()} onValueChange={handleWindowSizeChange}>
+                  <Select
+                    value={windowSize.toString()}
+                    onValueChange={(value: string) => {
+                      const newSize = parseInt(value, 10);
+                      setManualWindowSize(newSize);
+                    }}
+                  >
                     <SelectTrigger className="w-[100px]" size="sm">
                       <SelectValue />
                     </SelectTrigger>

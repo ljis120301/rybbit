@@ -28,7 +28,7 @@ function TabButton({ active, onClick, icon, label }: TabButtonProps) {
 }
 
 export default function MapViewSelector() {
-  const { mapView, setMapView } = useGlobeStore();
+  const { mapView, setMapView, mapMode, setMapMode } = useGlobeStore();
 
   return (
     <div>
@@ -56,6 +56,21 @@ export default function MapViewSelector() {
           onClick={() => setMapView("subdivisions")}
           icon={<HouseIcon className="mr-1 opacity-60" size={14} />}
           label="Subdivisions"
+        />
+      </div>
+
+      <div className="inline-flex items-center gap-0.5 rounded-lg bg-neutral-900/40 backdrop-blur-sm p-0.5 border border-white/10">
+        <TabButton
+          active={mapMode === "3D"}
+          onClick={() => setMapMode("3D")}
+          icon={<Globe2 className="mr-1 opacity-60" size={14} />}
+          label="3D"
+        />
+        <TabButton
+          active={mapMode === "2D"}
+          onClick={() => setMapMode("2D")}
+          icon={<Globe2 className="mr-1 opacity-60" size={14} />}
+          label="2D"
         />
       </div>
     </div>
