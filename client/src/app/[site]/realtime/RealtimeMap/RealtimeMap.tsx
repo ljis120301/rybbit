@@ -2,20 +2,19 @@
 
 import { useGetSessionLocations } from "@/api/analytics/useGetSessionLocations";
 import { scaleSqrt } from "d3-scale";
-import { Feature, GeoJsonObject } from "geojson";
-import { Layer } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { useMemo, useState } from "react";
-import { Circle, GeoJSON, MapContainer, useMapEvent } from "react-leaflet";
+import "ol/ol.css";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Map from "ol/Map";
+import View from "ol/View";
+import { fromLonLat } from "ol/proj";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import GeoJSON from "ol/format/GeoJSON";
+import { Style, Fill, Stroke, Circle as CircleStyle } from "ol/style";
+import { Point } from "ol/geom";
+import Feature from "ol/Feature";
 import { useCountries } from "../../../../lib/geo";
-
-// Component to handle zoom events and update circle sizes
-function ZoomHandler({ setZoom }: { setZoom: (zoom: number) => void }) {
-  const map = useMapEvent("zoom", () => {
-    setZoom(map.getZoom());
-  });
-  return null;
-}
+import type { FeatureLike } from "ol/Feature";
 
 interface TooltipContent {
   count: number;
@@ -37,6 +36,11 @@ export function RealtimeMap() {
     y: 0,
   });
 
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  const countryLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
+  const circleLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
+
   // Create a scale for circle radius based on count
   const radiusScale = useMemo(() => {
     if (!liveSessionLocations?.length) return () => 0;
@@ -45,7 +49,7 @@ export function RealtimeMap() {
 
     // Use sqrt scale to make small values more visible
     // This directly scales radius (not area) which makes small circles more noticeable
-    const baseScale = scaleSqrt().domain([1, maxCount]).range([50000, 500000]); // Min/max radius in meters
+    const baseScale = scaleSqrt().domain([1, maxCount]).range([5, 50]); // Min/max radius in pixels
 
     return (count: number) => {
       const baseRadius = baseScale(count);
@@ -55,39 +59,172 @@ export function RealtimeMap() {
     };
   }, [liveSessionLocations, currentZoom]);
 
-  const handleStyle = (feature: Feature | undefined) => {
-    const count = feature?.properties?.["count"] || 0;
-    return {
-      color: "rgba(140, 140, 140, 0.5)",
-      weight: 0.5,
-      fill: true,
-      fillColor: "rgba(140, 140, 140, 0.5)",
-      fillOpacity: 0.2,
-    };
-  };
-
-  const handleEachFeature = (feature: Feature, layer: Layer) => {
-    layer.on({
-      mouseover: () => {
-        // @ts-ignore
-        layer.setStyle({
-          fillOpacity: 0.5,
-        });
-      },
-      mouseout: () => {
-        // @ts-ignore
-        layer.setStyle({
-          fillOpacity: 0.2,
-        });
-      },
+  const getCountryStyle = (feature: FeatureLike) => {
+    return new Style({
+      fill: new Fill({
+        color: "rgba(140, 140, 140, 0.2)",
+      }),
+      stroke: new Stroke({
+        color: "rgba(140, 140, 140, 0.5)",
+        width: 0.5,
+      }),
     });
   };
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = new Map({
+      target: mapRef.current,
+      view: new View({
+        center: fromLonLat([0, 30]),
+        zoom: 1.5,
+        minZoom: 1,
+      }),
+      controls: [],
+    });
+
+    mapInstanceRef.current = map;
+
+    // Handle zoom changes
+    map.getView().on("change:resolution", () => {
+      const zoom = map.getView().getZoom() || 1.5;
+      setCurrentZoom(zoom);
+    });
+
+    // Handle pointer move for hover effects
+    map.on("pointermove", (evt) => {
+      if (evt.dragging) {
+        return;
+      }
+
+      const pixel = map.getEventPixel(evt.originalEvent);
+      const feature = map.forEachFeatureAtPixel(
+        pixel,
+        (feature) => feature,
+        {
+          layerFilter: (layer) => layer === circleLayerRef.current,
+        }
+      );
+
+      if (feature) {
+        const count = feature.get("count");
+        const city = feature.get("city");
+
+        setTooltipContent({
+          count,
+          city,
+        });
+
+        // Update tooltip position
+        const [x, y] = evt.pixel;
+        const rect = mapRef.current?.getBoundingClientRect();
+        if (rect) {
+          setTooltipPosition({
+            x: rect.left + x,
+            y: rect.top + y,
+          });
+        }
+      } else {
+        setTooltipContent(null);
+      }
+    });
+
+    return () => {
+      map.setTarget(undefined);
+    };
+  }, []);
+
+  // Update country layer when geo data changes
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    if (!countriesGeoData) return;
+
+    // Remove existing layer
+    if (countryLayerRef.current) {
+      mapInstanceRef.current.removeLayer(countryLayerRef.current);
+    }
+
+    // Create new vector source with GeoJSON data
+    const vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(countriesGeoData, {
+        featureProjection: "EPSG:3857",
+      }),
+    });
+
+    // Create new vector layer
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      style: getCountryStyle,
+    });
+
+    countryLayerRef.current = vectorLayer;
+    mapInstanceRef.current.addLayer(vectorLayer);
+  }, [countriesGeoData]);
+
+  // Update circle layer when session locations change
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    if (!liveSessionLocations?.length) return;
+
+    // Remove existing circle layer
+    if (circleLayerRef.current) {
+      mapInstanceRef.current.removeLayer(circleLayerRef.current);
+    }
+
+    // Get computed color from CSS variables
+    const getComputedColor = (cssVar: string) => {
+      const hslValues = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
+      return `hsl(${hslValues})`;
+    };
+
+    // Create features for each location
+    const features = liveSessionLocations.map((location) => {
+      const feature = new Feature({
+        geometry: new Point(fromLonLat([location.lon, location.lat])),
+        count: location.count,
+        city: location.city,
+      });
+
+      const radius = radiusScale(location.count);
+
+      feature.setStyle(
+        new Style({
+          image: new CircleStyle({
+            radius: radius,
+            fill: new Fill({
+              color: getComputedColor("--accent-500").replace("hsl(", "hsla(").replace(")", ", 0.4)"),
+            }),
+            stroke: new Stroke({
+              color: getComputedColor("--accent-400"),
+              width: 0,
+            }),
+          }),
+        })
+      );
+
+      return feature;
+    });
+
+    // Create new circle layer
+    const circleSource = new VectorSource({
+      features: features,
+    });
+
+    const circleLayer = new VectorLayer({
+      source: circleSource,
+    });
+
+    circleLayerRef.current = circleLayer;
+    mapInstanceRef.current.addLayer(circleLayer);
+  }, [liveSessionLocations, radiusScale]);
 
   return (
     <div>
       <div
         className="w-full h-[600px] rounded-lg overflow-hidden border border-neutral-850"
-        onMouseMove={e => {
+        onMouseMove={(e: React.MouseEvent<HTMLDivElement>) => {
           if (tooltipContent) {
             setTooltipPosition({
               x: e.clientX,
@@ -96,57 +233,14 @@ export function RealtimeMap() {
           }
         }}
       >
-        <MapContainer
-          center={[30, 0]}
-          zoom={1.5}
-          minZoom={1}
-          style={{ height: "100%", width: "100%", background: "none" }}
-          attributionControl={false}
-          zoomControl={false}
-        >
-          <ZoomHandler setZoom={setCurrentZoom} />
-          {countriesGeoData && (
-            <GeoJSON
-              data={countriesGeoData as GeoJsonObject}
-              style={handleStyle}
-              // onEachFeature={handleEachFeature}
-            />
-          )}
-          {liveSessionLocations?.map((location, index) => (
-            <Circle
-              key={`${location.lat}-${location.lon}-${index}`}
-              center={[location.lat, location.lon]}
-              radius={radiusScale(location.count)}
-              pathOptions={{
-                fillColor: "hsl(var(--accent-500))",
-                fillOpacity: 0.4,
-                color: "hsl(var(--accent-400))",
-                weight: 0,
-              }}
-              eventHandlers={{
-                mouseover: e => {
-                  setTooltipContent({
-                    count: location.count,
-                    city: location.city,
-                  });
-                  setTooltipPosition({
-                    x: e.originalEvent.clientX,
-                    y: e.originalEvent.clientY,
-                  });
-                },
-                mouseout: () => {
-                  setTooltipContent(null);
-                },
-                mousemove: e => {
-                  setTooltipPosition({
-                    x: e.originalEvent.clientX,
-                    y: e.originalEvent.clientY,
-                  });
-                },
-              }}
-            />
-          ))}
-        </MapContainer>
+        <div
+          ref={mapRef}
+          style={{
+            height: "100%",
+            width: "100%",
+            background: "none",
+          }}
+        />
 
         {tooltipContent && (
           <div

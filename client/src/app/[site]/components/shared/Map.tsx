@@ -4,16 +4,22 @@ import { FilterParameter } from "@rybbit/shared";
 import { useSingleCol } from "@/api/analytics/useSingleCol";
 import { useMeasure } from "@uidotdev/usehooks";
 import { scalePow } from "d3-scale";
-import { Feature, GeoJsonObject } from "geojson";
-import { Layer } from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { Feature } from "geojson";
+import "ol/ol.css";
 import { round } from "lodash";
-import { useEffect, useMemo, useState } from "react";
-import { GeoJSON, MapContainer, useMapEvent } from "react-leaflet";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Map from "ol/Map";
+import View from "ol/View";
+import { fromLonLat } from "ol/proj";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import GeoJSON from "ol/format/GeoJSON";
+import { Style, Fill, Stroke } from "ol/style";
 import { getCountryPopulation } from "../../../../lib/countryPopulation";
 import { useCountries, useSubdivisions } from "../../../../lib/geo";
 import { addFilter } from "../../../../lib/store";
 import { CountryFlag } from "./icons/CountryFlag";
+import type { FeatureLike } from "ol/Feature";
 
 interface TooltipContent {
   name: string;
@@ -74,6 +80,12 @@ export function MapComponent({
   // Track which feature is currently hovered to control opacity without conflicts
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<Map | null>(null);
+  const vectorLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
+  const processedCountryDataRef = useRef<any>(null);
+  const processedSubdivisionDataRef = useRef<any>(null);
+
   // Process data to include per capita metrics
   const processedCountryData = useMemo(() => {
     if (!countryData?.data) return null;
@@ -103,6 +115,12 @@ export function MapComponent({
       };
     });
   }, [subdivisionData?.data]);
+
+  // Update refs when data changes
+  useEffect(() => {
+    processedCountryDataRef.current = processedCountryData;
+    processedSubdivisionDataRef.current = processedSubdivisionData;
+  }, [processedCountryData, processedSubdivisionData]);
 
   const colorScale = useMemo(() => {
     if (mapView === "countries" && !processedCountryData) return () => "#eee";
@@ -141,46 +159,54 @@ export function MapComponent({
   const { data: subdivisionsGeoData } = useSubdivisions();
   const { data: countriesGeoData } = useCountries();
 
-  const handleStyle = (feature: Feature | undefined) => {
-    const borderColors = ["#377eb8", "#ff7f00", "#4daf4a", "#1abc9c", "#984ea3"];
-    const isCountryView = mapView === "countries";
-    const dataKey = isCountryView ? feature?.properties?.["ISO_A2"] : feature?.properties?.["iso_3166_2"];
-    const borderKey = isCountryView ? feature?.properties?.["BORDER"] : feature?.properties?.["border"];
+  const isLoading = isCountryLoading || isSubdivisionLoading || isCountryFetching || isSubdivisionFetching;
 
-    // Use the processed data that includes per capita metrics
-    const dataToUse = isCountryView ? processedCountryData : processedSubdivisionData;
+  const [ref, { height: resolvedHeight }] = useMeasure();
 
-    const foundData = dataToUse?.find(({ value }: any) => value === dataKey);
+  const zoom = resolvedHeight ? Math.log2(resolvedHeight / 400) + 1 : 1;
 
-    // Use count or per capita value based on mode
-    const metricValue = mode === "perCapita" ? foundData?.perCapita || 0 : foundData?.count || 0;
+  // Initialize map
+  useEffect(() => {
+    if (!mapRef.current) return;
 
-    const color = metricValue > 0 ? colorScale(metricValue) : "rgba(140, 140, 140, 0.5)";
+    const map = new Map({
+      target: mapRef.current,
+      view: new View({
+        center: fromLonLat([3, 40]),
+        zoom: zoom,
+      }),
+      controls: [],
+    });
 
-    return {
-      color: color,
-      weight: 1,
-      fill: true,
-      fillColor: color,
-      // Increase opacity if this feature is currently hovered
-      fillOpacity: hoveredId === dataKey?.toString() ? 0.8 : 0.5,
-    };
-  };
+    mapInstanceRef.current = map;
 
-  const handleEachFeature = (feature: Feature, layer: Layer) => {
-    layer.on({
-      mouseover: () => {
+    // Handle zoom changes
+    map.getView().on("change:resolution", () => {
+      const currentZoom = map.getView().getZoom() || 1;
+      const newMapView = currentZoom >= 5 ? "subdivisions" : "countries";
+      if (newMapView !== mapView) {
+        setInternalMapView(newMapView);
+        setTooltipContent(null);
+      }
+    });
+
+    // Handle pointer move for hover effects
+    map.on("pointermove", (evt) => {
+      if (evt.dragging) {
+        return;
+      }
+
+      const pixel = map.getEventPixel(evt.originalEvent);
+      const feature = map.forEachFeatureAtPixel(pixel, (feature) => feature);
+
+      if (feature) {
         const isCountryView = mapView === "countries";
-        const code = isCountryView ? feature.properties?.["ISO_A2"] : feature.properties?.["iso_3166_2"];
+        const code = isCountryView ? feature.get("ISO_A2") : feature.get("iso_3166_2");
+        const name = isCountryView ? feature.get("ADMIN") : feature.get("name");
 
-        // Mark this feature as hovered so handleStyle increases opacity
         setHoveredId(code);
 
-        const name = isCountryView ? feature.properties?.["ADMIN"] : feature.properties?.["name"];
-
-        // Use the processed data that includes per capita metrics
-        const dataToUse = isCountryView ? processedCountryData : processedSubdivisionData;
-
+        const dataToUse = isCountryView ? processedCountryDataRef.current : processedSubdivisionDataRef.current;
         const foundData = dataToUse?.find(({ value }: any) => value === code);
         const count = foundData?.count || 0;
         const percentage = foundData?.percentage || 0;
@@ -193,15 +219,30 @@ export function MapComponent({
           percentage,
           perCapita,
         });
-      },
-      mouseout: () => {
-        // Clear hover state
+
+        // Update tooltip position
+        const [x, y] = evt.pixel;
+        const rect = mapRef.current?.getBoundingClientRect();
+        if (rect) {
+          setTooltipPosition({
+            x: rect.left + x,
+            y: rect.top + y,
+          });
+        }
+      } else {
         setHoveredId(null);
         setTooltipContent(null);
-      },
-      click: () => {
+      }
+    });
+
+    // Handle click for filtering
+    map.on("click", (evt) => {
+      const pixel = map.getEventPixel(evt.originalEvent);
+      const feature = map.forEachFeatureAtPixel(pixel, (feature) => feature);
+
+      if (feature) {
         const isCountryView = mapView === "countries";
-        const code = isCountryView ? feature.properties?.["ISO_A2"] : feature.properties?.["iso_3166_2"];
+        const code = isCountryView ? feature.get("ISO_A2") : feature.get("iso_3166_2");
 
         // Set filter based on the current map view
         const filterParameter: FilterParameter = isCountryView ? "country" : "region";
@@ -211,37 +252,109 @@ export function MapComponent({
           value: [code],
           type: "equals",
         });
-      },
-    });
-  };
-
-  const MapEventHandler = () => {
-    const map = useMapEvent("zoomend", () => {
-      const newMapView = map.getZoom() >= 5 ? "subdivisions" : "countries";
-      if (newMapView !== mapView) {
-        setInternalMapView(newMapView);
-        setTooltipContent(null);
       }
     });
-    return null;
-  };
 
-  const isLoading = isCountryLoading || isSubdivisionLoading || isCountryFetching || isSubdivisionFetching;
+    return () => {
+      map.setTarget(undefined);
+    };
+  }, []);
 
-  const [ref, { height: resolvedHeight }] = useMeasure();
+  // Update zoom when height changes
+  useEffect(() => {
+    if (mapInstanceRef.current && zoom) {
+      mapInstanceRef.current.getView().setZoom(zoom);
+    }
+  }, [zoom]);
 
-  const zoom = resolvedHeight ? Math.log2(resolvedHeight / 400) + 1 : 1;
+  // Update vector layer when geo data or map view changes
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+
+    const geoData = mapView === "countries" ? countriesGeoData : subdivisionsGeoData;
+    if (!geoData) return;
+
+    // Wait for data to be available
+    const dataToCheck = mapView === "countries" ? processedCountryData : processedSubdivisionData;
+    if (!dataToCheck) return;
+
+    // Remove existing layer
+    if (vectorLayerRef.current) {
+      mapInstanceRef.current.removeLayer(vectorLayerRef.current);
+    }
+
+    // Create new vector source with GeoJSON data
+    const vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(geoData, {
+        featureProjection: "EPSG:3857",
+      }),
+    });
+
+    // Create new vector layer with a style function
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      style: (feature) => {
+        const isCountryView = mapView === "countries";
+        const dataKey = isCountryView
+          ? feature.get("ISO_A2")
+          : feature.get("iso_3166_2");
+
+        // Use the processed data that includes per capita metrics
+        const dataToUse = isCountryView ? processedCountryDataRef.current : processedSubdivisionDataRef.current;
+
+        const foundData = dataToUse?.find(({ value }: any) => value === dataKey);
+
+        // Use count or per capita value based on mode
+        const metricValue = mode === "perCapita" ? foundData?.perCapita || 0 : foundData?.count || 0;
+
+        let fillColor: string;
+        let strokeColor: string;
+
+        if (metricValue > 0) {
+          // Get the color from the scale
+          const baseColor = colorScale(metricValue);
+
+          if (hoveredId === dataKey?.toString()) {
+            // Increase opacity on hover
+            fillColor = baseColor.replace(/,\s*([\d.]+)\)$/, (match, opacity) => {
+              const newOpacity = Math.min(parseFloat(opacity) + 0.2, 1);
+              return `, ${newOpacity})`;
+            });
+          } else {
+            // Use the color directly from the scale
+            fillColor = baseColor;
+          }
+          strokeColor = baseColor;
+        } else {
+          fillColor = "rgba(140, 140, 140, 0.3)";
+          strokeColor = "rgba(140, 140, 140, 0.5)";
+        }
+
+        return new Style({
+          fill: new Fill({
+            color: fillColor,
+          }),
+          stroke: new Stroke({
+            color: strokeColor,
+            width: 1,
+          }),
+        });
+      },
+    });
+
+    vectorLayerRef.current = vectorLayer;
+    mapInstanceRef.current.addLayer(vectorLayer);
+  }, [mapView, countriesGeoData, subdivisionsGeoData, dataVersion, mode, colorScale, hoveredId, processedCountryData, processedSubdivisionData]);
+
+  // Force layer re-render when data changes
+  useEffect(() => {
+    if (vectorLayerRef.current && (processedCountryData || processedSubdivisionData)) {
+      vectorLayerRef.current.changed();
+    }
+  }, [processedCountryData, processedSubdivisionData]);
 
   return (
     <div
-      onMouseMove={e => {
-        if (tooltipContent) {
-          setTooltipPosition({
-            x: e.clientX,
-            y: e.clientY,
-          });
-        }
-      }}
       style={{
         height: height,
       }}
@@ -255,41 +368,16 @@ export function MapComponent({
           </div>
         </div>
       )}
-      {(countriesGeoData || subdivisionsGeoData) && (
-        <MapContainer
-          preferCanvas={true}
-          attributionControl={false}
-          zoomControl={false}
-          center={[40, 3]}
-          zoom={zoom}
-          style={{
-            // height: height,
-            height: "100%",
-            background: "none",
-            cursor: "default",
-            outline: "none",
-            zIndex: "1",
-          }}
-        >
-          <MapEventHandler />
-          {mapView === "subdivisions" && subdivisionsGeoData && (
-            <GeoJSON
-              key={`subdivisions-${dataVersion}-${mode}`}
-              data={subdivisionsGeoData as GeoJsonObject}
-              style={handleStyle}
-              onEachFeature={handleEachFeature}
-            />
-          )}
-          {mapView === "countries" && countriesGeoData && (
-            <GeoJSON
-              key={`countries-${dataVersion}-${mode}`}
-              data={countriesGeoData as GeoJsonObject}
-              style={handleStyle}
-              onEachFeature={handleEachFeature}
-            />
-          )}
-        </MapContainer>
-      )}
+      <div
+        ref={mapRef}
+        style={{
+          height: "100%",
+          width: "100%",
+          background: "none",
+          cursor: "default",
+          outline: "none",
+        }}
+      />
       {tooltipContent && (
         <div
           className="fixed z-50 bg-neutral-1000 text-white rounded-md p-2 shadow-lg text-sm pointer-events-none"
