@@ -37,7 +37,7 @@ export function useOpenLayersTimelineLayer({ mapInstanceRef, mapViewRef, mapView
   const tooltipOverlayRef = useRef<Overlay | null>(null);
   const [openTooltipSessionId, setOpenTooltipSessionId] = useState<string | null>(null);
   const [selectedSession, setSelectedSession] = useState<GetSessionsResponse[number] | null>(null);
-  const [currentZoom, setCurrentZoom] = useState<number>(2);
+  const currentZoomRef = useRef<number>(2);
 
   // Close tooltip when timeline time changes
   useEffect(() => {
@@ -54,7 +54,7 @@ export function useOpenLayersTimelineLayer({ mapInstanceRef, mapViewRef, mapView
 
     const handleZoomChange = () => {
       const zoom = map.getView().getZoom() || 2;
-      setCurrentZoom(zoom);
+      currentZoomRef.current = zoom;
     };
 
     // Set initial zoom
@@ -121,7 +121,7 @@ export function useOpenLayersTimelineLayer({ mapInstanceRef, mapViewRef, mapView
     }
 
     // Determine if we should use clustering
-    const shouldCluster = activeSessions.length > CLUSTERING_THRESHOLD && currentZoom < CLUSTER_MAX_ZOOM;
+    const shouldCluster = activeSessions.length > CLUSTERING_THRESHOLD && currentZoomRef.current < CLUSTER_MAX_ZOOM;
 
     if (shouldCluster) {
       // Create features for clustering
@@ -501,7 +501,7 @@ export function useOpenLayersTimelineLayer({ mapInstanceRef, mapViewRef, mapView
         clusterLayerRef.current = null;
       }
     };
-  }, [activeSessions, mapView, mapInstanceRef, mapViewRef, openTooltipSessionId, currentZoom]);
+  }, [activeSessions, mapView, mapInstanceRef, mapViewRef, openTooltipSessionId]);
 
   return {
     selectedSession,
