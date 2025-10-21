@@ -19,7 +19,6 @@
 
 <img width="1299" height="797" alt="Screenshot 2025-10-16 at 7 25 20 PM" src="https://github.com/user-attachments/assets/7988ba04-64ee-4410-9972-847d278efa2f" />
 
-
 <hr>
 
 ## 🚀 Getting Started
@@ -49,9 +48,41 @@ There are two ways to start using Rybbit:
 
 <hr>
 
+## 📊 Comparison
+
+See how Rybbit compares to other analytics solutions:
+
+| Feature                  | Rybbit  | GA4        | Plausible  | Cloudflare |
+| ------------------------ | ------- | ---------- | ---------- | ---------- |
+| **Open Source**          | ✅      | ❌         | ✅         | ❌         |
+| **Self-Hosting**         | ✅      | ❌         | ✅\*       | ❌         |
+| **GDPR Compliant**       | ✅      | ❌         | ✅         | ✅         |
+| **Advanced Maps**        | ✅      | ❌         | ❌         | ❌         |
+| **Advanced Filters**     | ✅      | ⚠️ Limited | ⚠️ Limited | ❌         |
+| **Web Vitals**           | ⚠️ Paid | ❌         | ❌         | ❌         |
+| **Session Details**      | ✅      | ❌         | ❌         | ❌         |
+| **User Profiles**        | ✅      | ❌         | ❌         | ❌         |
+| **Session Replays**      | ✅      | ❌         | ❌         | ❌         |
+| **Funnels**              | ✅      | ✅         | ⚠️ Paid    | ❌         |
+| **User Journeys**        | ✅      | ✅         | ❌         | ❌         |
+| **Retention Analysis**   | ✅      | ✅         | ❌         | ❌         |
+| **Goals & Events**       | ✅      | ✅         | ✅         | ❌         |
+| **Real-time Dashboard**  | ✅      | ✅         | ✅         | ✅         |
+| **Custom Events (JSON)** | ✅      | ✅         | ⚠️ Limited | ❌         |
+| **Error Tracking**       | ✅      | ❌         | ❌         | ❌         |
+| **Public Dashboards**    | ✅      | ❌         | ✅         | ❌         |
+| **Organizations**        | ✅      | ✅         | ✅         | ✅         |
+| **Free Tier**            | ✅      | ✅         | ❌         | ✅         |
+| **Frog 🐸**              | ✅      | ❌         | ❌         | ❌         |
+
+\* Plausible's Community Edition has very limited features compared to their cloud version
+
+<hr>
+
 ## 📊 Dashboard Preview
 
 ### Map
+
 <img width="1299" height="797" alt="Screenshot 2025-10-16 at 7 27 12 PM" src="https://github.com/user-attachments/assets/52643121-4f4d-4bbe-9910-2516226bf421" />
 <img width="1299" height="797" alt="Screenshot 2025-10-16 at 7 30 39 PM" src="https://github.com/user-attachments/assets/153585d5-7ff6-43bb-8bf6-fecfbe240ef8" />
 <img width="1299" height="797" alt="Screenshot 2025-10-16 at 7 30 00 PM" src="https://github.com/user-attachments/assets/3873bc6b-9f79-4e9a-b083-0676a7d52b1d" />
@@ -89,7 +120,6 @@ There are two ways to start using Rybbit:
 
 <img width="1299" height="797" alt="Screenshot 2025-10-16 at 7 28 01 PM" src="https://github.com/user-attachments/assets/d88b8be0-cd30-4dd6-a0e5-5446c890c0f9" />
 
-
 <hr>
 
 ## ⭐ Star History
@@ -111,4 +141,3 @@ There are two ways to start using Rybbit:
     </td>
   </tr>
 </table>
-
