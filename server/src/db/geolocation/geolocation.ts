@@ -137,67 +137,82 @@ async function getLocationFromIPAPI(ips: string[]): Promise<Record<string, Locat
   logger.info(`Cache hit: ${ips.length - uncachedIps.length}/${ips.length}, fetching ${uncachedIps.length} from IPAPI`);
 
   const localInfo = await getLocationFromLocal(uncachedIps);
+
+  // IPAPI has a limit of 100 IPs per request, so we need to batch them
+  const BATCH_SIZE = 100;
+  const batches: string[][] = [];
+
+  for (let i = 0; i < uncachedIps.length; i += BATCH_SIZE) {
+    batches.push(uncachedIps.slice(i, i + BATCH_SIZE));
+  }
+
   try {
-    const response = await fetch("https://api.ipapi.is/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ips: uncachedIps,
-        key: apiKey,
-      }),
-    });
+    // Process batches sequentially to avoid rate limiting
+    for (const batch of batches) {
+      const response = await fetch("https://api.ipapi.is/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ips: batch,
+          key: apiKey,
+        }),
+      });
 
-    if (!response.ok) {
-      logger.error(`IPAPI request failed: ${response.status} ${response.statusText}`);
-      return { ...results, ...localInfo };
-    }
-
-    const data = (await response.json()) as Record<string, IPAPIResponse>;
-
-    for (const ip of uncachedIps) {
-      const item = data[ip];
-
-      if (!item) {
-        continue;
+      if (!response.ok) {
+        logger.error(
+          `IPAPI request failed for batch of ${batch.length} IPs: ${response.status} ${response.statusText}`
+        );
+        continue; // Skip this batch but continue with others
       }
 
-      const locationData: LocationResponse = {
-        city: item.location?.city,
-        country: item.location?.country,
-        countryIso: item.location?.country_code,
-        region: localInfo[ip]?.region,
-        latitude: item.location?.latitude,
-        longitude: item.location?.longitude,
-        timeZone: item.location?.timezone,
-        vpn: item.vpn?.service,
-        crawler: typeof item.is_crawler === "string" ? item.is_crawler : undefined,
-        datacenter: item.datacenter?.datacenter,
-        isProxy: item.is_proxy,
-        isTor: item.is_tor,
-        isSatellite: item.is_satellite,
+      const data = (await response.json()) as Record<string, IPAPIResponse>;
 
-        company: {
-          name: item.company?.name,
-          domain: item.company?.domain,
-          type: item.company?.type,
-          abuseScore: Number(item.company?.abuser_score?.split(" ")[0]),
-        },
+      for (const ip of batch) {
+        const item = data[ip];
 
-        asn: {
-          asn: item.asn?.asn,
-          org: item.asn?.org,
-          domain: item.asn?.domain,
-          type: item.asn?.type,
-          abuseScore: Number(item.asn?.abuser_score?.split(" ")[0]),
-        },
-      };
+        if (!item) {
+          continue;
+        }
 
-      // Cache the result
-      setCachedIP(ip, locationData);
-      results[ip] = locationData;
+        const locationData: LocationResponse = {
+          city: item.location?.city,
+          country: item.location?.country,
+          countryIso: item.location?.country_code,
+          region: localInfo[ip]?.region,
+          latitude: item.location?.latitude,
+          longitude: item.location?.longitude,
+          timeZone: item.location?.timezone,
+          vpn: item.vpn?.service,
+          crawler: typeof item.is_crawler === "string" ? item.is_crawler : undefined,
+          datacenter: item.datacenter?.datacenter,
+          isProxy: item.is_proxy,
+          isTor: item.is_tor,
+          isSatellite: item.is_satellite,
+
+          company: {
+            name: item.company?.name,
+            domain: item.company?.domain,
+            type: item.company?.type,
+            abuseScore: Number(item.company?.abuser_score?.split(" ")[0]),
+          },
+
+          asn: {
+            asn: item.asn?.asn,
+            org: item.asn?.org,
+            domain: item.asn?.domain,
+            type: item.asn?.type,
+            abuseScore: Number(item.asn?.abuser_score?.split(" ")[0]),
+          },
+        };
+
+        // Cache the result
+        setCachedIP(ip, locationData);
+        results[ip] = locationData;
+      }
     }
+
     return results;
   } catch (error) {
     logger.error("Error fetching from IPAPI:", error);
