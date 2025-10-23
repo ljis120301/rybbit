@@ -8,6 +8,9 @@ const CRAWLER_TO_LOGO: Record<string, string> = {
   YandexBot: "Yandex.svg",
   Applebot: "Apple.svg",
   DuckDuckGoBot: "DuckDuckGo.svg",
+  ByteSpider: "TikTok.svg",
+  Baiduspider: "Baidu.svg",
+  Twitterbot: "Twitter.svg",
 };
 
 export function Crawler({ crawler = "" }: { crawler?: string }) {
