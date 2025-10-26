@@ -148,36 +148,52 @@ export async function activateAppSumoLicense(
 
     // Step 3: Check if license already exists
     const existingLicense = await db.execute(
-      sql`SELECT * FROM appsumo_licenses WHERE license_key = ${licenseData.licenseKey} LIMIT 1`
+      sql`SELECT organization_id FROM appsumo_licenses WHERE license_key = ${licenseData.licenseKey} LIMIT 1`
     );
 
     if (Array.isArray(existingLicense) && existingLicense.length > 0) {
-      return reply.status(409).send({
-        error: "License already activated",
-        message: "This license key has already been activated for another organization",
-      });
-    }
+      const existing = existingLicense[0] as any;
+      // If organization_id is already set, license is already activated
+      if (existing.organization_id !== null) {
+        return reply.status(409).send({
+          error: "License already activated",
+          message: "This license key has already been activated for another organization",
+        });
+      }
 
-    // Step 4: Save license to database
-    await db.execute(sql`
-      INSERT INTO appsumo_licenses (
-        organization_id,
-        license_key,
-        tier,
-        status,
-        activated_at,
-        created_at,
-        updated_at
-      ) VALUES (
-        ${organizationId},
-        ${licenseData.licenseKey},
-        ${licenseData.tier},
-        'active',
-        NOW(),
-        NOW(),
-        NOW()
-      )
-    `);
+      // License exists as placeholder (from purchase webhook) - update it
+      await db.execute(sql`
+        UPDATE appsumo_licenses
+        SET
+          organization_id = ${organizationId},
+          tier = ${licenseData.tier},
+          status = 'active',
+          activated_at = NOW(),
+          updated_at = NOW()
+        WHERE license_key = ${licenseData.licenseKey}
+      `);
+    } else {
+      // Step 4: License doesn't exist - create new record
+      await db.execute(sql`
+        INSERT INTO appsumo_licenses (
+          organization_id,
+          license_key,
+          tier,
+          status,
+          activated_at,
+          created_at,
+          updated_at
+        ) VALUES (
+          ${organizationId},
+          ${licenseData.licenseKey},
+          ${licenseData.tier},
+          'active',
+          NOW(),
+          NOW(),
+          NOW()
+        )
+      `);
+    }
 
     return reply.status(200).send({
       success: true,

@@ -32,7 +32,7 @@ async function initializeAppSumoTables() {
     await db.execute(sql`
       CREATE TABLE IF NOT EXISTS appsumo_licenses (
         id SERIAL PRIMARY KEY NOT NULL,
-        organization_id TEXT NOT NULL REFERENCES organization(id),
+        organization_id TEXT REFERENCES organization(id),
         license_key TEXT NOT NULL UNIQUE,
         tier TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'active',

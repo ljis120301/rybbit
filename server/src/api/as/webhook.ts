@@ -177,7 +177,7 @@ async function handlePurchaseEvent(
         created_at,
         updated_at
       ) VALUES (
-        'placeholder',
+        NULL,
         ${licenseKey},
         ${tierValue},
         'pending',

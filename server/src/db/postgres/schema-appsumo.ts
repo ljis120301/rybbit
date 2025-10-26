@@ -6,9 +6,7 @@ export const appsumoLicenses = pgTable(
   "appsumo_licenses",
   {
     id: serial("id").primaryKey().notNull(),
-    organizationId: text("organization_id")
-      .notNull()
-      .references(() => organization.id),
+    organizationId: text("organization_id").references(() => organization.id),
     licenseKey: text("license_key").notNull().unique(),
     tier: text("tier").notNull(), // Tier level from AppSumo (e.g., "1", "2", "3")
     status: text("status").notNull().default("active"), // 'active', 'inactive'
