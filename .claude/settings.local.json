@@ -13,7 +13,10 @@
       "Bash(npm install @marsidev/react-turnstile)",
       "Bash(npm install @marsidev/react-turnstile --legacy-peer-deps)",
       "WebFetch(domain:clickhouse.com)",
-      "WebFetch(domain:docs.licensing.appsumo.com)"
+      "WebFetch(domain:docs.licensing.appsumo.com)",
+      "Bash(npm view:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 30 npm run dev:*)"
     ],
     "deny": [],
     "ask": []
