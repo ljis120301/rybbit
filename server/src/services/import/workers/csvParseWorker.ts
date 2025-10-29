@@ -2,7 +2,7 @@ import { access, constants } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { parse } from "@fast-csv/parse";
 import { DateTime } from "luxon";
-import { getJobQueue } from "../../../queues/jobQueueFactory.js";
+import { IJobQueue } from "../../../queues/jobQueue.js";
 import { r2Storage } from "../../storage/r2StorageService.js";
 import { CSV_PARSE_QUEUE, CsvParseJob, DATA_INSERT_QUEUE, DataInsertJob } from "./jobs.js";
 import { UmamiEvent, umamiHeaders } from "../mappings/umami.js";
@@ -75,9 +75,7 @@ const createDateRangeFilter = (startDateStr?: string, endDateStr?: string) => {
   };
 };
 
-export async function registerCsvParseWorker() {
-  const jobQueue = getJobQueue();
-
+export async function createCsvParseWorker(jobQueue: IJobQueue) {
   await jobQueue.work<CsvParseJob>(CSV_PARSE_QUEUE, async job => {
     const { site, importId, platform, storageLocation, isR2Storage, organization, startDate, endDate } = job;
 

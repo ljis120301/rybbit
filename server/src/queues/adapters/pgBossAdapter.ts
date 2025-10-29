@@ -1,8 +1,12 @@
 import PgBoss, { Job } from "pg-boss";
 import { IJobQueue } from "../jobQueue.js";
+import { CSV_PARSE_QUEUE, DATA_INSERT_QUEUE } from "../../services/import/workers/jobs.js";
+import { createCsvParseWorker } from "../../services/import/workers/csvParseWorker.js";
+import { createDataInsertWorker } from "../../services/import/workers/dataInsertWorker.js";
 
 export class PgBossAdapter implements IJobQueue {
   private boss: PgBoss;
+  private ready: boolean = false;
 
   constructor() {
     this.boss = new PgBoss({
@@ -22,8 +26,22 @@ export class PgBossAdapter implements IJobQueue {
   }
 
   async start(): Promise<void> {
-    await this.boss.start();
-    console.info("[PgBoss] Started successfully");
+    try {
+      await this.boss.start();
+
+      await this.createQueue(CSV_PARSE_QUEUE);
+      await this.createQueue(DATA_INSERT_QUEUE);
+
+      await createCsvParseWorker(this);
+      await createDataInsertWorker(this);
+
+      this.ready = true;
+      console.info("[PgBoss] Started successfully");
+    } catch (error) {
+      this.ready = false;
+      console.error("[PgBoss] Failed to initialize:", error);
+      throw error;
+    }
   }
 
   async stop(): Promise<void> {
@@ -50,5 +68,9 @@ export class PgBossAdapter implements IJobQueue {
         await handler(job.data);
       }
     );
+  }
+
+  isReady(): boolean {
+    return this.ready;
   }
 }

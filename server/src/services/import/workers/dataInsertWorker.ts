@@ -1,4 +1,4 @@
-import { getJobQueue } from "../../../queues/jobQueueFactory.js";
+import { IJobQueue } from "../../../queues/jobQueue.js";
 import { UmamiImportMapper } from "../mappings/umami.js";
 import { DataInsertJob, DATA_INSERT_QUEUE } from "./jobs.js";
 import { clickhouse } from "../../../db/clickhouse/clickhouse.js";
@@ -13,9 +13,7 @@ const getImportDataMapping = (platform: string) => {
   }
 };
 
-export async function registerDataInsertWorker() {
-  const jobQueue = getJobQueue();
-
+export async function createDataInsertWorker(jobQueue: IJobQueue) {
   await jobQueue.work<DataInsertJob>(DATA_INSERT_QUEUE, async job => {
     const { site, importId, platform, chunk, allChunksSent } = job;
 

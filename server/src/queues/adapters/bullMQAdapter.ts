@@ -1,11 +1,15 @@
 import { Job, Queue, QueueEvents, Worker } from "bullmq";
 import { IJobQueue } from "../jobQueue.js";
+import { CSV_PARSE_QUEUE, DATA_INSERT_QUEUE } from "../../services/import/workers/jobs.js";
+import { createCsvParseWorker } from "../../services/import/workers/csvParseWorker.js";
+import { createDataInsertWorker } from "../../services/import/workers/dataInsertWorker.js";
 
 export class BullMQAdapter implements IJobQueue {
   private readonly connection: { host: string; port: number; password?: string };
   private queues: Map<string, Queue> = new Map();
   private workers: Map<string, Worker> = new Map();
   private queueEvents: Map<string, QueueEvents> = new Map();
+  private ready: boolean = false;
 
   constructor() {
     this.connection = {
@@ -13,12 +17,23 @@ export class BullMQAdapter implements IJobQueue {
       port: parseInt(process.env.REDIS_PORT || "6379", 10),
       ...(process.env.REDIS_PASSWORD && { password: process.env.REDIS_PASSWORD }),
     };
-
-    console.info(`[BullMQ] Configuration: Redis at ${this.connection.host}:${this.connection.port}`);
   }
 
   async start(): Promise<void> {
-    console.info("[BullMQ] Started successfully");
+    try {
+      await this.createQueue(CSV_PARSE_QUEUE);
+      await this.createQueue(DATA_INSERT_QUEUE);
+
+      await createCsvParseWorker(this);
+      await createDataInsertWorker(this);
+
+      this.ready = true;
+      console.info("[BullMQ] Started successfully");
+    } catch (error) {
+      this.ready = false;
+      console.error("[BullMQ] Failed to initialize:", error);
+      throw error;
+    }
   }
 
   async stop(): Promise<void> {
@@ -173,5 +188,9 @@ export class BullMQAdapter implements IJobQueue {
       console.error(`[BullMQ] Failed to create worker for queue ${queueName}`, error);
       throw error;
     }
+  }
+
+  isReady(): boolean {
+    return this.ready;
   }
 }

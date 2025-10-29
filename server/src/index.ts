@@ -84,9 +84,6 @@ import { getSiteImports } from "./api/sites/getSiteImports.js";
 import { importSiteData } from "./api/sites/importSiteData.js";
 import { deleteSiteImport } from "./api/sites/deleteSiteImport.js";
 import { getJobQueue } from "./queues/jobQueueFactory.js";
-import { registerCsvParseWorker } from "./services/import/workers/csvParseWorker.js";
-import { registerDataInsertWorker } from "./services/import/workers/dataInsertWorker.js";
-import { createJobQueues } from "./services/import/workers/queues.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -454,12 +451,15 @@ const start = async () => {
       weeklyReportService.startWeeklyReportCron();
     }
 
-    // Initialize and start job queue system
+    // Initialize and start import job queue system
     const jobQueue = getJobQueue();
-    await jobQueue.start();
-    await createJobQueues();
-    await registerCsvParseWorker();
-    await registerDataInsertWorker();
+    try {
+      await jobQueue.start();
+    } catch (queueError) {
+      server.log.error("Failed to initialize import job queue system:", queueError);
+      server.log.warn("Server will continue without import functionality");
+      // Don't exit - allow server to run without import features
+    }
 
     // Initialize import cleanup service (runs daily to clean up old import files)
     if (IS_CLOUD) {

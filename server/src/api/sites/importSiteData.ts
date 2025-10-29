@@ -61,6 +61,11 @@ type ImportDataRequest = {
 
 export async function importSiteData(request: FastifyRequest<ImportDataRequest>, reply: FastifyReply) {
   try {
+    const jobQueue = getJobQueue();
+    if (!jobQueue.isReady()) {
+      return reply.status(503).send({ error: "Import system is temporarily unavailable. Please try again later." });
+    }
+
     const parsedParams = importDataRequestSchema.safeParse({
       params: request.params,
     });
@@ -147,7 +152,6 @@ export async function importSiteData(request: FastifyRequest<ImportDataRequest>,
     }
 
     try {
-      const jobQueue = getJobQueue();
       await jobQueue.send<CsvParseJob>(CSV_PARSE_QUEUE, {
         site,
         importId,
