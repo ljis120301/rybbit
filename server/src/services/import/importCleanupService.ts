@@ -1,5 +1,8 @@
 import * as cron from "node-cron";
 import { r2Storage } from "../storage/r2StorageService.js";
+import { createServiceLogger } from "../../lib/logger/logger.js";
+
+const logger = createServiceLogger("import:cleanup");
 
 class ImportCleanupService {
   private cleanupTask: cron.ScheduledTask | null = null;
@@ -11,7 +14,7 @@ class ImportCleanupService {
    * Runs daily at 2 AM UTC to clean up orphaned import files.
    */
   initializeCleanupCron() {
-    console.info("[ImportCleanup] Initializing cleanup cron");
+    logger.info("Initializing cleanup cron");
 
     // Schedule cleanup to run daily at 2 AM UTC
     this.cleanupTask = cron.schedule(
@@ -20,13 +23,13 @@ class ImportCleanupService {
         try {
           await this.cleanupOrphanedFiles();
         } catch (error) {
-          console.error("[ImportCleanup] Error during cleanup:", error);
+          logger.error({ error }, "Error during cleanup");
         }
       },
       { timezone: "UTC" }
     );
 
-    console.info("[ImportCleanup] Cleanup initialized (runs daily at 2 AM UTC)");
+    logger.info("Cleanup initialized (runs daily at 2 AM UTC)");
   }
 
   /**
@@ -34,25 +37,25 @@ class ImportCleanupService {
    */
   private async cleanupOrphanedFiles() {
     if (r2Storage.isEnabled()) {
-      console.info("[ImportCleanup] Starting cleanup of old R2 import files");
+      logger.info("Starting cleanup of old R2 import files");
       try {
         const r2DeletedCount = await r2Storage.deleteOldImportFiles(1);
-        console.info(`[ImportCleanup] Deleted ${r2DeletedCount} old files from R2`);
+        logger.info({ deletedCount: r2DeletedCount }, "Deleted old files from R2");
       } catch (error) {
-        console.error("[ImportCleanup] Error cleaning up R2 files:", error);
+        logger.error({ error }, "Error cleaning up R2 files");
       }
     }
   }
 
   async triggerManualCleanup() {
-    console.info("[ImportCleanup] Manual cleanup triggered");
+    logger.info("Manual cleanup triggered");
     await this.cleanupOrphanedFiles();
   }
 
   stopCleanupCron() {
     if (this.cleanupTask) {
       this.cleanupTask.stop();
-      console.info("[ImportCleanup] Cleanup cron stopped");
+      logger.info("Cleanup cron stopped");
     }
   }
 }

@@ -9,6 +9,9 @@ import { UmamiEvent, umamiHeaders } from "../mappings/umami.js";
 import { updateImportStatus } from "../importStatusManager.js";
 import { deleteImportFile } from "../utils.js";
 import { ImportQuotaTracker } from "../importQuotaChecker.js";
+import { createServiceLogger } from "../../../lib/logger/logger.js";
+
+const logger = createServiceLogger("import:csv-parser");
 
 const getImportDataHeaders = (platform: string) => {
   switch (platform) {
@@ -20,7 +23,7 @@ const getImportDataHeaders = (platform: string) => {
 };
 
 const createR2FileStream = async (storageLocation: string, platform: string) => {
-  console.log(`[CSV Parser] Reading from R2: ${storageLocation}`);
+  logger.info({ storageLocation }, "Reading from R2");
   const fileStream = await r2Storage.getImportFileStream(storageLocation);
   return fileStream.pipe(
     parse({
@@ -32,7 +35,7 @@ const createR2FileStream = async (storageLocation: string, platform: string) => 
 };
 
 const createLocalFileStream = async (storageLocation: string, platform: string) => {
-  console.log(`[CSV Parser] Reading from local disk: ${storageLocation}`);
+  logger.info({ storageLocation }, "Reading from local disk");
   await access(storageLocation, constants.F_OK | constants.R_OK);
   return createReadStream(storageLocation).pipe(
     parse({
@@ -97,7 +100,7 @@ export async function createCsvParseWorker(jobQueue: IJobQueue) {
 
       // Add explicit error handler before starting to consume the stream
       stream.on("error", error => {
-        console.error(`[Import ${importId}] Stream error:`, error);
+        logger.error({ importId, error }, "Stream error");
         // Error will be caught by the outer try/catch
       });
 
@@ -165,7 +168,7 @@ export async function createCsvParseWorker(jobQueue: IJobQueue) {
         await updateImportStatus(importId, "failed", errorMessage);
         const deleteResult = await deleteImportFile(storageLocation, isR2Storage);
         if (!deleteResult.success) {
-          console.warn(`[Import ${importId}] File cleanup failed: ${deleteResult.error}`);
+          logger.warn({ importId, error: deleteResult.error }, "File cleanup failed");
         }
         return;
       }
@@ -179,12 +182,12 @@ export async function createCsvParseWorker(jobQueue: IJobQueue) {
         allChunksSent: true,
       });
     } catch (error) {
-      console.error(`[Import ${importId}] Error in CSV parse worker:`, error);
+      logger.error({ importId, error }, "Error in CSV parse worker");
 
       await updateImportStatus(importId, "failed", "An unexpected error occurred during import processing");
 
       // Don't re-throw - worker should continue processing other jobs
-      console.error(`[Import ${importId}] Import failed, worker continuing`);
+      logger.error({ importId }, "Import failed, worker continuing");
     } finally {
       // Clean up timeout
       if (processingTimeout) {
@@ -196,14 +199,14 @@ export async function createCsvParseWorker(jobQueue: IJobQueue) {
         try {
           stream.destroy();
         } catch (streamError) {
-          console.warn(`[Import ${importId}] Failed to destroy stream:`, streamError);
+          logger.warn({ importId, error: streamError }, "Failed to destroy stream");
         }
       }
 
       // Clean up file - don't throw on failure to prevent worker crashes
       const deleteResult = await deleteImportFile(storageLocation, isR2Storage);
       if (!deleteResult.success) {
-        console.warn(`[Import ${importId}] File cleanup failed, will remain in storage: ${deleteResult.error}`);
+        logger.warn({ importId, error: deleteResult.error }, "File cleanup failed, will remain in storage");
         // File will be orphaned but import status is already recorded
         // importCleanupService.ts handles orphans
       }

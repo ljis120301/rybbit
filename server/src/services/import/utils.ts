@@ -1,6 +1,9 @@
 import { unlink } from "node:fs/promises";
 import { IS_CLOUD } from "../../lib/const.js";
 import { r2Storage } from "../storage/r2StorageService.js";
+import { createServiceLogger } from "../../lib/logger/logger.js";
+
+const logger = createServiceLogger("import:utils");
 
 export interface DeleteFileResult {
   success: boolean;
@@ -34,15 +37,15 @@ export const deleteImportFile = async (storageLocation: string, isR2Storage: boo
   try {
     if (isR2Storage) {
       await r2Storage.deleteImportFile(storageLocation);
-      console.log(`[Import] Deleted R2 file: ${storageLocation}`);
+      logger.info({ storageLocation }, "Deleted R2 file");
     } else {
       await unlink(storageLocation);
-      console.log(`[Import] Deleted local file: ${storageLocation}`);
+      logger.info({ storageLocation }, "Deleted local file");
     }
     return { success: true };
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : "Unknown error";
-    console.error(`[Import] Failed to delete file ${storageLocation}:`, errorMsg);
+    logger.error({ storageLocation, error: errorMsg }, "Failed to delete file");
 
     // DON'T throw - return error info instead to prevent worker crashes
     return { success: false, error: errorMsg };

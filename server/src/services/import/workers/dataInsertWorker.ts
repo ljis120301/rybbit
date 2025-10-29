@@ -3,6 +3,9 @@ import { UmamiImportMapper } from "../mappings/umami.js";
 import { DataInsertJob, DATA_INSERT_QUEUE } from "./jobs.js";
 import { clickhouse } from "../../../db/clickhouse/clickhouse.js";
 import { updateImportStatus, updateImportProgress } from "../importStatusManager.js";
+import { createServiceLogger } from "../../../lib/logger/logger.js";
+
+const logger = createServiceLogger("import:data-insert");
 
 const getImportDataMapping = (platform: string) => {
   switch (platform) {
@@ -22,12 +25,12 @@ export async function createDataInsertWorker(jobQueue: IJobQueue) {
         await updateImportStatus(importId, "completed");
         return;
       } catch (error) {
-        console.error(`[Import ${importId}] Failed to mark as completed:`, error);
+        logger.error({ importId, error }, "Failed to mark as completed");
         // Try to update to failed status, but don't crash worker
         try {
           await updateImportStatus(importId, "failed", "Failed to complete import");
         } catch (updateError) {
-          console.error(`[Import ${importId}] Could not update status to failed:`, updateError);
+          logger.error({ importId, error: updateError }, "Could not update status to failed");
         }
         // Don't re-throw - worker should continue
         return;
@@ -49,23 +52,23 @@ export async function createDataInsertWorker(jobQueue: IJobQueue) {
       try {
         await updateImportProgress(importId, transformedRecords.length);
       } catch (progressError) {
-        console.warn(
-          `[Import ${importId}] Progress update failed (data inserted successfully):`,
-          progressError instanceof Error ? progressError.message : progressError
+        logger.warn(
+          { importId, error: progressError instanceof Error ? progressError.message : progressError },
+          "Progress update failed (data inserted successfully)"
         );
         // Don't throw - data is safely in ClickHouse, progress can be off slightly
       }
     } catch (error) {
-      console.error(`[Import ${importId}] ClickHouse insert failed:`, error);
+      logger.error({ importId, error }, "ClickHouse insert failed");
 
       try {
         await updateImportStatus(importId, "failed", "Data insertion failed due to unknown error");
       } catch (updateError) {
-        console.error(`[Import ${importId}] Could not update status to failed:`, updateError);
+        logger.error({ importId, error: updateError }, "Could not update status to failed");
       }
 
       // Don't re-throw - worker should continue processing other jobs
-      console.error(`[Import ${importId}] Import chunk failed, worker continuing`);
+      logger.error({ importId }, "Import chunk failed, worker continuing");
     }
   });
 }
