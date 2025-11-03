@@ -13,6 +13,7 @@ import {
   timestamp,
   unique,
   pgEnum,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 // User table
@@ -610,7 +611,7 @@ export const importStatusEnum = pgEnum("import_status_enum", ["pending", "proces
 export const importStatus = pgTable(
   "import_status",
   {
-    importId: text("import_id").primaryKey().notNull(),
+    importId: uuid("import_id").primaryKey().notNull(),
     siteId: integer("site_id").notNull(),
     organizationId: text("organization_id").notNull(),
     platform: importPlatformEnum("platform").notNull(),
