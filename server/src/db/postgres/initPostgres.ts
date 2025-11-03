@@ -28,9 +28,12 @@ export const initPostgres = async () => {
  */
 async function initializeAppSumoTables() {
   try {
-    // Create as_licenses table
+    // Create 'as' schema for AppSumo tables
+    await db.execute(sql`CREATE SCHEMA IF NOT EXISTS as`);
+
+    // Create as.licenses table
     await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS as_licenses (
+      CREATE TABLE IF NOT EXISTS as.licenses (
         id SERIAL PRIMARY KEY NOT NULL,
         organization_id TEXT REFERENCES organization(id),
         license_key TEXT NOT NULL UNIQUE,
@@ -44,9 +47,9 @@ async function initializeAppSumoTables() {
       )
     `);
 
-    // Create as_webhook_events table for audit trail
+    // Create as.webhook_events table for audit trail
     await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS as_webhook_events (
+      CREATE TABLE IF NOT EXISTS as.webhook_events (
         id SERIAL PRIMARY KEY NOT NULL,
         license_key TEXT NOT NULL,
         event TEXT NOT NULL,
@@ -56,7 +59,7 @@ async function initializeAppSumoTables() {
       )
     `);
 
-    console.info("AppSumo tables initialized successfully");
+    console.info("AppSumo schema and tables initialized successfully");
   } catch (error) {
     console.error("Error initializing AppSumo tables:", error);
   }
