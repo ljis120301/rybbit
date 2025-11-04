@@ -607,11 +607,10 @@ export const importPlatformEnum = pgEnum("import_platform_enum", ["umami"]);
 
 export const importStatusEnum = pgEnum("import_status_enum", ["pending", "processing", "completed", "failed"]);
 
-// Import status table for tracking data import progress
 export const importStatus = pgTable(
   "import_status",
   {
-    importId: uuid("import_id").primaryKey().notNull(),
+    importId: uuid("import_id").primaryKey().notNull().defaultRandom(),
     siteId: integer("site_id").notNull(),
     organizationId: text("organization_id").notNull(),
     platform: importPlatformEnum("platform").notNull(),
