@@ -6,6 +6,7 @@ import { refreshGSCToken } from "./utils.js";
 import { getUserHasAccessToSite } from "../../lib/auth-utils.js";
 import { db } from "../../db/postgres/postgres.js";
 import countries from "i18n-iso-countries";
+import { logger } from "../../lib/logger/logger.js";
 
 /**
  * Fetches data from Google Search Console API with support for multiple dimensions
@@ -67,7 +68,7 @@ export async function getGSCData(req: FastifyRequest<GetGSCDataRequest>, res: Fa
 
     if (!gscResponse.ok) {
       const errorText = await gscResponse.text();
-      console.error("GSC API error:", errorText);
+      logger.error(errorText, "GSC API error");
       return res.status(gscResponse.status).send({ error: "Failed to fetch GSC data", details: errorText });
     }
 
@@ -93,7 +94,7 @@ export async function getGSCData(req: FastifyRequest<GetGSCDataRequest>, res: Fa
 
     return res.send({ data: results });
   } catch (error) {
-    console.error("Error fetching GSC data:", error);
+    logger.error(error, "Error fetching GSC data");
     return res.status(500).send({ error: "Failed to fetch GSC data" });
   }
 }

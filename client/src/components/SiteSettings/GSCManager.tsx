@@ -15,7 +15,6 @@ interface GSCManagerProps {
 }
 
 export function GSCManager({ disabled = false }: GSCManagerProps) {
-  const { site } = useStore();
   const searchParams = useSearchParams();
   const { data: connection, isLoading, refetch } = useGSCConnection();
   const { mutate: connect, isPending: isConnecting } = useConnectGSC();

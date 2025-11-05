@@ -307,7 +307,7 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
       <CountryExclusionManager siteId={siteMetadata.siteId} disabled={disabled} />
 
       {/* Google Search Console Section */}
-      <GSCManager disabled={disabled} />
+      {IS_CLOUD && <GSCManager disabled={disabled} />}
 
       {/* Domain Settings Section */}
       <div className="space-y-3">

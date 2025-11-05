@@ -2,17 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { FilterParameter } from "@rybbit/shared";
-import { AlertCircle, Divide, Info, RefreshCcw } from "lucide-react";
+import { AlertCircle, Info, RefreshCcw } from "lucide-react";
+import Link from "next/link";
 import { ReactNode } from "react";
-import { usePaginatedSingleCol } from "../../../../../api/analytics/useSingleCol";
-import { SingleColResponse } from "../../../../../api/analytics/useSingleCol";
+import { SingleColResponse, usePaginatedSingleCol } from "../../../../../api/analytics/useSingleCol";
 import { CardLoader } from "../../../../../components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../../components/ui/tooltip";
+import { IS_CLOUD } from "../../../../../lib/const";
 import { Row } from "./Row";
 import { StandardSkeleton } from "./Skeleton";
 import { StandardSectionDialog } from "./StandardSectionDialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../../components/ui/tooltip";
-import Link from "next/link";
-import { IS_CLOUD } from "../../../../../lib/const";
 
 const MAX_ITEMS_TO_DISPLAY = 10;
 

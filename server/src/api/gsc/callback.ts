@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { getGSCProperties } from "./utils.js";
 import { getSessionFromReq } from "../../lib/auth-utils.js";
 import { db } from "../../db/postgres/postgres.js";
+import { logger } from "../../lib/logger/logger.js";
 
 interface TokenResponse {
   access_token: string;
@@ -23,7 +24,7 @@ export async function gscCallback(req: FastifyRequest<GSCCallbackRequest>, res: 
     const { code, state, error } = req.query;
 
     if (error) {
-      console.log("OAuth cancelled or failed:", error);
+      logger.info("OAuth cancelled or failed:", error);
       const siteId = state;
       return res.redirect(`${process.env.BASE_URL}/${siteId}/main`);
     }
@@ -67,7 +68,7 @@ export async function gscCallback(req: FastifyRequest<GSCCallbackRequest>, res: 
     });
 
     if (!tokenResponse.ok) {
-      console.error("Token exchange failed:", await tokenResponse.text());
+      logger.error(await tokenResponse.text(), "Token exchange failed");
       return res.redirect(`${process.env.BASE_URL}/error?message=Token exchange failed`);
     }
 
@@ -114,7 +115,7 @@ export async function gscCallback(req: FastifyRequest<GSCCallbackRequest>, res: 
     const propertiesParam = encodeURIComponent(JSON.stringify(properties));
     return res.redirect(`${process.env.BASE_URL}/${siteId}/gsc/select-property?properties=${propertiesParam}`);
   } catch (error) {
-    console.error("Error handling GSC callback:", error);
+    logger.error(error, "Error handling GSC callback");
     return res.redirect(`${process.env.BASE_URL}/error?message=Callback failed`);
   }
 }

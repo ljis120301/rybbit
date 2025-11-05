@@ -3,6 +3,7 @@ import { gscConnections } from "../../db/postgres/schema.js";
 import { eq } from "drizzle-orm";
 import { getUserHasAccessToSite } from "../../lib/auth-utils.js";
 import { db } from "../../db/postgres/postgres.js";
+import { logger } from "../../lib/logger/logger.js";
 
 interface SelectPropertyRequest {
   Params: {
@@ -52,7 +53,7 @@ export async function selectGSCProperty(req: FastifyRequest<SelectPropertyReques
 
     return res.send({ success: true, property: propertyUrl });
   } catch (error) {
-    console.error("Error selecting GSC property:", error);
+    logger.error(error, "Error selecting GSC property");
     return res.status(500).send({ error: "Failed to select property" });
   }
 }

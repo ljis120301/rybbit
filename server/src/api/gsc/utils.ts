@@ -1,6 +1,7 @@
 import { db } from "../../db/postgres/postgres.js";
 import { gscConnections } from "../../db/postgres/schema.js";
 import { eq } from "drizzle-orm";
+import { logger } from "../../lib/logger/logger.js";
 
 interface GSCTokens {
   access_token: string;
@@ -44,19 +45,17 @@ export async function refreshGSCToken(siteId: number): Promise<string | null> {
     });
 
     if (!tokenResponse.ok) {
-      console.error("Failed to refresh GSC token:", await tokenResponse.text());
+      logger.error(await tokenResponse.text(), "Failed to refresh GSC token");
       return null;
     }
 
     const tokens: GSCTokens = await tokenResponse.json();
-    console.log("--------------------------------");
-    console.log({ tokens });
 
     // Update the connection with new access token
     const newExpiresAt = new Date(Date.now() + tokens.expires_in * 1000);
 
     // Only update refresh_token if a new one was provided
-    const updateData: any = {
+    const updateData: Partial<typeof gscConnections.$inferInsert> = {
       accessToken: tokens.access_token,
       expiresAt: newExpiresAt.toISOString(),
       updatedAt: new Date().toISOString(),
@@ -68,10 +67,9 @@ export async function refreshGSCToken(siteId: number): Promise<string | null> {
 
     await db.update(gscConnections).set(updateData).where(eq(gscConnections.siteId, siteId));
 
-    console.log(`Successfully refreshed GSC token for site ${siteId}, expires at ${newExpiresAt.toISOString()}`);
     return tokens.access_token;
   } catch (error) {
-    console.error("Error refreshing GSC token:", error);
+    logger.error(error, "Error refreshing GSC token");
     return null;
   }
 }
@@ -88,14 +86,14 @@ export async function getGSCProperties(accessToken: string): Promise<string[]> {
     });
 
     if (!response.ok) {
-      console.error("Failed to fetch GSC properties:", await response.text());
+      logger.error(await response.text(), "Failed to fetch GSC properties");
       return [];
     }
 
     const data = await response.json();
-    return data.siteEntry?.map((site: any) => site.siteUrl) || [];
+    return data.siteEntry?.map((site: { siteUrl: string }) => site.siteUrl) || [];
   } catch (error) {
-    console.error("Error fetching GSC properties:", error);
+    logger.error(error, "Error fetching GSC properties");
     return [];
   }
 }

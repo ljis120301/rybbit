@@ -4,6 +4,7 @@ import { gscConnections } from "../../db/postgres/schema.js";
 import { eq } from "drizzle-orm";
 import { getUserHasAccessToSite } from "../../lib/auth-utils.js";
 import { db } from "../../db/postgres/postgres.js";
+import { logger } from "../../lib/logger/logger.js";
 
 /**
  * Checks if a site has an active GSC connection
@@ -37,7 +38,7 @@ export async function getGSCStatus(req: FastifyRequest<GetGSCStatusRequest>, res
       gscPropertyUrl: connection.gscPropertyUrl,
     });
   } catch (error) {
-    console.error("Error checking GSC status:", error);
+    logger.error(error, "Error checking GSC status");
     return res.status(500).send({ error: "Failed to check GSC status" });
   }
 }
