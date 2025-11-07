@@ -1,4 +1,4 @@
-import { DEFAULT_EVENT_LIMIT } from "../../../lib/const";
+import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 
 export function PlausibleComparisonContent() {
   return (

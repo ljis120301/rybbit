@@ -1,7 +1,7 @@
-import { DEFAULT_EVENT_LIMIT } from "../../../lib/const";
+import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 import { ComparisonSection } from "../components/ComparisonPage";
 
-export const plausibleComparisonData: ComparisonSection[] = [
+export const fathomComparisonData: ComparisonSection[] = [
   {
     title: "Core Analytics Features",
     features: [
@@ -16,27 +16,12 @@ export const plausibleComparisonData: ComparisonSection[] = [
         competitorValue: true,
       },
       {
-        name: "Visitor analytics",
+        name: "Live visitor counter",
         rybbitValue: true,
         competitorValue: true,
       },
       {
-        name: "Page analytics",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "Source tracking",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "Device/OS/Browser stats",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "UTM tracking",
+        name: "UTM/Campaign tracking",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -98,7 +83,7 @@ export const plausibleComparisonData: ComparisonSection[] = [
     ],
   },
   {
-    title: "Privacy & Open Source",
+    title: "Privacy & Compliance",
     features: [
       {
         name: "Cookie-free tracking",
@@ -111,7 +96,7 @@ export const plausibleComparisonData: ComparisonSection[] = [
       //   competitorValue: true,
       // },
       {
-        name: "No personal data collection",
+        name: "No consent banner needed",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -121,14 +106,39 @@ export const plausibleComparisonData: ComparisonSection[] = [
         competitorValue: false,
       },
       {
-        name: "Open source",
+        name: "IP anonymization",
         rybbitValue: true,
         competitorValue: true,
       },
       {
-        name: "Self-hostable",
+        name: "Data stored in EU",
         rybbitValue: true,
         competitorValue: true,
+      },
+    ],
+  },
+  {
+    title: "Open Source & Transparency",
+    features: [
+      {
+        name: "Open source",
+        rybbitValue: true,
+        competitorValue: false,
+      },
+      {
+        name: "Self-hostable",
+        rybbitValue: true,
+        competitorValue: false,
+      },
+      {
+        name: "Code transparency",
+        rybbitValue: "Full",
+        competitorValue: "None",
+      },
+      {
+        name: "License",
+        rybbitValue: "AGPL v3",
+        competitorValue: "Proprietary",
       },
     ],
   },
@@ -141,27 +151,27 @@ export const plausibleComparisonData: ComparisonSection[] = [
         competitorValue: true,
       },
       {
-        name: "No training required",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
         name: "Public dashboards",
         rybbitValue: true,
         competitorValue: true,
       },
       {
-        name: "Live demo",
-        rybbitValue: true,
+        name: "Email reports",
+        rybbitValue: false,
         competitorValue: true,
       },
     ],
   },
   {
-    title: "Performance & Technical",
+    title: "Technical & Performance",
     features: [
       {
-        name: "Real-time updates",
+        name: "Script size",
+        rybbitValue: "18KB",
+        competitorValue: "2KB",
+      },
+      {
+        name: "Bot filtering",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -173,47 +183,7 @@ export const plausibleComparisonData: ComparisonSection[] = [
       {
         name: "Tech stack",
         rybbitValue: "Typescript/ClickHouse",
-        competitorValue: "Elixir/ClickHouse",
-      },
-      {
-        name: "Bot filtering",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "Bypasses ad blockers",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-    ],
-  },
-  {
-    title: "Data & Infrastructure",
-    features: [
-      {
-        name: "Data retention",
-        rybbitValue: "2-5+ years",
-        competitorValue: "Unlimited",
-      },
-      {
-        name: "Data location",
-        rybbitValue: "EU (Hetzner)",
-        competitorValue: "EU (Hetzner)",
-      },
-      {
-        name: "Team collaboration",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "Organization support",
-        rybbitValue: true,
-        competitorValue: false,
-      },
-      {
-        name: "Multiple websites",
-        rybbitValue: true,
-        competitorValue: true,
+        competitorValue: "PHP/Singlestore",
       },
     ],
   },
@@ -228,12 +198,7 @@ export const plausibleComparisonData: ComparisonSection[] = [
       {
         name: "Entry price",
         rybbitValue: "$19/mo",
-        competitorValue: "$19/mo",
-      },
-      {
-        name: "Pricing model",
-        rybbitValue: "Events-based",
-        competitorValue: "Pageview-based",
+        competitorValue: "$15/mo",
       },
       {
         name: "Customer support",

@@ -44,6 +44,9 @@ export function CustomHeader() {
             <Link href="/pricing" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
               Pricing
             </Link>
+            <Link href="/features" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
+              Features
+            </Link>
             <Link href="/docs" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
               Docs
             </Link>

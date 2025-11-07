@@ -2,9 +2,9 @@ import { CheckCircle, CircleMinus } from "lucide-react";
 import { Tilt_Warp } from "next/font/google";
 import Image from "next/image";
 import React from "react";
-import { TrackedButton } from "../../../components/TrackedButton";
-import { cn } from "../../../lib/utils";
-import { DEFAULT_EVENT_LIMIT } from "../../../lib/const";
+import { TrackedButton } from "../../../../components/TrackedButton";
+import { cn } from "../../../../lib/utils";
+import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 
 const tilt_wrap = Tilt_Warp({
   subsets: ["latin"],

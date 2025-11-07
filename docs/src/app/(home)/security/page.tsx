@@ -1,5 +1,5 @@
-import { CustomHeader } from "../../components/CustomHeader";
-import { Footer } from "../../components/Footer";
+import { CustomHeader } from "../../../components/CustomHeader";
+import { Footer } from "../../../components/Footer";
 
 export const metadata = {
   title: "Security",

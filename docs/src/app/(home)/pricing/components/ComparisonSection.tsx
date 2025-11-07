@@ -2,7 +2,7 @@
 
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DEFAULT_EVENT_LIMIT } from "../../../lib/const";
+import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 
 const COMPARISON_FEATURES = [
   {

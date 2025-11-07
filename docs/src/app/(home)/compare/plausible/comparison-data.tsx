@@ -1,7 +1,7 @@
-import { DEFAULT_EVENT_LIMIT } from "../../../lib/const";
+import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 import { ComparisonSection } from "../components/ComparisonPage";
 
-export const fathomComparisonData: ComparisonSection[] = [
+export const plausibleComparisonData: ComparisonSection[] = [
   {
     title: "Core Analytics Features",
     features: [
@@ -16,12 +16,27 @@ export const fathomComparisonData: ComparisonSection[] = [
         competitorValue: true,
       },
       {
-        name: "Live visitor counter",
+        name: "Visitor analytics",
         rybbitValue: true,
         competitorValue: true,
       },
       {
-        name: "UTM/Campaign tracking",
+        name: "Page analytics",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
+        name: "Source tracking",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
+        name: "Device/OS/Browser stats",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
+        name: "UTM tracking",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -83,7 +98,7 @@ export const fathomComparisonData: ComparisonSection[] = [
     ],
   },
   {
-    title: "Privacy & Compliance",
+    title: "Privacy & Open Source",
     features: [
       {
         name: "Cookie-free tracking",
@@ -96,7 +111,7 @@ export const fathomComparisonData: ComparisonSection[] = [
       //   competitorValue: true,
       // },
       {
-        name: "No consent banner needed",
+        name: "No personal data collection",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -106,39 +121,14 @@ export const fathomComparisonData: ComparisonSection[] = [
         competitorValue: false,
       },
       {
-        name: "IP anonymization",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-      {
-        name: "Data stored in EU",
-        rybbitValue: true,
-        competitorValue: true,
-      },
-    ],
-  },
-  {
-    title: "Open Source & Transparency",
-    features: [
-      {
         name: "Open source",
         rybbitValue: true,
-        competitorValue: false,
+        competitorValue: true,
       },
       {
         name: "Self-hostable",
         rybbitValue: true,
-        competitorValue: false,
-      },
-      {
-        name: "Code transparency",
-        rybbitValue: "Full",
-        competitorValue: "None",
-      },
-      {
-        name: "License",
-        rybbitValue: "AGPL v3",
-        competitorValue: "Proprietary",
+        competitorValue: true,
       },
     ],
   },
@@ -151,27 +141,27 @@ export const fathomComparisonData: ComparisonSection[] = [
         competitorValue: true,
       },
       {
+        name: "No training required",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
         name: "Public dashboards",
         rybbitValue: true,
         competitorValue: true,
       },
       {
-        name: "Email reports",
-        rybbitValue: false,
+        name: "Live demo",
+        rybbitValue: true,
         competitorValue: true,
       },
     ],
   },
   {
-    title: "Technical & Performance",
+    title: "Performance & Technical",
     features: [
       {
-        name: "Script size",
-        rybbitValue: "18KB",
-        competitorValue: "2KB",
-      },
-      {
-        name: "Bot filtering",
+        name: "Real-time updates",
         rybbitValue: true,
         competitorValue: true,
       },
@@ -183,7 +173,47 @@ export const fathomComparisonData: ComparisonSection[] = [
       {
         name: "Tech stack",
         rybbitValue: "Typescript/ClickHouse",
-        competitorValue: "PHP/Singlestore",
+        competitorValue: "Elixir/ClickHouse",
+      },
+      {
+        name: "Bot filtering",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
+        name: "Bypasses ad blockers",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+    ],
+  },
+  {
+    title: "Data & Infrastructure",
+    features: [
+      {
+        name: "Data retention",
+        rybbitValue: "2-5+ years",
+        competitorValue: "Unlimited",
+      },
+      {
+        name: "Data location",
+        rybbitValue: "EU (Hetzner)",
+        competitorValue: "EU (Hetzner)",
+      },
+      {
+        name: "Team collaboration",
+        rybbitValue: true,
+        competitorValue: true,
+      },
+      {
+        name: "Organization support",
+        rybbitValue: true,
+        competitorValue: false,
+      },
+      {
+        name: "Multiple websites",
+        rybbitValue: true,
+        competitorValue: true,
       },
     ],
   },
@@ -198,7 +228,12 @@ export const fathomComparisonData: ComparisonSection[] = [
       {
         name: "Entry price",
         rybbitValue: "$19/mo",
-        competitorValue: "$15/mo",
+        competitorValue: "$19/mo",
+      },
+      {
+        name: "Pricing model",
+        rybbitValue: "Events-based",
+        competitorValue: "Pageview-based",
       },
       {
         name: "Customer support",
