@@ -90,6 +90,8 @@ import { selectGSCProperty } from "./api/gsc/selectProperty.js";
 import { getSiteImports } from "./api/sites/getSiteImports.js";
 import { importSiteData } from "./api/sites/importSiteData.js";
 import { deleteSiteImport } from "./api/sites/deleteSiteImport.js";
+import { getImportQuota } from "./api/sites/getImportQuota.js";
+import { batchImportEvents } from "./api/sites/batchImportEvents.js";
 import { getJobQueue } from "./services/import/queues/jobQueueFactory.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -365,6 +367,9 @@ server.post("/api/import-site-data/:site", {
 }, importSiteData);
 server.get("/api/get-site-imports/:site", getSiteImports);
 server.delete("/api/delete-site-import/:site/:importId", deleteSiteImport);
+// Client-side import endpoints
+server.get("/api/import-quota/:site", getImportQuota);
+server.post("/api/batch-import-events/:site", batchImportEvents);
 
 // Administrative
 server.get("/api/config", getConfig);

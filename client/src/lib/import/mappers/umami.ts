@@ -1,0 +1,207 @@
+// Duplicated from server/src/services/import/mappings/umami.ts for client-side import processing
+
+import { z } from "zod";
+import { UmamiEvent, RybbitEvent } from "../types";
+import { getAllUrlParams, clearSelfReferrer, getChannel } from "./tracker-utils";
+
+export const umamiHeaders = [
+  undefined,
+  "session_id",
+  undefined,
+  undefined,
+  "hostname",
+  "browser",
+  "os",
+  "device",
+  "screen",
+  "language",
+  "country",
+  "region",
+  "city",
+  "url_path",
+  "url_query",
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  "referrer_path",
+  "referrer_query",
+  "referrer_domain",
+  "page_title",
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  "event_type",
+  "event_name",
+  undefined,
+  "distinct_id",
+  "created_at",
+  undefined,
+];
+
+export class UmamiImportMapper {
+  private static readonly browserMap: Record<string, string> = {
+    chrome: "Chrome",
+    opera: "Opera",
+    crios: "Mobile Chrome",
+    firefox: "Firefox",
+    facebook: "Facebook",
+    safari: "Safari",
+    ios: "Mobile Safari",
+    "ios-webview": "Mobile Safari",
+    "edge-chromium": "Edge",
+    samsung: "Samsung Internet",
+    yandexbrowser: "Yandex",
+    "edge-ios": "Edge",
+    "chromium-webview": "Chrome WebView",
+    fxios: "Mobile Firefox",
+    edge: "Edge",
+  };
+
+  private static readonly browserSchema = z
+    .string()
+    .max(30)
+    .transform((browser) => {
+      const key = browser.toLowerCase();
+      return UmamiImportMapper.browserMap[key] ?? browser;
+    });
+
+  private static readonly osMap: Record<string, string> = {
+    "windows 10": "Windows",
+    "windows 7": "Windows",
+    "windows server 2003": "Windows",
+    "mac os": "macOS",
+    ios: "iOS",
+    "android os": "Android",
+    linux: "Linux",
+    "chrome os": "Chrome OS",
+  };
+
+  private static readonly osSchema = z
+    .string()
+    .max(25)
+    .transform((os) => {
+      const key = os.toLowerCase();
+      return UmamiImportMapper.osMap[key] ?? os;
+    });
+
+  private static readonly deviceMap: Record<string, "Desktop" | "Mobile"> = {
+    laptop: "Desktop",
+    desktop: "Desktop",
+    mobile: "Mobile",
+    tablet: "Mobile",
+  };
+
+  private static readonly deviceSchema = z
+    .string()
+    .max(20)
+    .transform((device) => {
+      const key = device.toLowerCase();
+      return UmamiImportMapper.deviceMap[key] ?? device;
+    });
+
+  private static readonly umamiEventSchema = z.object({
+    session_id: z.string().uuid(),
+
+    hostname: z.string().max(253),
+    browser: UmamiImportMapper.browserSchema,
+    os: UmamiImportMapper.osSchema,
+    device: UmamiImportMapper.deviceSchema,
+    screen: z
+      .string()
+      .regex(/^\d{1,5}x\d{1,5}$/)
+      .or(z.literal("")),
+    language: z.string().max(35),
+    country: z
+      .string()
+      .regex(/^[A-Z]{2}$/)
+      .or(z.literal("")),
+    region: z
+      .string()
+      .regex(/^[A-Z]{2}-[A-Z0-9]{1,3}$/)
+      .or(z.literal("")),
+    city: z.string().max(60),
+
+    url_path: z.string().max(2048),
+    url_query: z
+      .string()
+      .max(2048)
+      .transform((querystring) => (querystring ? `?${querystring}` : "")),
+    referrer_path: z.string().max(2048),
+    referrer_query: z
+      .string()
+      .max(2048)
+      .transform((querystring) => (querystring ? `?${querystring}` : "")),
+    referrer_domain: z
+      .string()
+      .max(253)
+      .transform((url) => (url ? `https://${url}` : "")),
+    page_title: z.string().max(512),
+
+    event_type: z.enum(["1", "2"]),
+    event_name: z.string().max(256),
+    distinct_id: z.string().max(64),
+    created_at: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/),
+  });
+
+  static transform(
+    events: UmamiEvent[],
+    site: string,
+    importId: string,
+    onError?: (error: { row: number; message: string }) => void
+  ): RybbitEvent[] {
+    return events.reduce<RybbitEvent[]>((acc, event, index) => {
+      const parsed = UmamiImportMapper.umamiEventSchema.safeParse(event);
+      if (!parsed.success) {
+        if (onError) {
+          onError({
+            row: index + 1,
+            message: `Validation failed: ${parsed.error.errors.map((e) => e.message).join(", ")}`,
+          });
+        }
+        return acc;
+      }
+
+      const data = parsed.data;
+      const referrer = data.referrer_domain + data.referrer_path + data.referrer_query;
+      const [screenWidth, screenHeight] = data.screen ? data.screen.split("x") : ["0", "0"];
+
+      acc.push({
+        site_id: Number(site),
+        timestamp: data.created_at,
+        session_id: data.session_id,
+        user_id: data.distinct_id,
+        hostname: data.hostname,
+        pathname: data.url_path,
+        querystring: data.url_query,
+        url_parameters: getAllUrlParams(data.url_query),
+        page_title: data.page_title,
+        referrer: clearSelfReferrer(referrer, data.hostname.replace(/^www\./, "")),
+        channel: getChannel(referrer, data.url_query, data.hostname),
+        browser: data.browser,
+        browser_version: "",
+        operating_system: data.os,
+        operating_system_version: event.os === "Windows 10" ? "10" : event.os === "Windows 7" ? "7" : "",
+        language: data.language,
+        country: data.country,
+        region: data.region,
+        city: data.city,
+        lat: 0,
+        lon: 0,
+        screen_width: parseInt(screenWidth, 10),
+        screen_height: parseInt(screenHeight, 10),
+        device_type: data.device,
+        type: data.event_type === "1" ? "pageview" : "custom_event",
+        event_name: data.event_type === "1" ? "" : data.event_name,
+        props: {},
+        import_id: importId,
+      });
+
+      return acc;
+    }, []);
+  }
+}
