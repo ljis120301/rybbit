@@ -1,6 +1,12 @@
 // Common utility functions and constants for subscription components
 
-import { FREE_SITE_LIMIT, STANDARD_SITE_LIMIT, STANDARD_TEAM_LIMIT, PRO_SITE_LIMIT, PRO_TEAM_LIMIT } from "../../../lib/const";
+import {
+  FREE_SITE_LIMIT,
+  STANDARD_SITE_LIMIT,
+  STANDARD_TEAM_LIMIT,
+  PRO_SITE_LIMIT,
+  PRO_TEAM_LIMIT,
+} from "../../../lib/const";
 import { getStripePrices, STRIPE_TIERS } from "../../../lib/stripe";
 
 export const EVENT_TIERS = [...STRIPE_TIERS.map(tier => tier.events), "Custom"];
@@ -40,6 +46,7 @@ export const ENTERPRISE_FEATURES = [
   "Dedicated isolated instance",
   "On-premise Installation",
   "Custom Features",
+  "Whitelabeling",
   "Manual invoicing",
   "Uptime SLA",
   "Enterprise support",

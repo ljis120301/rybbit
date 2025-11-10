@@ -181,6 +181,13 @@ const COMPARISON_FEATURES = [
         pro: false,
         enterprise: true,
       },
+      {
+        name: "Whitelabeling",
+        free: false,
+        standard: false,
+        pro: false,
+        enterprise: true,
+      },
     ],
   },
   {

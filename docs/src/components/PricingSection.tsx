@@ -55,6 +55,7 @@ const ENTERPRISE_FEATURES = [
   "Dedicated isolated instance",
   "On-premise Installation",
   "Custom Features",
+  "Whitelabeling",
   "Manual invoicing",
   "Uptime SLA",
   "Enterprise support",
