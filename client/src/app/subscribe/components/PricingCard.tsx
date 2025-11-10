@@ -117,7 +117,7 @@ export function PricingCard({ isLoggedIn }: { isLoggedIn: boolean }) {
           </div>
           <div className="flex flex-col items-end">
             {/* Billing toggle */}
-            <div className="flex gap-3 mb-2 text-sm">
+            <div className="flex mb-2 text-sm">
               <button
                 onClick={() => setIsAnnual(false)}
                 className={cn(
