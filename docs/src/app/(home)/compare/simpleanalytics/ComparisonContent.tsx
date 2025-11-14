@@ -3,10 +3,10 @@ import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 export function SimpleAnalyticsComparisonContent() {
   return (
     <div className="space-y-6 text-neutral-350 font-light">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Understanding the Key Differences</h2>
+      <h2 className="text-2xl md:text-3xl font-bold mb-6">Understanding the Key Differences</h2>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Privacy-First, Feature-Rich</h3>
+        <h3 className="text-xl font-medium">Privacy-First, Feature-Rich</h3>
         <p className="leading-relaxed">
           SimpleAnalytics and Rybbit share the same core mission: provide privacy-friendly analytics without cookies or
           personal data collection. Both platforms are GDPR/CCPA compliant by design, store data in EU servers, and
@@ -18,7 +18,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Open Source Freedom vs Closed Source Limitations</h3>
+        <h3 className="text-xl font-medium">Open Source Freedom vs Closed Source Limitations</h3>
         <p className="leading-relaxed">
           SimpleAnalytics keeps their code proprietary and closed source, requiring you to trust their privacy claims
           without verification. Rybbit is fully open source (AGPL v3) with 8000+ GitHub stars. You can inspect every
@@ -30,7 +30,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">See the Complete User Journey</h3>
+        <h3 className="text-xl font-medium">See the Complete User Journey</h3>
         <p className="leading-relaxed">
           SimpleAnalytics tells you what pages were visited and which buttons were clicked. That's useful, but modern
           businesses need deeper insights. Rybbit's session replay shows you exactly how users interact with your site,
@@ -42,7 +42,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Built for Modern Product Teams</h3>
+        <h3 className="text-xl font-medium">Built for Modern Product Teams</h3>
         <p className="leading-relaxed">
           SimpleAnalytics works well for blogs and content sites that need basic visitor metrics. Rybbit is designed for
           product teams building SaaS applications, e-commerce platforms, and complex web apps. Our error tracking helps
@@ -54,7 +54,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">AI Hype vs Real Features</h3>
+        <h3 className="text-xl font-medium">AI Hype vs Real Features</h3>
         <p className="leading-relaxed">
           SimpleAnalytics recently added an AI assistant to help interpret analytics data. While AI can be helpful, we
           believe in providing features that deliver immediate, tangible value. Instead of asking an AI what your users
@@ -66,7 +66,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Free Tier That Makes Sense</h3>
+        <h3 className="text-xl font-medium">Free Tier That Makes Sense</h3>
         <p className="leading-relaxed">
           SimpleAnalytics offers unlimited pageviews on their free tier, but with a major catch: they delete all data
           older than 30 days. This makes historical comparisons impossible and limits the free tier's usefulness for any
@@ -78,7 +78,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Modern Stack for Modern Needs</h3>
+        <h3 className="text-xl font-medium">Modern Stack for Modern Needs</h3>
         <p className="leading-relaxed">
           SimpleAnalytics uses Node.js and PostgreSQL, a solid but traditional stack. Rybbit leverages Next.js,
           TypeScript, and ClickHouse, the same database technology that powers analytics at scale for companies like
@@ -90,7 +90,7 @@ export function SimpleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Choose Power Without Sacrificing Simplicity</h3>
+        <h3 className="text-xl font-medium">Choose Power Without Sacrificing Simplicity</h3>
         <p className="leading-relaxed">
           Both Rybbit and SimpleAnalytics are bootstrapped companies fighting against surveillance capitalism. We
           respect their commitment to privacy and transparency. But we believe users shouldn't have to choose between

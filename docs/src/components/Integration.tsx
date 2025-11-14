@@ -40,8 +40,8 @@ const PlatformLogo = ({ name, logo, path }: { name: string; logo: string; path: 
       <div
         className={cn(
           "flex items-center justify-center h-20 w-20 mx-2 my-2",
-          "bg-neutral-800/50 backdrop-blur-sm rounded-lg p-4",
-          "border border-neutral-700/50 hover:border-neutral-500 transition-colors duration-200",
+          "bg-neutral-100/50 dark:bg-neutral-800/50 backdrop-blur-sm rounded-lg p-4",
+          "border border-neutral-300/50 dark:border-neutral-700/50 hover:border-neutral-500 dark:hover:border-neutral-500 transition-colors duration-200",
           "cursor-pointer hover:scale-105 transition-transform"
         )}
       >
@@ -63,7 +63,7 @@ export function Integrations() {
           Seamless Integration
         </SectionBadge>
         <h2 className="text-4xl font-bold mb-3">Works with all your favorite platforms</h2>
-        <p className="text-xl text-neutral-300 font-light">Integrate Rybbit with any platform in minutes</p>
+        <p className="text-xl text-neutral-600 dark:text-neutral-300 font-light">Integrate Rybbit with any platform in minutes</p>
       </div>
 
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-8">

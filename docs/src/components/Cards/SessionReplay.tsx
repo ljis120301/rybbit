@@ -53,20 +53,20 @@ export function SessionReplay() {
       description="Watch real user sessions to understand their behavior and identify pain points."
       icon={Film}
     >
-      <div className=" mt-4 transform rotate-2 translate-x-8 translate-y-8 bg-neutral-900 rounded-lg -mb-[30px] rounded-xl transition-transform duration-300 hover:scale-105 hover:rotate-3">
+      <div className=" mt-4 transform rotate-2 translate-x-8 translate-y-8 bg-neutral-200 dark:bg-neutral-900 rounded-lg -mb-[30px] rounded-xl transition-transform duration-300 hover:scale-105 hover:rotate-3">
         {/* Video player container */}
         <div className="relative">
           {/* Mock website content */}
           <div className="relative overflow-hidden">
             {/* Browser chrome */}
-            <div className="bg-neutral-800 h-7 flex items-center px-2 gap-2 rounded-t-lg">
+            <div className="bg-neutral-300 dark:bg-neutral-800 h-7 flex items-center px-2 gap-2 rounded-t-lg">
               <div className="flex gap-1">
                 <div className="w-2 h-2 rounded-full bg-red-500"></div>
                 <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
               </div>
               <div className="flex-1 mx-3">
-                <div className="bg-neutral-700 rounded px-2 py-0.5 text-[10px] text-neutral-300">
+                <div className="bg-neutral-400 dark:bg-neutral-700 rounded px-2 py-0.5 text-[10px] text-neutral-900 dark:text-neutral-300">
                   https://example.com/products
                 </div>
               </div>
@@ -158,7 +158,7 @@ export function SessionReplay() {
         </div>
 
         {/* Video controls */}
-        <div className="bg-neutral-800/50 backdrop-blur-sm p-2 pb-10">
+        <div className="bg-neutral-300/50 dark:bg-neutral-800/50 backdrop-blur-sm p-2 pb-10">
           <div className="flex items-center gap-3">
             {/* Play/Pause button */}
             <button
@@ -170,13 +170,13 @@ export function SessionReplay() {
 
             {/* Progress bar */}
             <div className="flex-1">
-              <div className="relative h-1 bg-neutral-700 rounded-full overflow-hidden">
+              <div className="relative h-1 bg-neutral-400 dark:bg-neutral-700 rounded-full overflow-hidden">
                 <div className="absolute left-0 top-0 h-full w-1/2 bg-emerald-500 rounded-full"></div>
               </div>
             </div>
 
             {/* Time display */}
-            <div className="text-[10px] text-neutral-400 tabular-nums">2:34 / 5:12</div>
+            <div className="text-[10px] text-neutral-600 dark:text-neutral-400 tabular-nums">2:34 / 5:12</div>
           </div>
         </div>
       </div>

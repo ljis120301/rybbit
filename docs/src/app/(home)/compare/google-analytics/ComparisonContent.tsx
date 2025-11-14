@@ -3,10 +3,10 @@ import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 export function GoogleAnalyticsComparisonContent() {
   return (
     <div className="space-y-6 text-neutral-350 font-light">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Understanding the Key Differences</h2>
+      <h2 className="text-2xl md:text-3xl font-bold mb-6">Understanding the Key Differences</h2>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Privacy First, Not Privacy Theater</h3>
+        <h3 className="text-xl font-medium">Privacy First, Not Privacy Theater</h3>
         <p className="leading-relaxed">
           The fundamental difference between Rybbit and Google Analytics lies in our approach to privacy. While Google
           Analytics collects vast amounts of personal data requiring cookie consent banners to comply with GDPR and
@@ -18,7 +18,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">The Sweet Spot Between Simple and Powerful</h3>
+        <h3 className="text-xl font-medium">The Sweet Spot Between Simple and Powerful</h3>
         <p className="leading-relaxed">
           Google Analytics 4 has become notoriously complex, often requiring dedicated specialists or extensive training
           to extract meaningful insights. Meanwhile, simpler alternatives may lack the advanced features you need.
@@ -30,7 +30,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Built for Performance</h3>
+        <h3 className="text-xl font-medium">Built for Performance</h3>
         <p className="leading-relaxed">
           Website performance directly impacts user experience, SEO rankings, and conversion rates. Google Analytics'
           tracking script can significantly slow down your site with its large size and multiple network requests.
@@ -41,7 +41,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Real-Time, Accurate Data That Lasts</h3>
+        <h3 className="text-xl font-medium">Real-Time, Accurate Data That Lasts</h3>
         <p className="leading-relaxed">
           Google Analytics has significant accuracy issues that most users don't realize. It samples data on
           high-traffic sites (showing you only a fraction of actual visits), has 24-48 hour delays in reporting, and
@@ -53,7 +53,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Beyond Basic Analytics</h3>
+        <h3 className="text-xl font-medium">Beyond Basic Analytics</h3>
         <p className="leading-relaxed">
           While Google Analytics shows you what happened through numbers and charts, Rybbit provides a comprehensive
           suite of advanced features. Watch real user sessions with session replay, track user journeys with Sankey
@@ -65,7 +65,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Open Source and Self-Hostable</h3>
+        <h3 className="text-xl font-medium">Open Source and Self-Hostable</h3>
         <p className="leading-relaxed">
           Google Analytics is a closed system where you have no control or visibility into how your data is processed.
           Rybbit is open source (AGPL v3) with thousands of stars on GitHub, meaning you can inspect our code,
@@ -77,7 +77,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Transparent Business Model</h3>
+        <h3 className="text-xl font-medium">Transparent Business Model</h3>
         <p className="leading-relaxed">
           Google Analytics is "free" because you're the product. Your data feeds their advertising empire. Rybbit has a
           transparent, sustainable business model: we charge fair prices for our service. Starting at just $19/month for
@@ -89,7 +89,7 @@ export function GoogleAnalyticsComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Try Before You Buy</h3>
+        <h3 className="text-xl font-medium">Try Before You Buy</h3>
         <p className="leading-relaxed">
           Unlike Google Analytics where you need to implement tracking before seeing any interface, Rybbit offers a live
           demo with real data so you can explore all features immediately. See our beautiful UI, test the session

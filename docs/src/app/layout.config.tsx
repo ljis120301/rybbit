@@ -12,7 +12,14 @@ export const baseOptions: BaseLayoutProps = {
   nav: {
     title: (
       <>
-        <Image src="/rybbit-text.svg" alt="Rybbit" width={90} height={0} style={{ height: "auto" }} className="mr-2" />
+        <Image
+          src="/rybbit-text.svg"
+          alt="Rybbit"
+          width={90}
+          height={0}
+          style={{ height: "auto" }}
+          className="mr-2 invert dark:invert-0"
+        />
       </>
     ),
   },

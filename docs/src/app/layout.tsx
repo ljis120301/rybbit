@@ -76,7 +76,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Script type="text/javascript" id="mixpanel" strategy="afterInteractive">
           {`(function (e, c) {
@@ -169,9 +169,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body className={`flex flex-col min-h-screen ${inter.variable} font-sans`}>
         <RootProvider
           theme={{
-            forcedTheme: "dark",
             defaultTheme: "dark",
-            enabled: false,
+            enabled: true,
           }}
         >
           {children}

@@ -3,10 +3,10 @@ import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 export function PlausibleComparisonContent() {
   return (
     <div className="space-y-6 text-neutral-350 font-light">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Understanding the Key Differences</h2>
+      <h2 className="text-2xl md:text-3xl font-bold mb-6">Understanding the Key Differences</h2>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Same Simplicity, Way More Features</h3>
+        <h3 className="text-xl font-medium">Same Simplicity, Way More Features</h3>
         <p className="leading-relaxed">
           Plausible pioneered the simple, privacy-friendly analytics dashboard, and we respect that. In fact, our main
           dashboard is remarkably similar because that clean, intuitive design just works. But here's where we diverge:
@@ -17,7 +17,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Privacy-Friendly Brothers in Arms</h3>
+        <h3 className="text-xl font-medium">Privacy-Friendly Brothers in Arms</h3>
         <p className="leading-relaxed">
           Both Rybbit and Plausible share the same core values: respect user privacy, avoid cookies, and comply with
           GDPR by default. We're both open source (AGPL v3), both self-hostable, and both store data in EU servers.
@@ -28,7 +28,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">See How Users Really Behave</h3>
+        <h3 className="text-xl font-medium">See How Users Really Behave</h3>
         <p className="leading-relaxed">
           Plausible tells you what pages users visit. Rybbit shows you how they actually interact with those pages. Our
           session replay feature lets you watch real user sessions, understand confusion points, identify bugs, and
@@ -40,7 +40,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Built for Product Teams, Not Just Marketers</h3>
+        <h3 className="text-xl font-medium">Built for Product Teams, Not Just Marketers</h3>
         <p className="leading-relaxed">
           Plausible excels at answering marketing questions: Where do visitors come from? What content performs best?
           Rybbit answers those questions too, but we also serve product teams. Track custom events with attributes,
@@ -52,7 +52,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Organizations and Scale</h3>
+        <h3 className="text-xl font-medium">Organizations and Scale</h3>
         <p className="leading-relaxed">
           As your business grows, your analytics needs evolve. Plausible works well for individual websites, but lacks
           organization-level features. Rybbit provides full organization support, allowing you to manage multiple
@@ -64,7 +64,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">A Free Tier That Actually Helps</h3>
+        <h3 className="text-xl font-medium">A Free Tier That Actually Helps</h3>
         <p className="leading-relaxed">
           Plausible requires payment from day one, even for small personal projects. We believe analytics should be
           accessible to everyone, which is why Rybbit offers a generous free tier with{" "}
@@ -76,7 +76,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">The Best of Both Worlds</h3>
+        <h3 className="text-xl font-medium">The Best of Both Worlds</h3>
         <p className="leading-relaxed">
           Choosing Rybbit doesn't mean rejecting what Plausible stands for. We share their commitment to privacy,
           simplicity, and ethical business practices. We've just taken it further. Our beautiful interface matches
@@ -88,7 +88,7 @@ export function PlausibleComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Modern Stack, Modern Features</h3>
+        <h3 className="text-xl font-medium">Modern Stack, Modern Features</h3>
         <p className="leading-relaxed">
           While both platforms use ClickHouse for data storage, our Next.js and TypeScript foundation enables rapid
           feature development and seamless integration with modern web frameworks. This shows in our feature velocity:

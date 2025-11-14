@@ -37,7 +37,7 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
         <CircleMinus className="w-5 h-5 text-neutral-500" />
       );
     }
-    return <span className="text-neutral-300">{value}</span>;
+    return <span className="text-neutral-700 dark:text-neutral-300">{value}</span>;
   };
 
   return (
@@ -46,7 +46,8 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
         className={cn(
           "absolute inset-0 -top-32 md:-top-48",
           "[background-size:40px_40px]",
-          "[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+          "[background-image:linear-gradient(to_right,#d4d4d4_1px,transparent_1px),linear-gradient(to_bottom,#d4d4d4_1px,transparent_1px)]",
+          "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
           "[mask-image:linear-gradient(to_bottom,black,transparent_80%),linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]",
           "[mask-composite:intersect]"
         )}
@@ -56,13 +57,13 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
 
         <h1
           className={cn(
-            "relative z-10 text-4xl md:text-5xl lg:text-7xl font-medium  px-4 tracking-tight max-w-4xl text-center text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-100 to-gray-400",
+            "relative z-10 text-4xl md:text-5xl lg:text-7xl font-medium  px-4 tracking-tight max-w-4xl text-center text-transparent bg-clip-text bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-500 dark:from-white dark:via-gray-100 dark:to-gray-400",
             tilt_wrap.className
           )}
         >
           Rybbit vs. {competitorName}
         </h1>
-        <h2 className="relative z-10 text-base md:text-xl pt-4 md:pt-6 px-4 tracking-tight max-w-4xl text-center text-neutral-300 font-light">
+        <h2 className="relative z-10 text-base md:text-xl pt-4 md:pt-6 px-4 tracking-tight max-w-4xl text-center text-neutral-600 dark:text-neutral-300 font-light">
           Compare the key features of Rybbit and {competitorName}.
         </h2>
 
@@ -82,12 +83,12 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
               target="_blank"
               rel="noopener noreferrer"
               eventProps={{ location: "hero", button_text: "Live demo" }}
-              className="w-full sm:w-auto bg-neutral-800 hover:bg-neutral-700 text-white font-medium px-5 py-3 rounded-lg border border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 cursor-pointer"
+              className="w-full sm:w-auto bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium px-5 py-3 rounded-lg border border-neutral-400 dark:border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-500 dark:hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 cursor-pointer"
             >
               Live demo
             </TrackedButton>
           </div>
-          <p className="text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2 mt-6">
+          <p className="text-neutral-500 dark:text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2 mt-6">
             <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
             First {DEFAULT_EVENT_LIMIT.toLocaleString()} pageviews/m are free. No credit card required.
           </p>
@@ -129,22 +130,22 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
       </div>
       {/* Comparison Table */}
       <section className="pb-12 pt-4 w-full max-w-5xl mx-auto px-4">
-        <div className="bg-neutral-900/40 p-2 rounded-3xl border border-neutral-800">
-          <div className="bg-neutral-900 backdrop-blur-sm rounded-2xl border border-neutral-800 overflow-hidden text-lg">
+        <div className="bg-neutral-200/40 dark:bg-neutral-900/40 p-2 rounded-3xl border border-neutral-300 dark:border-neutral-800">
+          <div className="bg-neutral-50 dark:bg-neutral-900 backdrop-blur-sm rounded-2xl border border-neutral-300 dark:border-neutral-800 overflow-hidden text-lg">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-neutral-800">
+                <tr className="border-b border-neutral-300 dark:border-neutral-800">
                   <th className="text-left p-6 w-2/5"></th>
                   <th className="text-center p-6">
                     <div className="flex flex-col items-center gap-2">
-                      <span className="text-white font-semibold">
-                        <Image src="/rybbit-text.svg" alt="Rybbit" width={100} height={27} />
+                      <span className="font-semibold">
+                        <Image src="/rybbit-text.svg" alt="Rybbit" width={100} height={27} className="dark:invert-0 invert" />
                       </span>
                     </div>
                   </th>
                   <th className="text-center p-6">
                     <div className="flex flex-col items-center gap-2">
-                      <span className="text-white font-semibold">{competitorName}</span>
+                      <span className="font-semibold">{competitorName}</span>
                     </div>
                   </th>
                 </tr>
@@ -153,16 +154,16 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
                 {sections.map((section, sectionIndex) => (
                   <React.Fragment key={sectionIndex}>
                     <tr>
-                      <td colSpan={3} className="px-6 py-4 bg-neutral-900/70">
-                        <span className="text-neutral-400 text-sm font-medium">{section.title}</span>
+                      <td colSpan={3} className="px-6 py-4 bg-neutral-200/70 dark:bg-neutral-900/70">
+                        <span className="text-neutral-600 dark:text-neutral-400 text-sm font-medium">{section.title}</span>
                       </td>
                     </tr>
                     {section.features.map((feature, featureIndex) => (
                       <tr
                         key={`${sectionIndex}-${featureIndex}`}
-                        className={featureIndex < section.features.length - 1 ? "border-b border-neutral-800" : ""}
+                        className={featureIndex < section.features.length - 1 ? "border-b border-neutral-300 dark:border-neutral-800" : ""}
                       >
-                        <td className="px-6 py-4 text-neutral-300 text-sm">{feature.name}</td>
+                        <td className="px-6 py-4 text-neutral-700 dark:text-neutral-300 text-sm">{feature.name}</td>
                         <td className="px-6 py-4 text-center text-sm">
                           <div className="flex justify-center">{renderFeatureValue(feature.rybbitValue)}</div>
                         </td>
@@ -185,16 +186,16 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
         </section>
       )}
 
-      <section className="py-12 md:py-20 w-full bg-gradient-to-b from-neutral-900 to-neutral-950">
+      <section className="py-12 md:py-20 w-full bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950">
         <div className="max-w-7xl mx-auto px-4">
           <div className="relative p-6 md:p-12 flex flex-col items-center justify-center text-center">
             <div className="mb-6 md:mb-8">
-              <Image src="/rybbit-text.svg" alt="Rybbit" width={150} height={27} />
+              <Image src="/rybbit-text.svg" alt="Rybbit" width={150} height={27} className="dark:invert-0 invert" />
             </div>
             <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">
               It&apos;s time to switch to analytics that&apos;s made for you
             </h2>
-            <p className="text-base md:text-xl text-neutral-300 mb-6 md:mb-10 max-w-3xl mx-auto font-light">
+            <p className="text-base md:text-xl text-neutral-600 dark:text-neutral-300 mb-6 md:mb-10 max-w-3xl mx-auto font-light">
               The first {DEFAULT_EVENT_LIMIT.toLocaleString()} events a month are free
             </p>
 
@@ -209,7 +210,7 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
               </TrackedButton>
             </div>
 
-            <p className="text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2">
+            <p className="text-neutral-500 dark:text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2">
               <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
               No credit card required
             </p>

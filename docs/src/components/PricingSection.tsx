@@ -142,10 +142,10 @@ export function PricingSection() {
     <section className="py-16 md:py-24 w-full">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-12 text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight pb-4 text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-400">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight pb-4 text-transparent bg-clip-text bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-500 dark:from-white dark:via-gray-200 dark:to-gray-400">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-lg text-neutral-300">Privacy-friendly analytics with all the features you need to grow</p>
+          <p className="text-lg text-neutral-600 dark:text-neutral-300">Privacy-friendly analytics with all the features you need to grow</p>
         </div>
 
         {/* Shared controls section */}
@@ -154,7 +154,7 @@ export function PricingSection() {
           <div className="flex justify-between mb-6 items-center">
             <div>
               <h3 className="font-semibold mb-2">Events per month</h3>
-              <div className="text-3xl font-bold text-emerald-400">
+              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                 {typeof eventLimit === "number" ? eventLimit.toLocaleString() : eventLimit}
               </div>
             </div>
@@ -166,8 +166,8 @@ export function PricingSection() {
                   className={cn(
                     "px-3 py-1 rounded-full transition-colors cursor-pointer",
                     !isAnnual
-                      ? "bg-emerald-500/20 text-emerald-400 font-medium"
-                      : "text-neutral-400 hover:text-neutral-200"
+                      ? "bg-emerald-500/30 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium"
+                      : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
                   )}
                 >
                   Monthly
@@ -177,12 +177,12 @@ export function PricingSection() {
                   className={cn(
                     "px-3 py-1 rounded-full transition-colors cursor-pointer",
                     isAnnual
-                      ? "bg-emerald-500/20 text-emerald-400 font-medium"
-                      : "text-neutral-400 hover:text-neutral-200"
+                      ? "bg-emerald-500/30 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium"
+                      : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
                   )}
                 >
                   Annual
-                  <span className="ml-1 text-xs text-emerald-500">-17%</span>
+                  <span className="ml-1 text-xs text-emerald-600 dark:text-emerald-500">-17%</span>
                 </button>
               </div>
             </div>

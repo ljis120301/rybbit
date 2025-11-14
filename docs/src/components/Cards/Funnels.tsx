@@ -29,7 +29,7 @@ export function Funnels() {
       icon={Filter}
     >
       {/* Funnel Steps */}
-      <div className="space-y-4 mt-4 transform -rotate-2 translate-x-8 translate-y-8 bg-neutral-800/20 border border-neutral-800/50 pb-20 rounded-lg p-4 -mb-[40px] transition-transform duration-300 hover:scale-105 hover:-rotate-1">
+      <div className="space-y-4 mt-4 transform -rotate-2 translate-x-8 translate-y-8 bg-neutral-100/50 dark:bg-neutral-800/20 border border-neutral-300/50 dark:border-neutral-800/50 pb-20 rounded-lg p-4 -mb-[40px] transition-transform duration-300 hover:scale-105 hover:-rotate-1">
         {funnelData.map((item, index) => {
           const overallConversion = (item.users / totalUsers) * 100;
           const previousUsers = index > 0 ? funnelData[index - 1].users : item.users;
@@ -37,7 +37,7 @@ export function Funnels() {
           return (
             <div key={item.step} className="flex items-center gap-3">
               {/* Step number */}
-              <div className="flex-shrink-0 w-8 h-8 mt-7 bg-neutral-800 rounded-full flex items-center justify-center text-xs">
+              <div className="flex-shrink-0 w-8 h-8 mt-7 bg-neutral-300 dark:bg-neutral-800 rounded-full flex items-center justify-center text-xs">
                 {item.step}
               </div>
 
@@ -49,7 +49,7 @@ export function Funnels() {
                   <span className="text-sm font-medium">{item.label}</span>
                 </div>
 
-                <div className="h-8 bg-neutral-800 relative">
+                <div className="h-8 bg-neutral-300 dark:bg-neutral-800 relative">
                   <div
                     className="h-8 bg-emerald-600 rounded flex items-center justify-end pr-3"
                     style={{ width: `${overallConversion}%` }}

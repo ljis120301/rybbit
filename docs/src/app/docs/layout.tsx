@@ -10,17 +10,10 @@ export default function Layout({ children }: { children: ReactNode }) {
       tree={source.pageTree}
       {...baseOptions}
       githubUrl="https://github.com/rybbit-io/rybbit"
-      themeSwitch={{ enabled: false }}
       links={[
         {
           type: "custom",
-          children: (
-            <GithubInfo
-              owner="rybbit-io"
-              repo="rybbit"
-              className="lg:-mx-2"
-            />
-          ),
+          children: <GithubInfo owner="rybbit-io" repo="rybbit" className="lg:-mx-2" />,
         },
       ]}
     >

@@ -109,14 +109,14 @@ function EventCard({ event, index, isNew }: { event: Event; index: number; isNew
 
   return (
     <div
-      className="absolute w-full rounded-md bg-neutral-800/50 overflow-hidden p-2 flex flex-col transition-all duration-500"
+      className="absolute w-full rounded-md bg-neutral-200/50 dark:bg-neutral-800/50 overflow-hidden p-2 flex flex-col transition-all duration-500"
       style={{
         transform: isAnimating && index === 0 ? `translateY(-70px)` : `translateY(${index * 70}px)`,
         opacity: isAnimating && index === 0 ? 0 : index < 4 ? 1 : 0,
         zIndex: 10 - index,
       }}
     >
-      <div className="flex items-center gap-2 text-sm text-neutral-100 mb-1.5">
+      <div className="flex items-center gap-2 text-sm text-neutral-900 dark:text-neutral-100 mb-1.5">
         <div className="flex items-center gap-2">
           {isPageview ? (
             <Eye className="w-4 h-4 text-blue-400" />
@@ -144,7 +144,7 @@ function EventCard({ event, index, isNew }: { event: Event; index: number; isNew
           </div>
         </div>
 
-        <div className="ml-auto flex items-center text-xs text-neutral-400">
+        <div className="ml-auto flex items-center text-xs text-neutral-500 dark:text-neutral-400">
           <Clock className="w-3 h-3 mr-1" />
           <span>{event.timestamp}</span>
         </div>
@@ -198,7 +198,7 @@ export function RealTimeAnalytics() {
       description="See your site performance as it happens with instant data updates and live visitor activity."
       icon={Activity}
     >
-      <div className="space-y-4 mt-4 transform -rotate-2 translate-x-8 translate-y-8 bg-neutral-800/20 border border-neutral-800/50 pb-20 rounded-lg p-4 -mb-[90px] transition-transform duration-300 hover:scale-105 hover:-rotate-1">
+      <div className="space-y-4 mt-4 transform -rotate-2 translate-x-8 translate-y-8 bg-neutral-100/50 dark:bg-neutral-800/20 border border-neutral-300/50 dark:border-neutral-800/50 pb-20 rounded-lg p-4 -mb-[90px] transition-transform duration-300 hover:scale-105 hover:-rotate-1">
         <div className="relative" style={{ height: "280px" }}>
           {events.map((event, index) => (
             <EventCard key={event.id} event={event} index={index} isNew={event.isNew} />

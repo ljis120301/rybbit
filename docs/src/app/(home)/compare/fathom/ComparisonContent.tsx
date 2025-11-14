@@ -3,10 +3,10 @@ import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 export function FathomComparisonContent() {
   return (
     <div className="space-y-6 text-neutral-350 font-light">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Understanding the Key Differences</h2>
+      <h2 className="text-2xl md:text-3xl font-bold mb-6">Understanding the Key Differences</h2>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Open Source vs Closed Source Philosophy</h3>
+        <h3 className="text-xl font-medium">Open Source vs Closed Source Philosophy</h3>
         <p className="leading-relaxed">
           While Fathom shares our commitment to privacy and simplicity, they've chosen to keep their code proprietary
           and closed source. This fundamental difference matters. With Rybbit's open source approach (AGPL v3), you can
@@ -18,7 +18,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Beyond Basic Analytics</h3>
+        <h3 className="text-xl font-medium">Beyond Basic Analytics</h3>
         <p className="leading-relaxed">
           Fathom excels at simple web analytics, and they've built a solid product for content sites and blogs. But
           modern businesses need more than pageview counts and referrer data. Rybbit provides the advanced features that
@@ -30,7 +30,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Built for Product Teams</h3>
+        <h3 className="text-xl font-medium">Built for Product Teams</h3>
         <p className="leading-relaxed">
           Fathom was created by content creators for content creators, and it shows. Their features focus on blog
           analytics, newsletter tracking, and content performance. Rybbit is built for product teams who need deeper
@@ -42,7 +42,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Modern Architecture, Modern Features</h3>
+        <h3 className="text-xl font-medium">Modern Architecture, Modern Features</h3>
         <p className="leading-relaxed">
           Fathom's Go and MySQL stack is solid but traditional. Rybbit leverages Next.js, TypeScript, and ClickHouse,
           the same database that powers analytics at Cloudflare and Uber. This modern architecture enables features
@@ -54,7 +54,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Privacy Without Compromise</h3>
+        <h3 className="text-xl font-medium">Privacy Without Compromise</h3>
         <p className="leading-relaxed">
           Both Rybbit and Fathom are privacy-first, cookie-free, and GDPR compliant. We both store data in EU servers
           and never sell user information. But Rybbit goes further with our daily rotating salt option for enhanced
@@ -66,7 +66,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Accessible to Everyone</h3>
+        <h3 className="text-xl font-medium">Accessible to Everyone</h3>
         <p className="leading-relaxed">
           Fathom requires payment from day one, even for personal projects or testing. Their cheapest plan starts at
           $15/month with no free tier. Rybbit believes analytics should be accessible to everyone, offering
@@ -78,7 +78,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">The Power of Choice</h3>
+        <h3 className="text-xl font-medium">The Power of Choice</h3>
         <p className="leading-relaxed">
           With Fathom, you get what you get. No self-hosting option. No code transparency. No advanced features. It's a
           take-it-or-leave-it proposition. Rybbit gives you choices. Run our cloud service for zero maintenance.
@@ -90,7 +90,7 @@ export function FathomComparisonContent() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-xl text-white font-medium">Try Before You Buy</h3>
+        <h3 className="text-xl font-medium">Try Before You Buy</h3>
         <p className="leading-relaxed">
           Fathom offers a 7-day trial, but you need to implement tracking before seeing their interface. Rybbit provides
           a live demo with real data, letting you explore every feature immediately. See session replays in action. Test

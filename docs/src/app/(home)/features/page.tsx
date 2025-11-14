@@ -290,18 +290,18 @@ function FeatureGrid({ title, description, features, bgClassName = "" }: Feature
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-12">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{title}</h2>
-          <p className="text-lg text-neutral-400">{description}</p>
+          <p className="text-lg text-neutral-600 dark:text-neutral-400">{description}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {features.map((feature, index) => (
-            <div key={index} className="bg-neutral-800/20 rounded-lg p-5 transition-colors">
+            <div key={index} className="bg-neutral-100/50 dark:bg-neutral-800/20 rounded-lg p-5 transition-colors">
               <div>
                 <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <div className="text-neutral-400">{feature.icon}</div>
+                  <div className="text-neutral-600 dark:text-neutral-400">{feature.icon}</div>
                   {feature.title}
                 </h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">{feature.description}</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -322,7 +322,7 @@ export default function FeaturesPage() {
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Everything you need to understand your audience
             </h1>
-            <p className="text-lg md:text-xl text-neutral-300 mb-8 font-light">
+            <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 mb-8 font-light">
               Powerful analytics without the complexity. Track, analyze, and optimize your website with privacy-friendly
               tools that just work.
             </p>
@@ -341,12 +341,12 @@ export default function FeaturesPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 eventProps={{ location: "features_hero", button_text: "View live demo" }}
-                className="w-full sm:w-auto bg-neutral-800 hover:bg-neutral-700 text-white font-medium px-6 py-3 rounded-lg border border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 cursor-pointer"
+                className="w-full sm:w-auto bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium px-6 py-3 rounded-lg border border-neutral-400 dark:border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-500 dark:hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 cursor-pointer"
               >
                 Live demo
               </TrackedButton>
             </div>
-            <p className="text-neutral-400 text-sm flex items-center justify-center gap-2 mt-6">
+            <p className="text-neutral-500 dark:text-neutral-400 text-sm flex items-center justify-center gap-2 mt-6">
               <CheckCircle className="w-4 h-4" />
               First {DEFAULT_EVENT_LIMIT.toLocaleString()} pageviews/m free • No credit card required
             </p>
@@ -364,7 +364,7 @@ export default function FeaturesPage() {
         title="Advanced Analytics"
         description="Go deeper with powerful tools for session replay, funnels, comparisons, and advanced user behavior analysis."
         features={advancedAnalyticsFeatures}
-        bgClassName="bg-neutral-900/50"
+        bgClassName="bg-neutral-100/30 dark:bg-neutral-900/50"
       />
 
       <FeatureGrid
@@ -377,7 +377,7 @@ export default function FeaturesPage() {
         title="Privacy"
         description="Privacy isn't a feature—it's the foundation. Analytics that respect your users and comply with regulations automatically."
         features={privacyFeatures}
-        bgClassName="bg-neutral-900/50"
+        bgClassName="bg-neutral-100/30 dark:bg-neutral-900/50"
       />
 
       <FeatureGrid
@@ -387,11 +387,11 @@ export default function FeaturesPage() {
       />
 
       {/* Why Choose Rybbit Section */}
-      <section className="py-14 md:py-20 w-full bg-neutral-900/50">
+      <section className="py-14 md:py-20 w-full bg-neutral-100/30 dark:bg-neutral-900/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Why choose Rybbit?</h2>
-            <p className="text-lg text-neutral-300 max-w-2xl mx-auto font-light">
+            <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto font-light">
               Built for teams who value privacy, simplicity, and powerful insights
             </p>
           </div>
@@ -399,13 +399,13 @@ export default function FeaturesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Clock className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Set up in minutes</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   Add a simple script tag or install our npm package and start tracking immediately. No complex
                   configuration required.
                 </p>
@@ -414,13 +414,13 @@ export default function FeaturesPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Shield className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Privacy-focused</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   Cookieless tracking that&apos;s GDPR and CCPA compliant by default. No cookie banners needed, your
                   users&apos; privacy protected.
                 </p>
@@ -429,13 +429,13 @@ export default function FeaturesPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Zap className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Lightning fast</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   Our tracking script is less than 2KB and doesn&apos;t slow down your site. Dashboard loads instantly
                   with real-time updates.
                 </p>
@@ -444,13 +444,13 @@ export default function FeaturesPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Eye className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Crystal clear insights</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   No confusing metrics or overwhelming dashboards. See exactly what matters with clean, intuitive
                   visualizations.
                 </p>
@@ -459,13 +459,13 @@ export default function FeaturesPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <TrendingUp className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Grow with confidence</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   From startups to enterprises, our infrastructure scales with you. Start free and upgrade only when you
                   need to.
                 </p>
@@ -474,13 +474,13 @@ export default function FeaturesPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 bg-emerald-500/20 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                   <Globe className="w-6 h-6" />
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">Open source</h3>
-                <p className="text-neutral-300 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm">
                   100% open source under AGPL v3.0. Self-host on your infrastructure or use our cloud service. Your
                   choice, your data.
                 </p>
@@ -491,10 +491,10 @@ export default function FeaturesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 w-full bg-gradient-to-b from-neutral-900 to-neutral-950">
+      <section className="py-16 md:py-24 w-full bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to get started?</h2>
-          <p className="text-lg md:text-xl text-neutral-300 mb-10 font-light">
+          <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 mb-10 font-light">
             Join thousands of companies using Rybbit to understand their audience
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-base md:text-lg">
@@ -507,13 +507,13 @@ export default function FeaturesPage() {
               Start tracking for free
             </TrackedButton>
             <Link href="/pricing" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto bg-neutral-800 hover:bg-neutral-700 text-white font-medium px-8 py-4 rounded-lg border border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 flex items-center justify-center gap-2">
+              <button className="w-full sm:w-auto bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white font-medium px-8 py-4 rounded-lg border border-neutral-400 dark:border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-500 dark:hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50 flex items-center justify-center gap-2">
                 View pricing
                 <ArrowRight className="w-4 h-4" />
               </button>
             </Link>
           </div>
-          <p className="text-neutral-400 text-sm flex items-center justify-center gap-2 mt-8">
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm flex items-center justify-center gap-2 mt-8">
             <CheckCircle className="w-4 h-4" />
             No credit card required • Cancel anytime • {DEFAULT_EVENT_LIMIT.toLocaleString()} events/month free
           </p>

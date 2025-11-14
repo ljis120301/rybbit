@@ -43,10 +43,10 @@ export function PricingCard({
         className={cn(
           "rounded-xl border overflow-hidden backdrop-blur-sm shadow-xl h-full",
           recommended
-            ? "bg-neutral-800/100 border-emerald-500 border-2"
+            ? "bg-neutral-100/80 dark:bg-neutral-800/100 border-emerald-500 border-2"
             : isFree
-            ? "bg-neutral-800/15 border-neutral-800/60 text-neutral-300"
-            : "bg-neutral-800/50 border-neutral-800/90"
+            ? "bg-neutral-100/30 dark:bg-neutral-800/15 border-neutral-300/60 dark:border-neutral-800/60 text-neutral-600 dark:text-neutral-300"
+            : "bg-neutral-100/50 dark:bg-neutral-800/50 border-neutral-300/90 dark:border-neutral-800/90"
         )}
       >
         <div className="p-6">
@@ -54,12 +54,12 @@ export function PricingCard({
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-xl font-bold">{title}</h3>
               {recommended && (
-                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-500/30 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-full border border-emerald-500/40 dark:border-emerald-500/30">
                   Recommended
                 </span>
               )}
             </div>
-            <p className="text-sm text-neutral-400 h-10">{description}</p>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 h-10">{description}</p>
           </div>
 
           {/* Price display */}
@@ -82,7 +82,7 @@ export function PricingCard({
                   "w-full font-medium px-5 py-3 rounded-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-opacity-50 cursor-pointer",
                   isPrimary
                     ? "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 focus:ring-emerald-500"
-                    : "bg-neutral-700 hover:bg-neutral-600 text-white border border-neutral-600 focus:ring-neutral-400"
+                    : "bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white border border-neutral-400 dark:border-neutral-600 focus:ring-neutral-400"
                 )}
               >
                 {buttonText}
@@ -99,9 +99,9 @@ export function PricingCard({
               return (
                 <div key={i} className="flex items-center">
                   {included ? (
-                    <Check className="h-4 w-4 text-emerald-400 mr-3 shrink-0" />
+                    <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 mr-3 shrink-0" />
                   ) : (
-                    <X className="h-4 w-4 text-neutral-400 mr-3 shrink-0" />
+                    <X className="h-4 w-4 text-neutral-500 dark:text-neutral-400 mr-3 shrink-0" />
                   )}
                   <span className="text-sm">{feature}</span>
                 </div>
@@ -110,7 +110,7 @@ export function PricingCard({
           </div>
 
           {footerText && (
-            <p className="text-center text-sm text-neutral-400 mt-4 flex items-center justify-center gap-2">
+            <p className="text-center text-sm text-neutral-600 dark:text-neutral-400 mt-4 flex items-center justify-center gap-2">
               {footerText}
             </p>
           )}

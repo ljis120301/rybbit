@@ -5,33 +5,34 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function CustomHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-300 dark:border-neutral-800 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3" aria-label="Global">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <Image src="/rybbit-text.svg" alt="Rybbit" width={100} height={0} style={{ height: "auto" }} />
+            <Image src="/rybbit-text.svg" alt="Rybbit" width={100} height={0} style={{ height: "auto" }} className="dark:invert-0 invert" />
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:flex-1 md:justify-center">
           <div className="flex items-center gap-x-6">
-            <Link href="/pricing" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
+            <Link href="/pricing" className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
               Pricing
             </Link>
-            <Link href="/features" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
+            <Link href="/features" className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
               Features
             </Link>
-            <Link href="/docs" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
+            <Link href="/docs" className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
               Docs
             </Link>
-            <Link href="/blog" className="text-sm font-base text-neutral-400 hover:text-white transition-colors">
+            <Link href="/blog" className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
               Blog
             </Link>
           </div>
@@ -44,7 +45,7 @@ export function CustomHeader() {
             href="https://discord.gg/DEhGb4hYBj"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-200 hover:text-white transition-colors"
+            className="text-neutral-600 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white transition-colors"
             aria-label="Discord"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -57,7 +58,7 @@ export function CustomHeader() {
             href="https://github.com/rybbit-io/rybbit"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-200 hover:text-white transition-colors"
+            className="text-neutral-600 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white transition-colors"
             aria-label="GitHub"
             onClick={() => trackAdEvent("github", { location: "header" })}
           >
@@ -66,11 +67,14 @@ export function CustomHeader() {
             </svg>
           </a>
 
+          {/* Theme Switcher */}
+          <ThemeSwitcher />
+
           {/* Login Button */}
           <a href="https://app.rybbit.io" target="_blank" rel="noopener noreferrer">
             <button
               onClick={() => trackAdEvent("login", { location: "header" })}
-              className="bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-medium px-3 py-1.5 rounded-md border border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50"
+              className="bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-medium px-3 py-1.5 rounded-md border border-neutral-400 dark:border-neutral-600 transform hover:-translate-y-0.5 transition-all duration-200 hover:border-neutral-500 dark:hover:border-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-opacity-50"
             >
               Login
             </button>
@@ -81,7 +85,7 @@ export function CustomHeader() {
         <div className="flex md:hidden">
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+            className="inline-flex items-center justify-center rounded-md p-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             <span className="sr-only">Open main menu</span>
@@ -96,21 +100,21 @@ export function CustomHeader() {
           <div className="space-y-1 px-4 pb-3 pt-2">
             <Link
               href="/pricing"
-              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white"
+              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
             </Link>
             <Link
               href="/docs"
-              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white"
+              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               Docs
             </Link>
             <Link
               href="/blog"
-              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white"
+              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               Blog
@@ -119,18 +123,25 @@ export function CustomHeader() {
               href="https://github.com/rybbit-io/rybbit"
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white"
+              className="block rounded-md px-3 py-2 text-base font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
               onClick={() => setMobileMenuOpen(false)}
             >
               GitHub
             </a>
 
-            <div className="pt-2 border-t border-neutral-800">
+            <div className="pt-2 border-t border-neutral-300 dark:border-neutral-800">
+              <div className="px-3 py-2 flex items-center justify-between">
+                <span className="text-base font-medium text-neutral-600 dark:text-neutral-300">Theme</span>
+                <ThemeSwitcher />
+              </div>
+            </div>
+
+            <div className="border-t border-neutral-300 dark:border-neutral-800">
               <a href="https://app.rybbit.io" target="_blank" rel="noopener noreferrer" className="block w-full">
                 <button
                   onClick={() => trackAdEvent("login", { location: "header" })}
                   data-rybbit-event="login"
-                  className="w-full bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-medium px-3 py-2 rounded-md border border-neutral-600"
+                  className="w-full bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white text-sm font-medium px-3 py-2 rounded-md border border-neutral-400 dark:border-neutral-600"
                 >
                   Login
                 </button>
