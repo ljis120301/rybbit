@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function CustomHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -66,6 +67,9 @@ export function CustomHeader() {
             </svg>
           </a>
 
+          {/* Theme Switcher */}
+          <ThemeSwitcher />
+
           {/* Login Button */}
           <a href="https://app.rybbit.io" target="_blank" rel="noopener noreferrer">
             <button
@@ -126,6 +130,13 @@ export function CustomHeader() {
             </a>
 
             <div className="pt-2 border-t border-neutral-300 dark:border-neutral-800">
+              <div className="px-3 py-2 flex items-center justify-between">
+                <span className="text-base font-medium text-neutral-600 dark:text-neutral-300">Theme</span>
+                <ThemeSwitcher />
+              </div>
+            </div>
+
+            <div className="border-t border-neutral-300 dark:border-neutral-800">
               <a href="https://app.rybbit.io" target="_blank" rel="noopener noreferrer" className="block w-full">
                 <button
                   onClick={() => trackAdEvent("login", { location: "header" })}

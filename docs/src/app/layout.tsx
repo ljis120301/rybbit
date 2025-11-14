@@ -76,7 +76,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <Script type="text/javascript" id="mixpanel" strategy="afterInteractive">
           {`(function (e, c) {
