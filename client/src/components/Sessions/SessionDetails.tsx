@@ -57,7 +57,7 @@ function PageviewItem({
       <div className="relative flex-shrink-0">
         {!isLast && (
           <div
-            className="absolute top-8 left-4 w-[1px] bg-neutral-700"
+            className="absolute top-8 left-4 w-[1px] bg-neutral-300 dark:bg-neutral-700"
             style={{
               height: "calc(100% - 20px)",
             }}
@@ -129,28 +129,28 @@ function PageviewItem({
             )}
           </div>
 
-          <div className="text-xs text-neutral-400 flex-shrink-0">{formattedTime}</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 flex-shrink-0">{formattedTime}</div>
         </div>
         {isPageview && duration && (
           <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-400">
-              <Clock className="w-3 h-3 inline mr-1 text-neutral-400" />
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">
+              <Clock className="w-3 h-3 inline mr-1 text-neutral-500 dark:text-neutral-400" />
               {duration}
             </div>
           </div>
         )}
         {isEvent && (
           <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-400">
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">
               {item.props && Object.keys(item.props).length > 0 ? (
                 <span className="flex flex-wrap gap-2 mt-1">
                   {Object.entries(item.props).map(([key, value]) => (
                     <Badge
                       key={key}
                       variant="outline"
-                      className="px-1.5 py-0 h-5 text-xs bg-neutral-800 text-neutral-100 font-medium"
+                      className="px-1.5 py-0 h-5 text-xs bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium"
                     >
-                      <span className="text-neutral-300 font-light mr-1">{key}:</span>{" "}
+                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">{key}:</span>{" "}
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <span className="truncate">
@@ -172,23 +172,23 @@ function PageviewItem({
         )}
         {isOutbound && (
           <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-400">
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">
               {item.props && Object.keys(item.props).length > 0 ? (
                 <span className="flex flex-wrap gap-2 mt-1">
                   {item.props.text ? (
                     <Badge
                       variant="outline"
-                      className="px-1.5 py-0 h-5 text-xs bg-neutral-800 text-neutral-100 font-medium"
+                      className="px-1.5 py-0 h-5 text-xs bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium"
                     >
-                      <span className="text-neutral-300 font-light mr-1">text:</span> {String(item.props.text)}
+                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">text:</span> {String(item.props.text)}
                     </Badge>
                   ) : null}
                   {item.props.target ? (
                     <Badge
                       variant="outline"
-                      className="px-1.5 py-0 h-5 text-xs bg-neutral-800 text-neutral-100 font-medium"
+                      className="px-1.5 py-0 h-5 text-xs bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium"
                     >
-                      <span className="text-neutral-300 font-light mr-1">target:</span> {String(item.props.target)}
+                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">target:</span> {String(item.props.target)}
                     </Badge>
                   ) : null}
                 </span>
@@ -198,23 +198,23 @@ function PageviewItem({
         )}
         {isError && (
           <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-400">
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">
               {item.props ? (
                 <span>
                   {item.props.message && (
                     <Badge
                       key="message"
                       variant="outline"
-                      className="px-1.5 py-0 h-5 text-xs bg-neutral-800 text-neutral-100 font-medium"
+                      className="px-1.5 py-0 h-5 text-xs bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-medium"
                     >
-                      <span className="text-neutral-300 font-light mr-1">message:</span> {String(item.props.message)}
+                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">message:</span> {String(item.props.message)}
                     </Badge>
                   )}
 
                   {item.props.stack && (
                     <div>
-                      <p className="mt-2 mb-1 text-neutral-300 font-light">Stack Trace:</p>
-                      <pre className="text-xs text-neutral-100 bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap break-words">
+                      <p className="mt-2 mb-1 text-neutral-600 dark:text-neutral-300 font-light">Stack Trace:</p>
+                      <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap break-words">
                         {item.props.stack}
                       </pre>
                     </div>
@@ -313,7 +313,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
   const { getRegionName } = useGetRegionName();
 
   return (
-    <div className="px-4 bg-neutral-900 border-t border-neutral-800">
+    <div className="px-4 bg-white dark:bg-neutral-900 border-t border-neutral-300 dark:border-neutral-800">
       {isLoading ? (
         <SessionDetailsTimelineSkeleton itemCount={session.pageviews + session.events} />
       ) : error ? (
@@ -323,7 +323,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
       ) : sessionDetailsData?.pages[0]?.data ? (
         <Tabs defaultValue="timeline" className="mt-4">
           <div className="flex justify-between items-center mb-6">
-            <TabsList className="bg-neutral-800">
+            <TabsList className="bg-neutral-200 dark:bg-neutral-800">
               <TabsTrigger value="timeline">Timeline</TabsTrigger>
               <TabsTrigger value="info">Session Info</TabsTrigger>
             </TabsList>
@@ -380,7 +380,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
               )}
 
               {sessionDetailsData.pages[0]?.data?.pagination?.total > 0 && (
-                <div className="text-center text-xs text-neutral-500 mt-2">
+                <div className="text-center text-xs text-neutral-400 dark:text-neutral-500 mt-2">
                   Showing {allEvents.length} of {sessionDetailsData.pages[0]?.data?.pagination?.total} events
                 </div>
               )}
@@ -391,22 +391,22 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
             <div className="grid grid-cols-1 lg:grid-cols-[auto_auto_auto] gap-8 mb-6">
               {/* User Information */}
               <div>
-                <h4 className="text-sm font-medium mb-3 text-neutral-300 border-b border-neutral-800 pb-2">
+                <h4 className="text-sm font-medium mb-3 text-neutral-600 dark:text-neutral-300 border-b border-neutral-300 dark:border-neutral-800 pb-2">
                   User Information
                 </h4>
                 <div className="space-y-3">
                   {sessionDetails?.user_id && (
                     <div className="flex items-center gap-2">
-                      <div className="h-10 w-10 bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
                         <Avatar size={40} id={sessionDetails.user_id} />
                       </div>
                       <div>
-                        <div className="text-sm text-neutral-400 flex items-center">
-                          <span className="font-medium text-neutral-300">User ID:</span>
+                        <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center">
+                          <span className="font-medium text-neutral-600 dark:text-neutral-300">User ID:</span>
                           <CopyText text={sessionDetails.user_id} maxLength={24} className="inline-flex ml-2" />
                         </div>
-                        <div className="text-sm text-neutral-400 flex items-center">
-                          <span className="font-medium text-neutral-300">Session ID:</span>
+                        <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center">
+                          <span className="font-medium text-neutral-600 dark:text-neutral-300">Session ID:</span>
                           <CopyText text={sessionDetails.session_id} maxLength={20} className="inline-flex ml-2" />
                         </div>
                       </div>
@@ -425,8 +425,8 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
 
                     {sessionDetails?.country && (
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-neutral-300 min-w-[80px]">Country:</span>
-                        <div className="flex items-center gap-1 text-neutral-400">
+                        <span className="font-medium text-neutral-600 dark:text-neutral-300 min-w-[80px]">Country:</span>
+                        <div className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400">
                           <CountryFlag country={sessionDetails.country} />
                           <span>{getCountryName(sessionDetails.country)}</span>
                           {sessionDetails.region && <span>({sessionDetails.region})</span>}
@@ -435,13 +435,13 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                     )}
                     {sessionDetails?.region && getRegionName(sessionDetails.region) && (
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-neutral-300 min-w-[80px]">Region:</span>
+                        <span className="font-medium text-neutral-600 dark:text-neutral-300 min-w-[80px]">Region:</span>
                         <span className="text-neutral-400">{getRegionName(sessionDetails.region)}</span>
                       </div>
                     )}
                     {sessionDetails?.city && (
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-neutral-300 min-w-[80px]">City:</span>
+                        <span className="font-medium text-neutral-600 dark:text-neutral-300 min-w-[80px]">City:</span>
                         <span className="text-neutral-400">{sessionDetails.city}</span>
                       </div>
                     )}
@@ -451,7 +451,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
 
               {/* Device Information */}
               <div>
-                <h4 className="text-sm font-medium mb-3 text-neutral-300 border-b border-neutral-800 pb-2">
+                <h4 className="text-sm font-medium mb-3 text-neutral-600 dark:text-neutral-300 border-b border-neutral-300 dark:border-neutral-800 pb-2">
                   Device Information
                 </h4>
                 <div className="space-y-3">
@@ -510,7 +510,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
 
               {/* Source Information */}
               <div>
-                <h4 className="text-sm font-medium mb-3 text-neutral-300 border-b border-neutral-800 pb-2">
+                <h4 className="text-sm font-medium mb-3 text-neutral-600 dark:text-neutral-300 border-b border-neutral-300 dark:border-neutral-800 pb-2">
                   Source Information
                 </h4>
                 <div className="space-y-3">

@@ -145,7 +145,7 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
 
           return (
             <div
-              className="text-white max-w-[300px] truncate flex items-center gap-2 cursor-pointer hover:underline"
+              className="text-neutral-900 dark:text-white max-w-[300px] truncate flex items-center gap-2 cursor-pointer hover:underline"
               onClick={handleClick}
             >
               {dimension === "country" && value ? (
@@ -184,7 +184,7 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
                       onClick={e => e.stopPropagation()}
                     >
                       <SquareArrowOutUpRight
-                        className="ml-0.5 w-3.5 h-3.5 text-neutral-300 hover:text-neutral-100"
+                        className="ml-0.5 w-3.5 h-3.5 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100"
                         strokeWidth={3}
                       />
                     </a>
@@ -262,7 +262,7 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
       }),
       columnHelper.accessor("event_count", {
         header: "Events",
-        cell: info => <div className="text-center text-neutral-300">{info.getValue()?.toLocaleString() ?? 0}</div>,
+        cell: info => <div className="text-center text-neutral-600 dark:text-neutral-300">{info.getValue()?.toLocaleString() ?? 0}</div>,
       }),
     ],
     [selectedPercentile]
@@ -321,33 +321,33 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
       {isLoading ? (
         <Table>
           <TableHeader>
-            <TableRow className="border-neutral-800">
-              <TableHead className="text-neutral-300">
+            <TableRow className="border-neutral-300 dark:border-neutral-800">
+              <TableHead className="text-neutral-600 dark:text-neutral-300">
                 <Skeleton className="h-4 w-20" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-8 mx-auto" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-8 mx-auto" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-8 mx-auto" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-8 mx-auto" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-10 mx-auto" />
               </TableHead>
-              <TableHead className="text-neutral-300 text-center">
+              <TableHead className="text-neutral-600 dark:text-neutral-300 text-center">
                 <Skeleton className="h-4 w-12 mx-auto" />
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Array.from({ length: 10 }).map((_, i) => (
-              <TableRow key={i} className="border-neutral-800">
+              <TableRow key={i} className="border-neutral-300 dark:border-neutral-800">
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-4 w-4 rounded" />
@@ -393,11 +393,11 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map(headerGroup => (
-                <TableRow key={headerGroup.id} className="border-neutral-800">
+                <TableRow key={headerGroup.id} className="border-neutral-300 dark:border-neutral-800">
                   {headerGroup.headers.map(header => (
                     <TableHead
                       key={header.id}
-                      className={`text-neutral-300 ${
+                      className={`text-neutral-600 dark:text-neutral-300 ${
                         header.column.getCanSort()
                           ? "cursor-pointer hover:text-white transition-colors select-none"
                           : ""
@@ -432,7 +432,7 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
                 </TableRow>
               ) : (
                 table.getRowModel().rows.map(row => (
-                  <TableRow key={row.id} className="border-neutral-800 hover:bg-neutral-900/50">
+                  <TableRow key={row.id} className="border-neutral-300 dark:border-neutral-800 hover:bg-neutral-100/50 dark:hover:bg-neutral-900/50">
                     {row.getVisibleCells().map(cell => (
                       <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                     ))}

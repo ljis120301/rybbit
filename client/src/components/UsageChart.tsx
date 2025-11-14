@@ -1,5 +1,5 @@
 "use client";
-import { nivoTheme } from "@/lib/nivo";
+import { getNivoTheme } from "@/lib/nivo";
 import { ResponsiveLine } from "@nivo/line";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { DateTime } from "luxon";
@@ -7,6 +7,7 @@ import { useGetOrgEventCount } from "../api/analytics/useGetOrgEventCount";
 import { userLocale } from "../lib/dateTimeUtils";
 import { formatter } from "../lib/utils";
 import { Badge } from "./ui/badge";
+import { useTheme } from "next-themes";
 
 interface UsageChartProps {
   organizationId: string;
@@ -17,6 +18,8 @@ interface UsageChartProps {
 
 export function UsageChart({ organizationId, startDate, endDate, timeZone = "UTC" }: UsageChartProps) {
   const { width } = useWindowSize();
+  const { theme } = useTheme();
+  const nivoTheme = getNivoTheme(theme === "dark");
 
   // Fetch the data inside the component
   const { data, isLoading, error } = useGetOrgEventCount({
@@ -110,9 +113,9 @@ export function UsageChart({ organizationId, startDate, endDate, timeZone = "UTC
 
   return (
     <div>
-      <h3 className="font-medium text-sm text-neutral-300 mb-2 flex items-center gap-2 mb-4">
+      <h3 className="font-medium text-sm text-neutral-600 dark:text-neutral-300 mb-2 flex items-center gap-2 mb-4">
         Last 30 Days Usage
-        <Badge variant="outline" className="text-neutral-300">
+        <Badge variant="outline" className="text-neutral-600 dark:text-neutral-300">
           {totalEvents.toLocaleString()} events
         </Badge>
       </h3>
@@ -172,14 +175,14 @@ export function UsageChart({ organizationId, startDate, endDate, timeZone = "UTC
             const total = slice.points.reduce((acc: number, point: any) => acc + Number(point.data.yFormatted), 0);
 
             return (
-              <div className="text-sm bg-neutral-850 p-3 rounded-md min-w-[100px] border border-neutral-750">
+              <div className="text-sm bg-neutral-150 dark:bg-neutral-850 p-3 rounded-md min-w-[100px] border border-neutral-300 dark:border-neutral-750">
                 <div className="font-medium mb-1">{currentTime.toLocaleString(DateTime.DATE_MED)}</div>
                 {slice.points
                   .sort((a: any, b: any) => a.seriesId.localeCompare(b.seriesId))
                   .map((point: any) => {
                     return (
                       <div key={point.serieId} className="flex justify-between gap-4 text-sm">
-                        <div className="flex items-center gap-2 text-neutral-300">
+                        <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: point.seriesColor }} />
                           <span>{point.seriesId.charAt(0).toUpperCase() + point.seriesId.slice(1)}</span>
                         </div>
@@ -188,7 +191,7 @@ export function UsageChart({ organizationId, startDate, endDate, timeZone = "UTC
                     );
                   })}
                 <div className="text-sm mt-2 flex justify-between">
-                  <div className="text-neutral-300">Total</div>
+                  <div className="text-neutral-600 dark:text-neutral-300">Total</div>
                   <div className="font-semibold">{total.toLocaleString()}</div>
                 </div>
               </div>

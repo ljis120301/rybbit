@@ -17,7 +17,7 @@ export function TopBar() {
   const queryClient = useQueryClient();
 
   return (
-    <div className="flex py-2 pr-3 pl-6 items-center w-full  bg-neutral-950 justify-center border-b border-neutral-750">
+    <div className="flex py-2 pr-3 pl-6 items-center w-full bg-neutral-50 dark:bg-neutral-950 justify-center border-b border-neutral-150 dark:border-neutral-750">
       <div className="flex items-center justify-between flex-1">
         <div className="flex items-center space-x-4">
           <Link href={session ? "/" : "https://rybbit.com"}>
