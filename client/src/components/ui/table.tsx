@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -82,4 +83,29 @@ const TableCaption = React.forwardRef<HTMLTableCaptionElement, React.HTMLAttribu
 );
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+interface TableSortIndicatorProps {
+  /** The current sort direction: 'asc', 'desc', or false/undefined for unsorted */
+  sortDirection?: false | "asc" | "desc";
+  /** Whether sorting is enabled for this column */
+  canSort?: boolean;
+  className?: string;
+}
+
+const TableSortIndicator = ({ sortDirection, canSort = true, className }: TableSortIndicatorProps) => {
+  if (!canSort) return null;
+
+  return (
+    <div className={cn("flex flex-col", className)}>
+      {sortDirection === "asc" ? (
+        <ChevronUp className="h-3 w-3 text-blue-400" />
+      ) : sortDirection === "desc" ? (
+        <ChevronDown className="h-3 w-3 text-blue-400" />
+      ) : (
+        <ChevronsUpDown className="h-3 w-3 text-neutral-400" />
+      )}
+    </div>
+  );
+};
+TableSortIndicator.displayName = "TableSortIndicator";
+
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption, TableSortIndicator };

@@ -1,7 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSortIndicator } from "@/components/ui/table";
 import {
   createColumnHelper,
   flexRender,
@@ -11,9 +11,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
-  ChevronDown,
-  ChevronsUpDown,
-  ChevronUp,
   Monitor,
   Smartphone,
   Tablet,
@@ -388,17 +385,10 @@ export function PerformanceTable({ dimension, title }: PerformanceTableProps) {
                     >
                       <div className="flex items-center gap-1">
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                        {header.column.getCanSort() && (
-                          <div className="flex flex-col">
-                            {header.column.getIsSorted() === "asc" ? (
-                              <ChevronUp className="h-3 w-3 text-blue-400" />
-                            ) : header.column.getIsSorted() === "desc" ? (
-                              <ChevronDown className="h-3 w-3 text-blue-400" />
-                            ) : (
-                              <ChevronsUpDown className="h-3 w-3 text-neutral-400" />
-                            )}
-                          </div>
-                        )}
+                        <TableSortIndicator
+                          sortDirection={header.column.getIsSorted()}
+                          canSort={header.column.getCanSort()}
+                        />
                       </div>
                     </TableHead>
                   ))}
