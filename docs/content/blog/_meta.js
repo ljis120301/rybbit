@@ -9,4 +9,5 @@ export default {
     "Rybbit Analytics for E-commerce Websites",
   "onyx-ai-knowledge-platform":
     "How We Use Onyx to Power Knowledge Management at Rybbit",
+  "bounce-rate": "How to Calculate Bounce Rate with Rybbit Analytics",
 };
