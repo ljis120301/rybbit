@@ -1,10 +1,7 @@
-import { ToolCTA } from "../components/ToolCTA";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { RelatedTools } from "@/components/RelatedTools";
 import { Metadata } from "next";
 import Link from "next/link";
 import { OGTagForm } from "./OGTagForm";
+import { ToolPageLayout } from "../components/ToolPageLayout";
 
 export const metadata: Metadata = {
   title: "Free Open Graph Tag Generator | OG Meta Tag Creator for Social Sharing",
@@ -111,253 +108,223 @@ const structuredData = {
   ],
 };
 
+const educationalContent = (
+  <>
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">What Are Open Graph Tags?</h2>
+    <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
+      Open Graph (OG) tags are meta tags placed in the HTML head of your web pages that control how your
+      content appears when shared on social media platforms. Developed by Facebook, the Open Graph protocol
+      works across Facebook, LinkedIn, Twitter, Pinterest, and many other social networks.
+    </p>
+    <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
+      When someone shares your link on social media, the platform's crawler reads your OG tags to determine
+      what preview to display: the title, description, image, and content type. Without proper OG tags, social
+      platforms make their best guess by extracting text and images from your page, often resulting in
+      unattractive or irrelevant previews that discourage clicks.
+    </p>
+
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">
+      Why Open Graph Tags Matter for Social Sharing
+    </h2>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>
+        <strong>Increased Click-Through Rates:</strong> Optimized OG images and descriptions increase clicks on
+        social shares by 2-3x compared to default previews.
+      </li>
+      <li>
+        <strong>Brand Consistency:</strong> Control exactly how your brand appears across social platforms,
+        ensuring consistent messaging and visual branding.
+      </li>
+      <li>
+        <strong>Better Social Engagement:</strong> Professional, well-designed previews encourage sharing and
+        comments, leading to increased organic reach.
+      </li>
+      <li>
+        <strong>SEO and Discoverability:</strong> Better social engagement signals can indirectly improve search
+        rankings and overall content discoverability.
+      </li>
+    </ul>
+
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">Required vs Optional OG Tags</h2>
+
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">
+      Required Tags (Minimum)
+    </h3>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:title</code> - The title
+        of your page or content (50-60 characters recommended)
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:type</code> - The type of
+        content: website, article, product, video.movie, music.song, etc.
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:image</code> - URL of the
+        image to display (1200x630px recommended)
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:url</code> - The canonical
+        URL of the page being shared
+      </li>
+    </ul>
+
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">Recommended Tags</h3>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:description</code> - A
+        brief description of the content (150-160 characters)
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">
+          og:image:width & og:image:height
+        </code>{" "}
+        - Actual dimensions of the og:image
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:site_name</code> - Your
+        website or brand name
+      </li>
+      <li>
+        <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">twitter:card</code> - Twitter
+        Card type: summary, summary_large_image, app, or player
+      </li>
+    </ul>
+
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">
+      Open Graph Image Specifications
+    </h2>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>
+        <strong>Facebook / General:</strong> 1200 x 630 px (1.91:1 aspect ratio), JPG or PNG
+      </li>
+      <li>
+        <strong>Twitter (summary_large_image):</strong> 1024 x 512 px (2:1 aspect ratio), JPG or PNG
+      </li>
+      <li>
+        <strong>LinkedIn:</strong> 1200 x 630 px (1.91:1 aspect ratio), JPG or PNG
+      </li>
+      <li>
+        <strong>Minimum:</strong> 200 x 200 px (1:1 aspect ratio), JPG or PNG
+      </li>
+    </ul>
+    <p className="text-neutral-700 dark:text-neutral-300">
+      Use 1200x630px for most platforms (Facebook, LinkedIn, Pinterest). Keep file size under 8MB. Use
+      high-quality JPG or PNG. Avoid text in critical image areas as it may be cropped.
+    </p>
+
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">How to Test Your OG Tags</h2>
+    <ol className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>
+        <strong>Facebook Sharing Debugger:</strong> Visit facebook.com/developers/tools/debug/ and enter your
+        URL. This shows exactly how your page will appear in Facebook feeds and reveals any parsing errors. Pro
+        tip: Click "Scrape Again" to refresh the cache after making changes.
+      </li>
+      <li>
+        <strong>LinkedIn Post Inspector:</strong> Visit linkedin.com/feed/update and paste your URL in the status
+        box. This preview shows how your content will appear on LinkedIn feeds. Pro tip: LinkedIn sometimes takes
+        time to update. Wait a few hours if changes don't appear immediately.
+      </li>
+      <li>
+        <strong>Twitter Card Validator:</strong> Visit cards-dev.twitter.com/validator and enter your URL to
+        preview how your page will appear in tweets and Twitter feeds. Pro tip: Check the "Tag" tab to see which
+        tags Twitter detected from your page.
+      </li>
+      <li>
+        <strong>Test on Actual Social Platforms:</strong> Paste your URL directly into Facebook, LinkedIn,
+        Twitter, and Pinterest status boxes to see real-time previews. This is the most authentic test. Pro tip:
+        Use incognito/private browsing mode to avoid cached versions.
+      </li>
+      <li>
+        <strong>Track Performance with Analytics:</strong> Use{" "}
+        <Link
+          href="https://app.rybbit.io"
+          className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium"
+        >
+          Rybbit Analytics
+        </Link>{" "}
+        to track which social platforms drive the most traffic to your pages. Measure CTR by platform to see
+        which OG tags perform best and optimize accordingly.
+      </li>
+    </ol>
+  </>
+);
+
+const faqs = [
+  {
+    question: "What are Open Graph tags?",
+    answer: (
+      <>
+        Open Graph tags are meta tags that control how URLs are displayed when shared on social media
+        platforms like Facebook, LinkedIn, and Twitter. They define the title, description, image, and type
+        of content that appears in social shares.
+      </>
+    ),
+  },
+  {
+    question: "Why are OG tags important?",
+    answer: (
+      <>
+        OG tags significantly impact social media engagement. A well-optimized OG image and description can
+        increase click-through rates by 2-3x compared to default previews. They're essential for content
+        marketing and social sharing strategy.
+      </>
+    ),
+  },
+  {
+    question: "How do I test my OG tags?",
+    answer: (
+      <>
+        Use Facebook's Sharing Debugger, LinkedIn's Post Inspector, or Twitter's Card Validator to test how
+        your OG tags appear. Track social referral traffic with{" "}
+        <Link
+          href="https://app.rybbit.io"
+          className="text-emerald-600 dark:text-emerald-400 hover:underline"
+        >
+          Rybbit Analytics
+        </Link>{" "}
+        to see which OG tags drive the most clicks.
+      </>
+    ),
+  },
+  {
+    question: "What's the difference between Open Graph tags and Twitter Cards?",
+    answer: (
+      <>
+        Open Graph tags are a protocol developed by Facebook that works across multiple platforms. Twitter
+        Cards use the twitter: prefix and allow more granular control over Twitter-specific previews. You
+        should implement both for complete social optimization. Twitter will fall back to OG tags if Twitter
+        Card tags are missing.
+      </>
+    ),
+  },
+  {
+    question: "What image sizes should I use for OG tags?",
+    answer: (
+      <>
+        Use 1200x630 pixels (1.91:1 aspect ratio) for og:image on most platforms. Minimum size is 200x200
+        pixels. For Twitter Cards (summary_large_image), use 1024x512 or larger. Always include
+        og:image:width and og:image:height tags. Keep file size under 8MB and use JPG or PNG format.
+      </>
+    ),
+  },
+];
+
 export default function OGTagGeneratorPage() {
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
-      <div className="min-h-screen">
-        <div className="max-w-4xl mx-auto px-6 py-20">
-          <Breadcrumbs
-            items={[{ label: "Home", href: "/" }, { label: "Tools", href: "/tools" }, { label: "OG Tag Generator" }]}
-          />
-          {/* Header */}
-          <div className="mb-16">
-            <div className="inline-block mb-4 px-4 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full">
-              <span className="text-sm font-medium text-emerald-700 dark:text-emerald-400">AI-Powered Tool</span>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-neutral-900 dark:text-white mb-6 tracking-tight">
-              Open Graph Tag Generator
-            </h1>
-            <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
-              Generate optimized Open Graph tags for social media sharing. Get perfect previews on Facebook, Twitter,
-              and LinkedIn with AI-powered suggestions and complete HTML code.
-            </p>
-          </div>
-
-          {/* Tool */}
-          <div className="mb-16">
-            <OGTagForm />
-          </div>
-
-          {/* Educational Content */}
-          <div className="mb-16 prose prose-neutral dark:prose-invert max-w-none">
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">What Are Open Graph Tags?</h2>
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
-              Open Graph (OG) tags are meta tags placed in the HTML head of your web pages that control how your
-              content appears when shared on social media platforms. Developed by Facebook, the Open Graph protocol
-              works across Facebook, LinkedIn, Twitter, Pinterest, and many other social networks.
-            </p>
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
-              When someone shares your link on social media, the platform's crawler reads your OG tags to determine
-              what preview to display: the title, description, image, and content type. Without proper OG tags, social
-              platforms make their best guess by extracting text and images from your page, often resulting in
-              unattractive or irrelevant previews that discourage clicks.
-            </p>
-
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">
-              Why Open Graph Tags Matter for Social Sharing
-            </h2>
-            <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
-              <li>
-                <strong>Increased Click-Through Rates:</strong> Optimized OG images and descriptions increase clicks on
-                social shares by 2-3x compared to default previews.
-              </li>
-              <li>
-                <strong>Brand Consistency:</strong> Control exactly how your brand appears across social platforms,
-                ensuring consistent messaging and visual branding.
-              </li>
-              <li>
-                <strong>Better Social Engagement:</strong> Professional, well-designed previews encourage sharing and
-                comments, leading to increased organic reach.
-              </li>
-              <li>
-                <strong>SEO and Discoverability:</strong> Better social engagement signals can indirectly improve search
-                rankings and overall content discoverability.
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">Required vs Optional OG Tags</h2>
-
-            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">
-              Required Tags (Minimum)
-            </h3>
-            <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:title</code> - The title
-                of your page or content (50-60 characters recommended)
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:type</code> - The type of
-                content: website, article, product, video.movie, music.song, etc.
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:image</code> - URL of the
-                image to display (1200x630px recommended)
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:url</code> - The canonical
-                URL of the page being shared
-              </li>
-            </ul>
-
-            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">Recommended Tags</h3>
-            <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:description</code> - A
-                brief description of the content (150-160 characters)
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">
-                  og:image:width & og:image:height
-                </code>{" "}
-                - Actual dimensions of the og:image
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">og:site_name</code> - Your
-                website or brand name
-              </li>
-              <li>
-                <code className="text-sm font-mono text-emerald-600 dark:text-emerald-400">twitter:card</code> - Twitter
-                Card type: summary, summary_large_image, app, or player
-              </li>
-            </ul>
-
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">
-              Open Graph Image Specifications
-            </h2>
-            <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
-              <li>
-                <strong>Facebook / General:</strong> 1200 x 630 px (1.91:1 aspect ratio), JPG or PNG
-              </li>
-              <li>
-                <strong>Twitter (summary_large_image):</strong> 1024 x 512 px (2:1 aspect ratio), JPG or PNG
-              </li>
-              <li>
-                <strong>LinkedIn:</strong> 1200 x 630 px (1.91:1 aspect ratio), JPG or PNG
-              </li>
-              <li>
-                <strong>Minimum:</strong> 200 x 200 px (1:1 aspect ratio), JPG or PNG
-              </li>
-            </ul>
-            <p className="text-neutral-700 dark:text-neutral-300">
-              Use 1200x630px for most platforms (Facebook, LinkedIn, Pinterest). Keep file size under 8MB. Use
-              high-quality JPG or PNG. Avoid text in critical image areas as it may be cropped.
-            </p>
-
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">How to Test Your OG Tags</h2>
-            <ol className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
-              <li>
-                <strong>Facebook Sharing Debugger:</strong> Visit facebook.com/developers/tools/debug/ and enter your
-                URL. This shows exactly how your page will appear in Facebook feeds and reveals any parsing errors. Pro
-                tip: Click "Scrape Again" to refresh the cache after making changes.
-              </li>
-              <li>
-                <strong>LinkedIn Post Inspector:</strong> Visit linkedin.com/feed/update and paste your URL in the status
-                box. This preview shows how your content will appear on LinkedIn feeds. Pro tip: LinkedIn sometimes takes
-                time to update. Wait a few hours if changes don't appear immediately.
-              </li>
-              <li>
-                <strong>Twitter Card Validator:</strong> Visit cards-dev.twitter.com/validator and enter your URL to
-                preview how your page will appear in tweets and Twitter feeds. Pro tip: Check the "Tag" tab to see which
-                tags Twitter detected from your page.
-              </li>
-              <li>
-                <strong>Test on Actual Social Platforms:</strong> Paste your URL directly into Facebook, LinkedIn,
-                Twitter, and Pinterest status boxes to see real-time previews. This is the most authentic test. Pro tip:
-                Use incognito/private browsing mode to avoid cached versions.
-              </li>
-              <li>
-                <strong>Track Performance with Analytics:</strong> Use{" "}
-                <Link
-                  href="https://app.rybbit.io"
-                  className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium"
-                >
-                  Rybbit Analytics
-                </Link>{" "}
-                to track which social platforms drive the most traffic to your pages. Measure CTR by platform to see
-                which OG tags perform best and optimize accordingly.
-              </li>
-            </ol>
-          </div>
-
-          {/* FAQ Section */}
-          <div className="mb-16">
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Open Graph Tags FAQs</h2>
-            <div className="bg-neutral-100/50 dark:bg-neutral-800/20 backdrop-blur-sm border border-neutral-300/50 dark:border-neutral-800/50 rounded-xl overflow-hidden">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1" className="border-b border-neutral-300/50 dark:border-neutral-800/50">
-                  <AccordionTrigger className="px-6 py-4 text-base font-medium hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
-                    What are Open Graph tags?
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-neutral-700 dark:text-neutral-300">
-                    Open Graph tags are meta tags that control how URLs are displayed when shared on social media
-                    platforms like Facebook, LinkedIn, and Twitter. They define the title, description, image, and type
-                    of content that appears in social shares.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-2" className="border-b border-neutral-300/50 dark:border-neutral-800/50">
-                  <AccordionTrigger className="px-6 py-4 text-base font-medium hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
-                    Why are OG tags important?
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-neutral-700 dark:text-neutral-300">
-                    OG tags significantly impact social media engagement. A well-optimized OG image and description can
-                    increase click-through rates by 2-3x compared to default previews. They're essential for content
-                    marketing and social sharing strategy.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-3" className="border-b border-neutral-300/50 dark:border-neutral-800/50">
-                  <AccordionTrigger className="px-6 py-4 text-base font-medium hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
-                    How do I test my OG tags?
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-neutral-700 dark:text-neutral-300">
-                    Use Facebook's Sharing Debugger, LinkedIn's Post Inspector, or Twitter's Card Validator to test how
-                    your OG tags appear. Track social referral traffic with{" "}
-                    <Link
-                      href="https://app.rybbit.io"
-                      className="text-emerald-600 dark:text-emerald-400 hover:underline"
-                    >
-                      Rybbit Analytics
-                    </Link>{" "}
-                    to see which OG tags drive the most clicks.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-4" className="border-b border-neutral-300/50 dark:border-neutral-800/50">
-                  <AccordionTrigger className="px-6 py-4 text-base font-medium hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
-                    What's the difference between Open Graph tags and Twitter Cards?
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-neutral-700 dark:text-neutral-300">
-                    Open Graph tags are a protocol developed by Facebook that works across multiple platforms. Twitter
-                    Cards use the twitter: prefix and allow more granular control over Twitter-specific previews. You
-                    should implement both for complete social optimization. Twitter will fall back to OG tags if Twitter
-                    Card tags are missing.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-5">
-                  <AccordionTrigger className="px-6 py-4 text-base font-medium hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">
-                    What image sizes should I use for OG tags?
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4 text-neutral-700 dark:text-neutral-300">
-                    Use 1200x630 pixels (1.91:1 aspect ratio) for og:image on most platforms. Minimum size is 200x200
-                    pixels. For Twitter Cards (summary_large_image), use 1024x512 or larger. Always include
-                    og:image:width and og:image:height tags. Keep file size under 8MB and use JPG or PNG format.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-          </div>
-          <RelatedTools currentToolHref="/tools/og-tag-generator" category="seo" />
-        </div>
-
-        <ToolCTA
-          title="Track your social media traffic with Rybbit"
-          description="See which social platforms drive the most traffic and optimize your OG tags based on real data."
-          eventLocation="og_tag_generator_cta"
-        />
-      </div>
-    </>
+    <ToolPageLayout
+      toolSlug="og-tag-generator"
+      title="Open Graph Tag Generator"
+      description="Generate optimized Open Graph tags for social media sharing. Get perfect previews on Facebook, Twitter, and LinkedIn with AI-powered suggestions and complete HTML code."
+      badge="AI-Powered Tool"
+      toolComponent={<OGTagForm />}
+      educationalContent={educationalContent}
+      faqs={faqs}
+      relatedToolsCategory="seo"
+      ctaTitle="Track your social media traffic with Rybbit"
+      ctaDescription="See which social platforms drive the most traffic and optimize your OG tags based on real data."
+      ctaEventLocation="og_tag_generator_cta"
+      structuredData={structuredData}
+    />
   );
 }

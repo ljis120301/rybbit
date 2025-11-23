@@ -107,19 +107,19 @@ const educationalContent = (
   <>
     <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">Understanding ROI vs ROAS</h2>
     <p className="text-neutral-700 dark:text-neutral-300 mb-6">
-      When measuring marketing performance, two key metrics stand out: ROI (Return on Investment) and ROAS
-      (Return on Ad Spend). While they sound similar, they measure different aspects of campaign success.
+      When measuring marketing performance, two key metrics stand out: ROI (Return on Investment) and ROAS (Return on Ad
+      Spend). While they sound similar, they measure different aspects of campaign success.
     </p>
     <ul className="space-y-4 text-neutral-700 dark:text-neutral-300">
       <li>
         <strong>ROI (Return on Investment):</strong> Measures profit as a percentage of your investment. Formula:{" "}
-        <code>(Revenue - Cost) / Cost × 100</code>. A 200% ROI means you earn $2 in profit for every $1 spent.
-        Focuses on profitability and bottom-line impact.
+        <code>(Revenue - Cost) / Cost × 100</code>. A 200% ROI means you earn $2 in profit for every $1 spent. Focuses
+        on profitability and bottom-line impact.
       </li>
       <li>
         <strong>ROAS (Return on Ad Spend):</strong> Measures revenue generated per dollar of ad spend. Formula:{" "}
-        <code>Revenue / Ad Spend</code>. A 4:1 ROAS means you generate $4 in revenue for every $1 spent on ads.
-        Focuses on revenue generation efficiency.
+        <code>Revenue / Ad Spend</code>. A 4:1 ROAS means you generate $4 in revenue for every $1 spent on ads. Focuses
+        on revenue generation efficiency.
       </li>
     </ul>
 
@@ -176,15 +176,15 @@ const educationalContent = (
       </li>
     </ul>
     <p className="text-sm text-neutral-600 dark:text-neutral-400">
-      Use our calculator above to apply these formulas instantly. All calculations are performed in
-      real-time as you enter your numbers.
+      Use our calculator above to apply these formulas instantly. All calculations are performed in real-time as you
+      enter your numbers.
     </p>
 
     <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">Industry Benchmarks</h2>
     <div className="space-y-4 text-neutral-700 dark:text-neutral-300">
       <p>
-        Marketing ROI varies significantly by industry, business model, and campaign type. Here are general
-        benchmarks to help you evaluate your performance:
+        Marketing ROI varies significantly by industry, business model, and campaign type. Here are general benchmarks
+        to help you evaluate your performance:
       </p>
       <div className="overflow-x-auto mt-6">
         <table className="w-full text-sm border-collapse">
@@ -231,28 +231,28 @@ const educationalContent = (
         </table>
       </div>
       <p className="text-sm italic">
-        Note: These benchmarks are based on industry averages and can vary significantly based on business
-        model, market, and campaign optimization.
+        Note: These benchmarks are based on industry averages and can vary significantly based on business model,
+        market, and campaign optimization.
       </p>
     </div>
 
     <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">Marketing ROI Best Practices</h2>
     <ol className="space-y-3 text-neutral-700 dark:text-neutral-300">
       <li>
-        <strong>Track All Costs Accurately:</strong> Include ad spend, platform fees, creative production, and
-        overhead costs to calculate true ROI.
+        <strong>Track All Costs Accurately:</strong> Include ad spend, platform fees, creative production, and overhead
+        costs to calculate true ROI.
       </li>
       <li>
-        <strong>Define Attribution Windows:</strong> Establish clear timeframes for tracking conversions based on
-        your sales cycle and customer behavior.
+        <strong>Define Attribution Windows:</strong> Establish clear timeframes for tracking conversions based on your
+        sales cycle and customer behavior.
       </li>
       <li>
-        <strong>Segment by Channel and Campaign:</strong> Track ROI separately for different channels, campaigns,
-        and customer segments to identify winners.
+        <strong>Segment by Channel and Campaign:</strong> Track ROI separately for different channels, campaigns, and
+        customer segments to identify winners.
       </li>
       <li>
-        <strong>Account for Customer Lifetime Value:</strong> Consider repeat purchases and long-term customer
-        value when evaluating campaign ROI.
+        <strong>Account for Customer Lifetime Value:</strong> Consider repeat purchases and long-term customer value
+        when evaluating campaign ROI.
       </li>
       <li>
         <strong>Test and Optimize Continuously:</strong> Run A/B tests, analyze performance data, and iterate on
@@ -264,39 +264,29 @@ const educationalContent = (
       </li>
     </ol>
 
-    <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">
-      How to Improve Your Marketing ROI
-    </h2>
-    <div className="space-y-4 text-neutral-700 dark:text-neutral-300">
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <h3 className="font-semibold text-neutral-900 dark:text-white mb-3">Acquisition Side</h3>
-          <ul className="space-y-2 text-sm">
-            <li>• Improve targeting accuracy and audience segmentation</li>
-            <li>• Optimize ad copy and creative performance</li>
-            <li>• Reduce customer acquisition cost (CAC)</li>
-            <li>• Test different channels and tactics</li>
-            <li>• Implement attribution tracking</li>
-            <li>• Focus on high-intent audiences</li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-semibold text-neutral-900 dark:text-white mb-3">Conversion Side</h3>
-          <ul className="space-y-2 text-sm">
-            <li>• Improve website conversion rates</li>
-            <li>• Optimize landing pages for campaigns</li>
-            <li>• Streamline checkout and purchase process</li>
-            <li>• Improve product-market fit</li>
-            <li>• Increase average order value</li>
-            <li>• Maximize customer retention</li>
-          </ul>
-        </div>
-      </div>
-      <p className="text-sm mt-4">
-        The most effective approach combines optimization on both sides: reducing costs to acquire customers
-        while increasing the revenue they generate.
-      </p>
-    </div>
+    <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4 mt-8">How to Improve Your Marketing ROI</h2>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">Acquisition Side</h3>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-6">
+      <li>Improve targeting accuracy and audience segmentation</li>
+      <li>Optimize ad copy and creative performance</li>
+      <li>Reduce customer acquisition cost (CAC)</li>
+      <li>Test different channels and tactics</li>
+      <li>Implement attribution tracking</li>
+      <li>Focus on high-intent audiences</li>
+    </ul>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 mt-6">Conversion Side</h3>
+    <ul className="space-y-2 text-neutral-700 dark:text-neutral-300 mb-4">
+      <li>Improve website conversion rates</li>
+      <li>Optimize landing pages for campaigns</li>
+      <li>Streamline checkout and purchase process</li>
+      <li>Improve product-market fit</li>
+      <li>Increase average order value</li>
+      <li>Maximize customer retention</li>
+    </ul>
+    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-4">
+      The most effective approach combines optimization on both sides: reducing costs to acquire customers while
+      increasing the revenue they generate.
+    </p>
   </>
 );
 
@@ -325,9 +315,9 @@ const faqs = [
     question: "How can I improve my marketing ROI?",
     answer: (
       <>
-        To improve ROI, focus on: targeting high-intent audiences, optimizing conversion rates, reducing
-        customer acquisition costs, improving ad creative and messaging, A/B testing campaigns, focusing on
-        high-performing channels, and tracking performance with analytics. Use{" "}
+        To improve ROI, focus on: targeting high-intent audiences, optimizing conversion rates, reducing customer
+        acquisition costs, improving ad creative and messaging, A/B testing campaigns, focusing on high-performing
+        channels, and tracking performance with analytics. Use{" "}
         <Link href="https://app.rybbit.io" className="text-emerald-600 dark:text-emerald-400 hover:underline">
           Rybbit Analytics
         </Link>{" "}

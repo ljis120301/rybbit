@@ -18,7 +18,7 @@ export interface ToolPageLayoutProps {
   toolComponent: ReactNode;
   educationalContent: ReactNode;
   faqs: FAQItem[];
-  relatedToolsCategory: string; // e.g., "seo", "analytics", "privacy"
+  relatedToolsCategory: "seo" | "analytics" | "privacy";
 
   // CTA section
   ctaTitle: string;
