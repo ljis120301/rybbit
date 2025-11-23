@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { source } from "@/lib/source";
 import { blogSource } from "@/lib/blog-source";
+import { readdirSync } from "fs";
+import { join } from "path";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://rybbit.com";
@@ -21,23 +23,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Tool pages
-  const toolSlugs = [
-    "utm-builder",
-    "seo-title-generator",
-    "meta-description-generator",
-    "og-tag-generator",
-    "marketing-roi-calculator",
-    "ctr-calculator",
-    "bounce-rate-calculator",
-    "sample-size-calculator",
-    "traffic-value-calculator",
-    "page-speed-calculator",
-    "funnel-visualizer",
-    "ai-privacy-policy-generator",
-    "analytics-detector",
-    "privacy-policy-builder",
-  ];
+  // Dynamically get tool slugs from the tools directory
+  const toolsPath = join(process.cwd(), "src/app/(home)/tools");
+  const toolSlugs = readdirSync(toolsPath, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory() && dirent.name !== "components")
+    .map(dirent => dirent.name);
 
   const toolPages = toolSlugs.map(slug => ({
     url: `${baseUrl}/tools/${slug}`,
