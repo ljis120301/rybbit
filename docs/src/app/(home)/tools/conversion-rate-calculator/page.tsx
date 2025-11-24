@@ -127,29 +127,17 @@ const educationalContent = (
           By Industry
         </h4>
         <ul className="space-y-2">
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Landing Pages:</strong> 4.02%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Landing Pages:</strong> 4.02%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>SaaS:</strong> 3.0%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>SaaS:</strong> 3.0%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>E-commerce:</strong> 2.86%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>E-commerce:</strong> 2.86%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Overall Website:</strong> 2.35%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Overall Website:</strong> 2.35%
           </li>
         </ul>
       </div>
@@ -158,29 +146,17 @@ const educationalContent = (
           By Traffic Source
         </h4>
         <ul className="space-y-2">
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Paid Search:</strong> 3.75%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Paid Search:</strong> 3.75%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Email Campaigns:</strong> 3.2%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Email Campaigns:</strong> 3.2%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Organic Search:</strong> 2.4%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Organic Search:</strong> 2.4%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Display Ads:</strong> 0.77%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Display Ads:</strong> 0.77%
           </li>
         </ul>
       </div>
@@ -190,32 +166,20 @@ const educationalContent = (
       Why Conversion Rate Matters
     </h3>
     <ul className="space-y-2 mb-6">
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Maximize ROI:</strong> Get more value from existing traffic without
-          increasing ad spend
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Maximize ROI:</strong> Get more value from existing traffic without
+        increasing ad spend
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Identify issues:</strong> Low conversion rates signal problems with user
-          experience or messaging
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Identify issues:</strong> Low conversion rates signal problems with user
+        experience or messaging
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Benchmark performance:</strong> Compare effectiveness across channels and
-          campaigns
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Benchmark performance:</strong> Compare effectiveness across channels and
+        campaigns
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Guide optimization:</strong> Focus efforts on high-impact improvements
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Guide optimization:</strong> Focus efforts on high-impact improvements
       </li>
     </ul>
 
@@ -262,19 +226,13 @@ const educationalContent = (
       Understanding different conversion types helps optimize the entire funnel:
     </p>
     <ul className="space-y-2 mb-6">
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Macro conversions:</strong> Primary goals like purchases, subscriptions, or
-          qualified leads
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Macro conversions:</strong> Primary goals like purchases, subscriptions, or
+        qualified leads
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Micro conversions:</strong> Smaller actions like email sign-ups, content
-          downloads, or video views that indicate progress
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Micro conversions:</strong> Smaller actions like email sign-ups, content
+        downloads, or video views that indicate progress
       </li>
     </ul>
   </>

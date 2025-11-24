@@ -9,8 +9,7 @@ export const metadata: Metadata = {
     "Calculate customer retention rate instantly with our free calculator. Compare against industry benchmarks, identify churn patterns, and improve customer loyalty.",
   openGraph: {
     title: "Free Retention Rate Calculator",
-    description:
-      "Calculate and optimize your customer retention with industry benchmarks",
+    description: "Calculate and optimize your customer retention with industry benchmarks",
     type: "website",
     url: "https://rybbit.com/tools/retention-rate-calculator",
     siteName: "Rybbit Documentation",
@@ -31,8 +30,7 @@ const structuredData = {
     {
       "@type": "WebApplication",
       name: "Retention Rate Calculator",
-      description:
-        "Free retention rate calculator to measure customer loyalty and compare against industry benchmarks",
+      description: "Free retention rate calculator to measure customer loyalty and compare against industry benchmarks",
       url: "https://rybbit.com/tools/retention-rate-calculator",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Any",
@@ -84,23 +82,18 @@ const structuredData = {
 
 const educationalContent = (
   <>
-    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
-      What is Retention Rate?
-    </h2>
+    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">What is Retention Rate?</h2>
     <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
-      Retention rate measures the percentage of customers who continue doing business with you
-      over a specific period. It's one of the most important metrics for understanding customer
-      loyalty, product-market fit, and long-term business sustainability.
+      Retention rate measures the percentage of customers who continue doing business with you over a specific period.
+      It's one of the most important metrics for understanding customer loyalty, product-market fit, and long-term
+      business sustainability.
     </p>
     <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-6">
-      High retention rates indicate satisfied customers who find ongoing value in your product
-      or service, while low retention signals potential issues with product quality, customer
-      experience, or value proposition.
+      High retention rates indicate satisfied customers who find ongoing value in your product or service, while low
+      retention signals potential issues with product quality, customer experience, or value proposition.
     </p>
 
-    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">
-      How to Calculate Retention Rate
-    </h3>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">How to Calculate Retention Rate</h3>
     <div className="bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 mb-6">
       <div className="text-center mb-4">
         <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
@@ -117,165 +110,99 @@ const educationalContent = (
           <li>S = Customers at start of period</li>
         </ul>
         <p className="pt-2">
-          <strong>Example:</strong> If you started with 1,000 customers, ended with 920, and
-          acquired 150 new customers:
+          <strong>Example:</strong> If you started with 1,000 customers, ended with 920, and acquired 150 new customers:
         </p>
-        <p className="text-center font-mono">
-          Retention Rate = ((920 - 150) ÷ 1,000) × 100 = 77%
-        </p>
+        <p className="text-center font-mono">Retention Rate = ((920 - 150) ÷ 1,000) × 100 = 77%</p>
       </div>
     </div>
 
-    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">
-      Industry Benchmarks
-    </h3>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Industry Benchmarks</h3>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
       <div>
-        <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">
-          Monthly Retention
-        </h4>
+        <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">Monthly Retention</h4>
         <ul className="space-y-2">
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Telecom:</strong> 97%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Telecom:</strong> 97%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Financial Services:</strong> 95%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Financial Services:</strong> 95%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>SaaS:</strong> 93%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>SaaS:</strong> 93%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Media/Publishing:</strong> 84%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Media/Publishing:</strong> 84%
           </li>
         </ul>
       </div>
       <div>
-        <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">
-          Annual Retention
-        </h4>
+        <h4 className="font-semibold text-neutral-900 dark:text-white mb-2">Annual Retention</h4>
         <ul className="space-y-2">
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Telecom:</strong> 78%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Telecom:</strong> 78%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Financial Services:</strong> 75%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Financial Services:</strong> 75%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>Media/Publishing:</strong> 55%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>Media/Publishing:</strong> 55%
           </li>
-          <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-            
-            <span>
-              <strong>SaaS:</strong> 35%
-            </span>
+          <li className="text-neutral-700 dark:text-neutral-300">
+            <strong>SaaS:</strong> 35%
           </li>
         </ul>
       </div>
     </div>
 
-    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">
-      Why Retention Rate Matters
-    </h3>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Why Retention Rate Matters</h3>
     <ul className="space-y-2 mb-6">
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Cost efficiency:</strong> Retaining customers is 5-25x cheaper than acquiring
-          new ones
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Cost efficiency:</strong> Retaining customers is 5-25x cheaper than acquiring new ones
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Revenue predictability:</strong> High retention creates stable, recurring
-          revenue streams
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Revenue predictability:</strong> High retention creates stable, recurring revenue streams
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Growth indicator:</strong> Shows product-market fit and customer satisfaction
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Growth indicator:</strong> Shows product-market fit and customer satisfaction
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Compounding value:</strong> Retained customers often increase spending over
-          time
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Compounding value:</strong> Retained customers often increase spending over time
       </li>
     </ul>
 
-    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">
-      How to Improve Retention Rate
-    </h3>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">How to Improve Retention Rate</h3>
     <ol className="space-y-3 mb-6 list-decimal list-inside text-neutral-700 dark:text-neutral-300">
       <li>
-        <strong>Enhance onboarding:</strong> Create smooth, guided experiences that help
-        customers realize value quickly
+        <strong>Enhance onboarding:</strong> Create smooth, guided experiences that help customers realize value quickly
       </li>
       <li>
-        <strong>Provide excellent support:</strong> Respond quickly to issues and proactively
-        help customers succeed
+        <strong>Provide excellent support:</strong> Respond quickly to issues and proactively help customers succeed
       </li>
       <li>
-        <strong>Deliver consistent value:</strong> Continuously improve your product and
-        communicate new features
+        <strong>Deliver consistent value:</strong> Continuously improve your product and communicate new features
       </li>
       <li>
-        <strong>Engage regularly:</strong> Maintain communication through email, in-app
-        messaging, and content
+        <strong>Engage regularly:</strong> Maintain communication through email, in-app messaging, and content
       </li>
       <li>
-        <strong>Gather feedback:</strong> Understand why customers leave and address common pain
-        points
+        <strong>Gather feedback:</strong> Understand why customers leave and address common pain points
       </li>
       <li>
-        <strong>Build loyalty programs:</strong> Reward long-term customers with special perks
-        and recognition
+        <strong>Build loyalty programs:</strong> Reward long-term customers with special perks and recognition
       </li>
     </ol>
 
-    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">
-      Retention vs Churn
-    </h3>
+    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3">Retention vs Churn</h3>
     <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4">
-      Retention rate and churn rate are inverse metrics that sum to 100%. If your retention
-      rate is 77%, your churn rate is 23%. Both metrics provide valuable insights:
+      Retention rate and churn rate are inverse metrics that sum to 100%. If your retention rate is 77%, your churn rate
+      is 23%. Both metrics provide valuable insights:
     </p>
     <ul className="space-y-2 mb-6">
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Retention rate:</strong> Focuses on customers who stay (positive framing)
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Retention rate:</strong> Focuses on customers who stay (positive framing)
       </li>
-      <li className="flex items-start text-neutral-700 dark:text-neutral-300">
-        
-        <span>
-          <strong>Churn rate:</strong> Highlights customers lost (helps identify problems)
-        </span>
+      <li className="text-neutral-700 dark:text-neutral-300">
+        <strong>Churn rate:</strong> Highlights customers lost (helps identify problems)
       </li>
     </ul>
   </>
@@ -311,16 +238,15 @@ const faqs = [
     question: "Why is retention rate more important than acquisition?",
     answer: (
       <>
-        Retaining existing customers is typically 5-25x cheaper than acquiring new ones. High
-        retention also increases{" "}
+        Retaining existing customers is typically 5-25x cheaper than acquiring new ones. High retention also increases{" "}
         <Link
           href="/tools/customer-lifetime-value-calculator"
           className="text-emerald-600 dark:text-emerald-400 hover:underline"
         >
           customer lifetime value
         </Link>
-        , creates predictable revenue, and indicates strong product-market fit. A 5% increase
-        in retention can increase profits by 25-95%.
+        , creates predictable revenue, and indicates strong product-market fit. A 5% increase in retention can increase
+        profits by 25-95%.
       </>
     ),
   },
