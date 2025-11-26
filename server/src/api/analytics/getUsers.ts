@@ -5,6 +5,8 @@ import { FilterParams } from "@rybbit/shared";
 
 export type GetUsersResponse = {
   user_id: string;
+  anonymous_id: string;
+  is_identified: boolean;
   country: string;
   region: string;
   city: string;
@@ -59,6 +61,8 @@ export async function getUsers(req: FastifyRequest<GetUsersRequest>, res: Fastif
 WITH AggregatedUsers AS (
     SELECT
         user_id,
+        argMax(anonymous_id, timestamp) AS anonymous_id,
+        if(user_id != argMax(anonymous_id, timestamp) AND argMax(anonymous_id, timestamp) != '', true, false) AS is_identified,
         argMax(country, timestamp) AS country,
         argMax(region, timestamp) AS region,
         argMax(city, timestamp) AS city,
@@ -68,7 +72,7 @@ WITH AggregatedUsers AS (
         argMax(operating_system, timestamp) AS operating_system,
         argMax(operating_system_version, timestamp) AS operating_system_version,
         argMax(device_type, timestamp) AS device_type,
-        argMax(screen_width, timestamp) AS screen_width, 
+        argMax(screen_width, timestamp) AS screen_width,
         argMax(screen_height, timestamp) AS screen_height,
         argMin(referrer, timestamp) AS referrer,
         argMax(channel, timestamp) AS channel,

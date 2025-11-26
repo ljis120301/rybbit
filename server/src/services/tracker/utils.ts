@@ -9,6 +9,7 @@ import { SiteConfigData } from "../../lib/siteConfig.js";
 
 export type TotalTrackingPayload = TrackingPayload & {
   userId: string;
+  anonymousId: string; // Always the hash of IP+UserAgent (device fingerprint)
   timestamp: string;
   type?: string;
   event_name?: string;
@@ -100,10 +101,15 @@ export async function createBasePayload(
   // Override IP if provided in payload
   const ipAddress = validatedBody.ip_address || getIpAddress(request);
 
-  // Use custom user ID if provided, otherwise generate one
-  const userId = validatedBody.user_id
-    ? validatedBody.user_id.trim()
-    : await userIdService.generateUserId(ipAddress, userAgent, siteConfiguration.siteId);
+  // Always compute anonymous_id based on IP+UserAgent (device fingerprint)
+  const anonymousId = await userIdService.generateUserId(
+    ipAddress,
+    userAgent,
+    siteConfiguration.siteId
+  );
+
+  // Use custom user ID if provided (identified user), otherwise use anonymous_id
+  const userId = validatedBody.user_id ? validatedBody.user_id.trim() : anonymousId;
 
   return {
     ...validatedBody,
@@ -121,6 +127,7 @@ export async function createBasePayload(
     timestamp: new Date().toISOString(),
     ua: userAgentParser(userAgent),
     userId: userId,
+    anonymousId: anonymousId,
     storeIp: siteConfiguration.trackIp,
   } as any;
 }

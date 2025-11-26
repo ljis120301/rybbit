@@ -66,6 +66,7 @@ class PageviewQueue {
         timestamp: DateTime.fromISO(pv.timestamp).toFormat("yyyy-MM-dd HH:mm:ss"),
         session_id: pv.sessionId,
         user_id: pv.userId,
+        anonymous_id: pv.anonymousId,
         hostname: pv.hostname || "",
         pathname: pv.pathname || "",
         querystring: pv.querystring || "",

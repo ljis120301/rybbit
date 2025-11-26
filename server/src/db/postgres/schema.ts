@@ -7,6 +7,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  primaryKey,
   real,
   serial,
   text,
@@ -522,3 +523,40 @@ export const gscConnections = pgTable("gsc_connections", {
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 });
+
+// User profiles - stores identified user traits (email, name, custom fields)
+export const userProfiles = pgTable(
+  "user_profiles",
+  {
+    siteId: integer("site_id")
+      .notNull()
+      .references(() => sites.siteId, { onDelete: "cascade" }),
+    userId: text("user_id").notNull(), // The identified user ID from identify() call
+    traits: jsonb("traits").$type<Record<string, unknown>>().default({}),
+    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.siteId, table.userId] }),
+    index("user_profiles_site_idx").on(table.siteId),
+  ]
+);
+
+// User aliases - maps anonymous IDs to identified users (multi-device support)
+export const userAliases = pgTable(
+  "user_aliases",
+  {
+    id: serial("id").primaryKey().notNull(),
+    siteId: integer("site_id")
+      .notNull()
+      .references(() => sites.siteId, { onDelete: "cascade" }),
+    anonymousId: text("anonymous_id").notNull(), // Hash of IP+UserAgent (device fingerprint)
+    userId: text("user_id").notNull(), // The identified user ID
+    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+  },
+  (table) => [
+    unique("user_aliases_site_anon_unique").on(table.siteId, table.anonymousId),
+    index("user_aliases_user_idx").on(table.siteId, table.userId),
+    index("user_aliases_anon_idx").on(table.siteId, table.anonymousId),
+  ]
+);
