@@ -17,5 +17,5 @@ export function useTrack() {
         name: user.data?.user?.name,
       });
     }
-  }, []);
+  }, [user.data?.user?.id]);
 }
