@@ -62,7 +62,6 @@ WITH AggregatedUsers AS (
     SELECT
         user_id,
         argMax(anonymous_id, timestamp) AS anonymous_id,
-        if(user_id != argMax(anonymous_id, timestamp) AND argMax(anonymous_id, timestamp) != '', true, false) AS is_identified,
         argMax(country, timestamp) AS country,
         argMax(region, timestamp) AS region,
         argMax(city, timestamp) AS city,
@@ -89,7 +88,9 @@ WITH AggregatedUsers AS (
     GROUP BY
         user_id
 )
-SELECT *
+SELECT
+    *,
+    if(user_id != anonymous_id AND anonymous_id != '', true, false) AS is_identified
 FROM AggregatedUsers
 WHERE 1 = 1 ${filterStatement}
 ORDER BY ${actualSortBy} ${actualSortOrder}

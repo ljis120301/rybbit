@@ -19,6 +19,7 @@ import { Avatar, generateName } from "../../../components/Avatar";
 import { extractDomain, getChannelIcon, getDisplayName } from "../../../components/Channel";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { Favicon } from "../../../components/Favicon";
+import { IdentifiedBadge } from "../../../components/IdentifiedBadge";
 import { Pagination } from "../../../components/pagination";
 import { Button } from "../../../components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
@@ -101,12 +102,22 @@ export default function UsersPage() {
   const columns = [
     columnHelper.accessor("user_id", {
       header: "User",
-      cell: info => (
-        <Link href={`/${site}/user/${info.getValue()}`} className="flex items-center gap-2 hover:underline">
-          <Avatar size={20} id={info.getValue() as string} />
-          <span className="max-w-24 truncate">{generateName(info.getValue())}</span>
-        </Link>
-      ),
+      cell: info => {
+        const userId = info.getValue();
+        const isIdentified = info.row.original.is_identified;
+        // For identified users, show the actual user_id; for anonymous, generate a name
+        const displayName = isIdentified ? userId : generateName(userId);
+
+        return (
+          <Link href={`/${site}/user/${userId}`} className="flex items-center gap-2 hover:underline">
+            <Avatar size={20} id={userId as string} />
+            <span className="max-w-32 truncate" title={displayName}>
+              {displayName}
+            </span>
+            {isIdentified && <IdentifiedBadge />}
+          </Link>
+        );
+      },
     }),
     columnHelper.accessor("country", {
       header: "Country",

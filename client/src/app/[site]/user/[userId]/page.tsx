@@ -6,10 +6,9 @@ import {
   Calendar,
   CalendarCheck,
   Clock,
-  Eye,
   Files,
+  Laptop,
   Monitor,
-  MousePointerClick,
   Smartphone,
   Tablet,
 } from "lucide-react";
@@ -22,6 +21,7 @@ import { Avatar, generateName } from "../../../../components/Avatar";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import { Skeleton } from "../../../../components/ui/skeleton";
+import { IdentifiedBadge } from "../../../../components/IdentifiedBadge";
 import { useSetPageTitle } from "../../../../hooks/useSetPageTitle";
 import { formatDuration } from "../../../../lib/dateTimeUtils";
 import { useGetRegionName } from "../../../../lib/geo";
@@ -59,7 +59,11 @@ export default function UserPage() {
     router.push(`/${site}/users`);
   };
 
-  const name = generateName(userId as string);
+  // Get display name from traits if available, otherwise generate from ID
+  const traitsName = data?.traits?.name as string | undefined;
+  const traitsEmail = data?.traits?.email as string | undefined;
+  const isIdentified = data?.is_identified ?? false;
+  const displayName = traitsName || (isIdentified ? (userId as string) : generateName(userId as string));
 
   return (
     <div className="p-2 md:p-4 max-w-[1300px] mx-auto space-y-3">
@@ -73,8 +77,16 @@ export default function UserPage() {
           <div className="flex items-center gap-4">
             <Avatar size={48} id={userId as string} />
             <div>
-              <div className="text-lg font-bold">{name}</div>
-              <span className="text-neutral-600 dark:text-neutral-300 text-sm">ID: {userId}</span>
+              <div className="text-lg font-bold flex items-center gap-2">
+                {displayName}
+                {isIdentified && <IdentifiedBadge />}
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {traitsEmail && (
+                  <span className="text-neutral-600 dark:text-neutral-300 text-sm">{traitsEmail}</span>
+                )}
+                <span className="text-neutral-500 dark:text-neutral-400 text-xs">ID: {userId}</span>
+              </div>
             </div>
           </div>
           {data?.ip && (
@@ -227,6 +239,57 @@ export default function UserPage() {
             </>
           )}
         </div>
+
+        {/* Traits and Linked Devices sections for identified users */}
+        {isIdentified && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+            {/* Custom Traits */}
+            {data?.traits && Object.keys(data.traits).filter(k => k !== 'name' && k !== 'email').length > 0 && (
+              <div className="bg-white dark:bg-neutral-900 p-3 rounded-lg border border-neutral-100 dark:border-neutral-750">
+                <h3 className="text-sm font-semibold mb-2 text-neutral-700 dark:text-neutral-200">User Traits</h3>
+                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+                  {Object.entries(data.traits)
+                    .filter(([key]) => key !== 'name' && key !== 'email')
+                    .map(([key, value]) => (
+                      <>
+                        <span key={`key-${key}`} className="text-neutral-500 dark:text-neutral-400 capitalize">
+                          {key.replace(/_/g, ' ')}:
+                        </span>
+                        <span key={`value-${key}`} className="text-neutral-700 dark:text-neutral-200 truncate">
+                          {String(value)}
+                        </span>
+                      </>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {/* Linked Devices */}
+            {data?.linked_devices && data.linked_devices.length > 0 && (
+              <div className="bg-white dark:bg-neutral-900 p-3 rounded-lg border border-neutral-100 dark:border-neutral-750">
+                <h3 className="text-sm font-semibold mb-2 text-neutral-700 dark:text-neutral-200 flex items-center gap-2">
+                  <Laptop className="w-4 h-4" />
+                  Linked Devices ({data.linked_devices.length})
+                </h3>
+                <div className="space-y-2 text-sm max-h-32 overflow-y-auto">
+                  {data.linked_devices.map((device, index) => (
+                    <div
+                      key={device.anonymous_id}
+                      className="flex items-center justify-between py-1 border-b border-neutral-100 dark:border-neutral-800 last:border-0"
+                    >
+                      <span className="text-neutral-600 dark:text-neutral-300 font-mono text-xs truncate max-w-[200px]">
+                        {device.anonymous_id}
+                      </span>
+                      <span className="text-neutral-400 dark:text-neutral-500 text-xs">
+                        {DateTime.fromISO(device.created_at).toRelative()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="bg-white dark:bg-neutral-900 p-3 rounded-lg flex flex-col gap-1 border border-neutral-100 dark:border-neutral-800 h-[150px]">
         <VisitCalendar sessionCount={sessionCount?.data ?? []} />
