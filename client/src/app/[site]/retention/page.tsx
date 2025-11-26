@@ -201,11 +201,11 @@ export default function RetentionPage() {
       <div className="p-2 md:p-4 max-w-[1300px] mx-auto flex flex-col gap-3">
         {/* Single Card containing both chart and grid */}
         <FilterControls />
-        <Card>
+        <Card className="overflow-visible">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle>Retention</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 overflow-visible">
             {isLoading ? (
               <ThreeDotLoader />
             ) : data ? (

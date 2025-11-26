@@ -3,10 +3,11 @@
 import { useNivoTheme } from "@/lib/nivo";
 import { ResponsiveLine } from "@nivo/line";
 import { DateTime } from "luxon";
+import { useTheme } from "next-themes";
 import { useMemo } from "react";
 import { ProcessedRetentionData, RetentionMode } from "../../../api/analytics/useGetRetention";
+import { ChartTooltip } from "../../../components/charts/ChartTooltip";
 import { Skeleton } from "../../../components/ui/skeleton";
-import { useTheme } from "next-themes";
 
 interface RetentionChartProps {
   data: ProcessedRetentionData | undefined;
@@ -125,7 +126,7 @@ export function RetentionChart({ data, isLoading, mode }: RetentionChartProps) {
   );
 
   return (
-    <div className="h-[400px]">
+    <div className="h-[400px] overflow-visible">
       <ResponsiveLine
         data={chartData}
         theme={nivoTheme}
@@ -216,17 +217,19 @@ export function RetentionChart({ data, isLoading, mode }: RetentionChartProps) {
           }
 
           return (
-            <div className="text-sm bg-neutral-150 dark:bg-neutral-850 p-2 rounded-md border border-neutral-300 dark:border-neutral-800 shadow-md">
-              <div className="font-medium mb-1" style={{ color: point.seriesColor }}>
-                Cohort: {cohortDateDisplay}
+            <ChartTooltip>
+              <div className="p-2 text-sm">
+                <div className="font-medium mb-1" style={{ color: point.seriesColor }}>
+                  Cohort: {cohortDateDisplay}
+                </div>
+                <div className="flex justify-between w-48 text-neutral-700 dark:text-neutral-200">
+                  <span>
+                    {mode === "day" ? "Day" : "Week"} {xValue}
+                  </span>
+                  <span className="font-medium">{value !== null ? `${value.toFixed(1)}%` : "-"}</span>
+                </div>
               </div>
-              <div className="flex justify-between w-48 text-neutral-700 dark:text-neutral-200">
-                <span>
-                  {mode === "day" ? "Day" : "Week"} {xValue}
-                </span>
-                <span className="font-medium">{value !== null ? `${value.toFixed(1)}%` : "-"}</span>
-              </div>
-            </div>
+            </ChartTooltip>
           );
         }}
       />

@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 import { useGetOverviewBucketed } from "../../../../../api/analytics/useGetOverviewBucketed";
+import { ChartTooltip } from "../../../../../components/charts/ChartTooltip";
 import { Tabs, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
 import { Card, CardContent, CardLoader } from "../../../../../components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../../components/ui/select";
@@ -214,14 +215,18 @@ export function Weekdays() {
                               )}
                             />
                           </TooltipTrigger>
-                          <TooltipContent className="flex flex-col gap-1 p-2">
-                            <div className="font-medium text-sm">
-                              {longDayNames[day]} {formatLocalTime(hour, 0)} - {formatLocalTime(hour, 59)}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold">{formatMetricValue(value)}</span>
-                              <span className="text-neutral-400 text-xs">{getMetricDisplayName(metric)}</span>
-                            </div>
+                          <TooltipContent className="p-0 border-0 bg-transparent">
+                            <ChartTooltip>
+                              <div className="flex flex-col gap-1 p-2">
+                                <div className="font-medium text-sm">
+                                  {longDayNames[day]} {formatLocalTime(hour, 0)} - {formatLocalTime(hour, 59)}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-semibold">{formatMetricValue(value)}</span>
+                                  <span className="text-neutral-500 dark:text-neutral-400 text-xs">{getMetricDisplayName(metric)}</span>
+                                </div>
+                              </div>
+                            </ChartTooltip>
                           </TooltipContent>
                         </Tooltip>
                       );
