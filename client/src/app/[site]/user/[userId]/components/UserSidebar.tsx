@@ -61,12 +61,12 @@ function StatCard({
 }) {
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-1">
-        <div className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
-          <Skeleton className="w-3 h-3" />
-          <Skeleton className="h-3 w-12" />
+      <div className="flex flex-col gap-0.5">
+        <div className="text-[10px] text-neutral-500 dark:text-neutral-400 flex items-center gap-1 uppercase tracking-wide">
+          <Skeleton className="w-3 h-3 rounded" />
+          <Skeleton className="h-2.5 w-14 rounded" />
         </div>
-        <Skeleton className="h-5 w-14" />
+        <Skeleton className="h-4 w-16 rounded" />
       </div>
     );
   }
@@ -147,13 +147,54 @@ export function UserSidebar({ data, isLoading, sessionCount, getRegionName }: Us
           Location & Device
         </h3>
         {isLoading ? (
-          <div className="space-y-2">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="flex justify-between">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-4 w-24" />
+          <div className="space-y-0">
+            {/* Country */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-14 rounded" />
+              <div className="flex items-center gap-1.5">
+                <Skeleton className="w-4 h-4 rounded" />
+                <Skeleton className="h-3 w-24 rounded" />
               </div>
-            ))}
+            </div>
+            {/* Region */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-12 rounded" />
+              <Skeleton className="h-3 w-32 rounded" />
+            </div>
+            {/* Language */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-16 rounded" />
+              <Skeleton className="h-3 w-20 rounded" />
+            </div>
+            {/* Device */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-12 rounded" />
+              <div className="flex items-center gap-1.5">
+                <Skeleton className="w-4 h-4 rounded" />
+                <Skeleton className="h-3 w-14 rounded" />
+              </div>
+            </div>
+            {/* Browser */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-14 rounded" />
+              <div className="flex items-center gap-1.5">
+                <Skeleton className="w-4 h-4 rounded" />
+                <Skeleton className="h-3 w-20 rounded" />
+              </div>
+            </div>
+            {/* OS */}
+            <div className="flex items-center justify-between py-1.5 border-b border-neutral-50 dark:border-neutral-850">
+              <Skeleton className="h-3 w-8 rounded" />
+              <div className="flex items-center gap-1.5">
+                <Skeleton className="w-4 h-4 rounded" />
+                <Skeleton className="h-3 w-24 rounded" />
+              </div>
+            </div>
+            {/* Screen */}
+            <div className="flex items-center justify-between py-1.5">
+              <Skeleton className="h-3 w-12 rounded" />
+              <Skeleton className="h-3 w-16 rounded" />
+            </div>
           </div>
         ) : (
           <div>
@@ -212,8 +253,24 @@ export function UserSidebar({ data, isLoading, sessionCount, getRegionName }: Us
         <h3 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">
           Activity Calendar
         </h3>
-        <div className="h-[160px]">
-          <VisitCalendar sessionCount={sessionCount} />
+        <div className="h-[140px]">
+          {isLoading ? (
+            <div className="flex flex-col gap-1.5 h-full">
+              {/* Calendar grid skeleton - 7 rows for weeks */}
+              {Array.from({ length: 7 }).map((_, rowIndex) => (
+                <div key={rowIndex} className="flex gap-1 flex-1">
+                  {Array.from({ length: 52 }).map((_, colIndex) => (
+                    <Skeleton
+                      key={colIndex}
+                      className="flex-1 h-full rounded-sm"
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <VisitCalendar sessionCount={sessionCount} />
+          )}
         </div>
       </SidebarCard>
 
