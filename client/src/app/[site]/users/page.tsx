@@ -22,6 +22,8 @@ import { Favicon } from "../../../components/Favicon";
 import { IdentifiedBadge } from "../../../components/IdentifiedBadge";
 import { Pagination } from "../../../components/pagination";
 import { Button } from "../../../components/ui/button";
+import { Switch } from "../../../components/ui/switch";
+import { Label } from "../../../components/ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
 import { useSetPageTitle } from "../../../hooks/useSetPageTitle";
 import { USER_PAGE_FILTERS } from "../../../lib/filterGroups";
@@ -70,6 +72,7 @@ export default function UsersPage() {
     pageSize: 50,
   });
   const [sorting, setSorting] = useState<SortingState>([{ id: "last_seen", desc: true }]);
+  const [identifiedOnly, setIdentifiedOnly] = useState(false);
 
   // Convert page index to 1-based for the API
   const page = pagination.pageIndex + 1;
@@ -84,6 +87,7 @@ export default function UsersPage() {
     pageSize: pagination.pageSize,
     sortBy,
     sortOrder,
+    identifiedOnly,
   });
 
   // Format relative time with special handling for times less than 1 minute
@@ -290,6 +294,16 @@ export default function UsersPage() {
     <DisabledOverlay message="Users" featurePath="users">
       <div className="p-2 md:p-4 max-w-[1400px] mx-auto space-y-3">
         <SubHeader availableFilters={USER_PAGE_FILTERS} />
+        <div className="flex items-center justify-end gap-2">
+          <Switch
+            id="identified-only"
+            checked={identifiedOnly}
+            onCheckedChange={setIdentifiedOnly}
+          />
+          <Label htmlFor="identified-only" className="text-sm text-neutral-600 dark:text-neutral-400 cursor-pointer">
+            Identified only
+          </Label>
+        </div>
         <div className="rounded-md border border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900">
           <div className="relative overflow-x-auto">
             <table className="w-full text-sm text-left">

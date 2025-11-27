@@ -46,7 +46,12 @@ export type GetSessionsResponse = {
   lon: number;
 }[];
 
-export function useGetSessions(userId?: string, page: number = 1, limit: number = 100) {
+export function useGetSessions(
+  userId?: string,
+  page: number = 1,
+  limit: number = 100,
+  identifiedOnly: boolean = false
+) {
   const { time, site } = useStore();
 
   // Get the appropriate time parameters using getQueryParams
@@ -55,7 +60,7 @@ export function useGetSessions(userId?: string, page: number = 1, limit: number 
   const filteredFilters = getFilteredFilters(SESSION_PAGE_FILTERS);
 
   return useQuery<APIResponse<GetSessionsResponse>>({
-    queryKey: ["sessions", time, site, filteredFilters, userId, page, limit],
+    queryKey: ["sessions", time, site, filteredFilters, userId, page, limit, identifiedOnly],
     queryFn: () => {
       // Use an object for request parameters so we can conditionally add fields
       const requestParams: Record<string, any> = {
@@ -63,6 +68,7 @@ export function useGetSessions(userId?: string, page: number = 1, limit: number 
         filters: filteredFilters,
         page,
         limit,
+        identified_only: identifiedOnly,
       };
 
       // Add userId if provided

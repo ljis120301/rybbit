@@ -35,6 +35,7 @@ export interface GetUsersRequest {
     page_size?: string;
     sort_by?: string;
     sort_order?: string;
+    identified_only?: string;
   }>;
 }
 
@@ -45,8 +46,10 @@ export async function getUsers(req: FastifyRequest<GetUsersRequest>, res: Fastif
     page_size: pageSize = "20",
     sort_by: sortBy = "last_seen",
     sort_order: sortOrder = "desc",
+    identified_only: identifiedOnly = "false",
   } = req.query;
   const site = req.params.site;
+  const filterIdentified = identifiedOnly === "true";
 
   const pageNum = parseInt(page, 10);
   const pageSizeNum = parseInt(pageSize, 10);
@@ -97,12 +100,30 @@ SELECT
     if(user_id != anonymous_id AND anonymous_id != '', true, false) AS is_identified
 FROM AggregatedUsers
 WHERE 1 = 1 ${filterStatement}
+${filterIdentified ? "AND user_id != anonymous_id AND anonymous_id != ''" : ""}
 ORDER BY ${actualSortBy} ${actualSortOrder}
 LIMIT {limit:Int32} OFFSET {offset:Int32}
   `;
 
   // Query to get total count
-  const countQuery = `
+  const countQuery = filterIdentified
+    ? `
+WITH UserAnon AS (
+    SELECT
+        user_id,
+        argMax(anonymous_id, timestamp) AS anonymous_id
+    FROM events
+    WHERE
+        site_id = {siteId:Int32}
+        ${timeStatement}
+    GROUP BY user_id
+)
+SELECT count(*) AS total_count
+FROM UserAnon
+WHERE user_id != anonymous_id AND anonymous_id != ''
+${filterStatement}
+`
+    : `
 SELECT
     count(DISTINCT user_id) AS total_count
 FROM events

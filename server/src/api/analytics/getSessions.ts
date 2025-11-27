@@ -55,12 +55,14 @@ export interface GetSessionsRequest {
     limit: number;
     page: number;
     user_id?: string;
+    identified_only?: string;
   }>;
 }
 
 export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: FastifyReply) {
-  const { filters, page, user_id: userId, limit } = req.query;
+  const { filters, page, user_id: userId, limit, identified_only: identifiedOnly = "false" } = req.query;
   const site = req.params.site;
+  const filterIdentified = identifiedOnly === "true";
 
   const timeStatement = getTimeStatement(req.query);
   let filterStatement = getFilterStatement(filters, Number(site), timeStatement);
@@ -126,6 +128,7 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       if(user_id != anonymous_id AND anonymous_id != '', true, false) AS is_identified
   FROM AggregatedSessions
   WHERE 1 = 1 ${filterStatement}
+  ${filterIdentified ? "AND user_id != anonymous_id AND anonymous_id != ''" : ""}
   LIMIT {limit:Int32} OFFSET {offset:Int32}
   `;
 
