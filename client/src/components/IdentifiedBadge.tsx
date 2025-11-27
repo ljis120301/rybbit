@@ -1,5 +1,5 @@
 import { Badge } from "./ui/badge";
-import { UserCheck } from "lucide-react";
+import { IdCard } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 interface IdentifiedBadgeProps {
@@ -11,8 +11,7 @@ export function IdentifiedBadge({ className }: IdentifiedBadgeProps) {
     <Tooltip>
       <TooltipTrigger asChild>
         <Badge variant="success" className={className}>
-          <UserCheck className="w-3 h-3 mr-1" />
-          Identified
+          <IdCard className="w-3 h-3" />
         </Badge>
       </TooltipTrigger>
       <TooltipContent>

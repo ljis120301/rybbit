@@ -6,6 +6,8 @@ import { FilterParams } from "@rybbit/shared";
 export type GetSessionsResponse = {
   session_id: string;
   user_id: string;
+  anonymous_id: string;
+  is_identified: boolean;
   country: string;
   region: string;
   city: string;
@@ -73,6 +75,7 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       SELECT
           session_id,
           user_id,
+          argMax(anonymous_id, timestamp) AS anonymous_id,
           argMax(country, timestamp) AS country,
           argMax(region, timestamp) AS region,
           argMax(city, timestamp) AS city,
@@ -114,7 +117,9 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
           user_id
       ORDER BY session_end DESC
   )
-  SELECT *
+  SELECT
+      *,
+      if(user_id != anonymous_id AND anonymous_id != '', true, false) AS is_identified
   FROM AggregatedSessions
   WHERE 1 = 1 ${filterStatement}
   LIMIT {limit:Int32} OFFSET {offset:Int32}

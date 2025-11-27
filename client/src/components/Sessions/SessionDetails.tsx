@@ -20,8 +20,9 @@ import { OperatingSystem } from "../../app/[site]/components/shared/icons/Operat
 import { formatDuration, hour12 } from "../../lib/dateTimeUtils";
 import { useGetRegionName } from "../../lib/geo";
 import { cn, getCountryName, getLanguageName } from "../../lib/utils";
-import { Avatar } from "../Avatar";
+import { Avatar, generateName } from "../Avatar";
 import { EventIcon, PageviewIcon } from "../EventIcons";
+import { IdentifiedBadge } from "../IdentifiedBadge";
 import { Button } from "../ui/button";
 
 // Component to display a single pageview or event
@@ -398,6 +399,12 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                         <Avatar size={40} id={sessionDetails.user_id} />
                       </div>
                       <div>
+                        <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                          <span className="font-medium text-neutral-600 dark:text-neutral-300">
+                            {session.is_identified ? sessionDetails.user_id : generateName(sessionDetails.user_id)}
+                          </span>
+                          {session.is_identified && <IdentifiedBadge />}
+                        </div>
                         <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center">
                           <span className="font-medium text-neutral-600 dark:text-neutral-300">User ID:</span>
                           <CopyText text={sessionDetails.user_id} maxLength={24} className="inline-flex ml-2" />

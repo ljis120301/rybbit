@@ -4,11 +4,12 @@ import { ArrowRight, ChevronDown, ChevronRight } from "lucide-react";
 import { DateTime } from "luxon";
 import { memo, useState } from "react";
 import { GetSessionsResponse } from "../../api/analytics/useGetUserSessions";
-import { formatDuration, hour12, userLocale } from "../../lib/dateTimeUtils";
+import { formatShortDuration, hour12, userLocale } from "../../lib/dateTimeUtils";
 import { cn, formatter } from "../../lib/utils";
 import { Avatar, generateName } from "../Avatar";
 import { Channel } from "../Channel";
 import { EventIcon, PageviewIcon } from "../EventIcons";
+import { IdentifiedBadge } from "../IdentifiedBadge";
 import {
   BrowserTooltipIcon,
   CountryFlagTooltipIcon,
@@ -40,7 +41,7 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
   const start = DateTime.fromSQL(session.session_start);
   const end = DateTime.fromSQL(session.session_end);
   const totalSeconds = Math.floor(end.diff(start).milliseconds / 1000);
-  const duration = formatDuration(totalSeconds);
+  const duration = formatShortDuration(totalSeconds);
 
   const handleCardClick = () => {
     if (onClick) {
@@ -50,7 +51,8 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
     }
   };
 
-  const name = generateName(session.user_id);
+  const isIdentified = session.is_identified;
+  const displayName = isIdentified ? session.user_id : generateName(session.user_id);
 
   return (
     <div className="rounded-lg bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 overflow-hidden">
@@ -58,7 +60,8 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             <Avatar size={24} id={session.user_id} />
-            <span className="text-xs text-neutral-600 dark:text-neutral-200 w-24 truncate">{name}</span>
+            <span className="text-xs text-neutral-600 dark:text-neutral-200 w-24 truncate">{displayName}</span>
+            {isIdentified && <IdentifiedBadge />}
           </div>
 
           {/* Icons section */}

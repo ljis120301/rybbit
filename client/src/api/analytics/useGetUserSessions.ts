@@ -8,6 +8,8 @@ import { authedFetch, getQueryParams } from "../utils";
 export type GetSessionsResponse = {
   session_id: string;
   user_id: string;
+  anonymous_id: string;
+  is_identified: boolean;
   country: string;
   region: string;
   city: string;
