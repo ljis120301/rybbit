@@ -6,7 +6,7 @@ import { AuthInput } from "@/components/auth/AuthInput";
 import { SocialButtons } from "@/components/auth/SocialButtons";
 import { Turnstile } from "@/components/auth/Turnstile";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Used for disabled signup view
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
@@ -22,6 +22,7 @@ import { useConfigs } from "../../lib/configs";
 import { IS_CLOUD } from "../../lib/const";
 import { userStore } from "../../lib/userStore";
 import { cn, isValidDomain, normalizeDomain } from "../../lib/utils";
+import { SpinningGlobe } from "./components/SpinningGlobe";
 
 // Animation variants for step transitions
 const contentVariants = {
@@ -378,33 +379,26 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex justify-center items-center h-dvh w-full p-4 ">
-      <div className="flex flex-col items-center bg-background relative">
+    <div className="flex h-dvh w-full">
+      {/* Left panel - signup form */}
+      <div className="w-full lg:w-[550px] flex flex-col p-6 lg:p-10">
+        {/* Logo at top left */}
+        <div className="mb-8">
+          <a href="https://rybbit.com" target="_blank" className="inline-block">
+            <RybbitTextLogo />
+          </a>
+        </div>
+
         {/* Suspense boundary for the URL parameter handler */}
         <Suspense fallback={null}>
           <StepHandler onSetStep={setCurrentStep} />
         </Suspense>
 
-        {/* Background gradients similar to docs page */}
-        {/* <div className="absolute top-0 left-0 w-[550px] h-[550px] bg-emerald-500/40 rounded-full blur-[80px] opacity-40"></div>
-        <div className="absolute top-20 left-20 w-[400px] h-[400px] bg-emerald-600/30 rounded-full blur-[70px] opacity-30"></div>
+        <div className="flex-1 flex flex-col justify-center w-full max-w-[550px] mx-auto">
+          <h1 className="text-lg text-neutral-600 dark:text-neutral-300 mb-6">Get started with Rybbit</h1>
 
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-[80px] opacity-30"></div>
-        <div className="absolute bottom-40 right-20 w-[350px] h-[350px] bg-indigo-500/30 rounded-full blur-[75px] opacity-30"></div>
-
-        <div className="absolute top-1/4 right-0 w-[320px] h-[320px] bg-purple-500/40 rounded-full blur-[70px] opacity-20"></div> */}
-
-        {/* Logo and title above the card */}
-        <div className="relative z-10 mb-6 text-center">
-          <a href="https://rybbit.com" target="_blank" className="inline-block mb-2">
-            <RybbitTextLogo />
-          </a>
-          <h1 className="text-lg text-neutral-600 dark:text-neutral-300">Get started with Rybbit</h1>
-        </div>
-
-        <Card className="w-full md:w-[500px] p-0 overflow-hidden shadow-2xl border-neutral-200/50 dark:border-neutral-700/50 backdrop-blur-sm bg-white/80 dark:bg-neutral-800/20 z-10 p-8">
           {/* Horizontal step indicator */}
-          <div className="flex items-center w-full mb-4">
+          <div className="flex items-center w-full mb-6">
             {[1, 2, 3].map((step, index) => (
               <React.Fragment key={step}>
                 <div
@@ -436,10 +430,10 @@ export default function SignupPage() {
             {renderStepContent()}
             <AuthError error={error} />
           </div>
-        </Card>
+        </div>
 
         {!IS_CLOUD && (
-          <div className="text-xs text-muted-foreground relative z-10 mt-8">
+          <div className="text-xs text-muted-foreground mt-8">
             <a
               href="https://rybbit.com"
               target="_blank"
@@ -450,6 +444,11 @@ export default function SignupPage() {
             </a>
           </div>
         )}
+      </div>
+
+      {/* Right panel - globe (hidden on mobile/tablet) */}
+      <div className="hidden lg:block lg:w-[calc(100%-500px)] relative m-3 rounded-2xl overflow-hidden">
+        <SpinningGlobe />
       </div>
     </div>
   );
