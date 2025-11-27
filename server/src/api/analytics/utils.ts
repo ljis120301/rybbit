@@ -1,6 +1,9 @@
 import { ResultSet } from "@clickhouse/client";
 import { FilterParams } from "@rybbit/shared";
+import { and, eq, inArray } from "drizzle-orm";
 import SqlString from "sqlstring";
+import { db } from "../../db/postgres/postgres.js";
+import { userProfiles } from "../../db/postgres/schema.js";
 import { filterParamSchema, validateFilters, validateTimeStatementParams } from "./query-validation.js";
 import { FilterParameter, FilterType } from "./types.js";
 
@@ -337,3 +340,36 @@ export const bucketIntervalMap = {
   month: "1 MONTH",
   year: "1 YEAR",
 } as const;
+
+/**
+ * Enriches data with user traits from Postgres for identified users.
+ * This is a shared utility to avoid duplicating the traits fetching logic.
+ */
+export async function enrichWithTraits<T extends { user_id: string; is_identified: boolean }>(
+  data: T[],
+  siteId: number
+): Promise<Array<T & { traits: Record<string, unknown> | null }>> {
+  const identifiedUserIds = [...new Set(data.filter((item) => item.is_identified).map((item) => item.user_id))];
+
+  let traitsMap: Map<string, Record<string, unknown>> = new Map();
+  if (identifiedUserIds.length > 0) {
+    const profiles = await db
+      .select({
+        userId: userProfiles.userId,
+        traits: userProfiles.traits,
+      })
+      .from(userProfiles)
+      .where(and(eq(userProfiles.siteId, siteId), inArray(userProfiles.userId, identifiedUserIds)));
+
+    traitsMap = new Map(
+      profiles.map((p) => [
+        p.userId,
+        p.traits && typeof p.traits === "object" && !Array.isArray(p.traits)
+          ? (p.traits as Record<string, unknown>)
+          : {},
+      ])
+    );
+  }
+
+  return data.map((item) => ({ ...item, traits: traitsMap.get(item.user_id) || null }));
+}

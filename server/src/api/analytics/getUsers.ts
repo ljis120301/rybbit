@@ -1,9 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { inArray, and, eq } from "drizzle-orm";
 import { clickhouse } from "../../db/clickhouse/clickhouse.js";
-import { db } from "../../db/postgres/postgres.js";
-import { userProfiles } from "../../db/postgres/schema.js";
-import { getFilterStatement, getTimeStatement, processResults } from "./utils.js";
+import { enrichWithTraits, getFilterStatement, getTimeStatement, processResults } from "./utils.js";
 import { FilterParams } from "@rybbit/shared";
 
 export type GetUsersResponse = {
@@ -158,27 +155,8 @@ WHERE
     const countData = await processResults<{ total_count: number }>(countResult);
     const totalCount = countData[0]?.total_count || 0;
 
-    // Get traits for identified users from Postgres
-    const identifiedUserIds = data.filter((u) => u.is_identified).map((u) => u.user_id);
-
-    let traitsMap: Map<string, Record<string, unknown>> = new Map();
-    if (identifiedUserIds.length > 0) {
-      const profiles = await db
-        .select({
-          userId: userProfiles.userId,
-          traits: userProfiles.traits,
-        })
-        .from(userProfiles)
-        .where(and(eq(userProfiles.siteId, Number(site)), inArray(userProfiles.userId, identifiedUserIds)));
-
-      traitsMap = new Map(profiles.map((p) => [p.userId, (p.traits as Record<string, unknown>) || {}]));
-    }
-
-    // Merge traits into user data
-    const dataWithTraits = data.map((user) => ({
-      ...user,
-      traits: traitsMap.get(user.user_id) || null,
-    }));
+    // Enrich with traits from Postgres
+    const dataWithTraits = await enrichWithTraits(data, Number(site));
 
     return res.send({
       data: dataWithTraits,
