@@ -30,23 +30,31 @@ const getMax = (time: Time, bucket: TimeBucket) => {
     }
     return undefined;
   } else if (time.mode === "day") {
-    const dayDate = DateTime.fromISO(time.day).endOf("day").minus({ minutes: getBucketMinutesOffset(bucket) });
+    const dayDate = DateTime.fromISO(time.day)
+      .endOf("day")
+      .minus({ minutes: getBucketMinutesOffset(bucket) });
     return now < dayDate ? dayDate.toJSDate() : undefined;
   } else if (time.mode === "range") {
     if (bucket === "day" || bucket === "week" || bucket === "month" || bucket === "year") {
       return undefined;
     }
-    const rangeDate = DateTime.fromISO(time.endDate).endOf("day").minus({ minutes: getBucketMinutesOffset(bucket) });
+    const rangeDate = DateTime.fromISO(time.endDate)
+      .endOf("day")
+      .minus({ minutes: getBucketMinutesOffset(bucket) });
     return now < rangeDate ? rangeDate.toJSDate() : undefined;
   } else if (time.mode === "week") {
     if (bucket !== "hour" && bucket !== "fifteen_minutes") {
       return undefined;
     }
-    const endDate = DateTime.fromISO(time.week).endOf("week").minus({ minutes: getBucketMinutesOffset(bucket) });
+    const endDate = DateTime.fromISO(time.week)
+      .endOf("week")
+      .minus({ minutes: getBucketMinutesOffset(bucket) });
     return now < endDate ? endDate.toJSDate() : undefined;
   } else if (time.mode === "month") {
     if (bucket === "hour") {
-      const endDate = DateTime.fromISO(time.month).endOf("month").minus({ minutes: getBucketMinutesOffset(bucket) });
+      const endDate = DateTime.fromISO(time.month)
+        .endOf("month")
+        .minus({ minutes: getBucketMinutesOffset(bucket) });
       return now < endDate ? endDate.toJSDate() : undefined;
     }
     const monthDate = DateTime.fromISO(time.month).endOf("month");

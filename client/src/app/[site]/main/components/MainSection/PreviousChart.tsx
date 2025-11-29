@@ -64,7 +64,7 @@ export function PreviousChart({
         ]
       : [{ id: selectedStat, dataKey: selectedStat, color: previousColors[0] }];
 
-  const size = (data?.data.length ?? 0 / 2) + 1;
+  const size = (data?.data.length ?? 0) / 2 + 1;
   const chartData = seriesConfig.map(series => {
     const points =
       data?.data
@@ -158,7 +158,9 @@ export function PreviousChart({
       animate={false}
       // motionConfig="stiff"
       enableSlices={"x"}
-      colors={({ id }) => colorMap[id as string] ?? (resolvedTheme === "dark" ? "hsl(var(--neutral-700))" : "hsl(var(--neutral-100))")}
+      colors={({ id }) =>
+        colorMap[id as string] ?? (resolvedTheme === "dark" ? "hsl(var(--neutral-700))" : "hsl(var(--neutral-100))")
+      }
     />
   );
 }
