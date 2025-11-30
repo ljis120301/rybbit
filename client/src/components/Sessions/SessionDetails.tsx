@@ -326,7 +326,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
               <TabsTrigger value="info">Session Info</TabsTrigger>
             </TabsList>
             {!userId && (
-              <Link href={`/${site}/user/${session.user_id}`}>
+              <Link href={`/${site}/user/${session.is_identified ? session.identified_user_id : session.user_id}`}>
                 <Button size={"sm"} variant={"success"}>
                   View User <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -396,7 +396,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                   {sessionDetails?.user_id && (
                     <div className="flex items-center gap-2">
                       <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Avatar size={40} id={sessionDetails.user_id} />
+                        <Avatar size={40} id={session.is_identified ? session.identified_user_id : sessionDetails.user_id} />
                       </div>
                       <div>
                         <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
@@ -404,14 +404,14 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                             {session.is_identified
                               ? (session.traits?.username as string) ||
                                 (session.traits?.name as string) ||
-                                sessionDetails.user_id
+                                session.identified_user_id
                               : generateName(sessionDetails.user_id)}
                           </span>
                           {session.is_identified && <IdentifiedBadge traits={session.traits} />}
                         </div>
                         <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center">
                           <span className="font-medium text-neutral-600 dark:text-neutral-300">User ID:</span>
-                          <CopyText text={sessionDetails.user_id} maxLength={24} className="inline-flex ml-2" />
+                          <CopyText text={session.is_identified ? session.identified_user_id : sessionDetails.user_id} maxLength={24} className="inline-flex ml-2" />
                         </div>
                         <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center">
                           <span className="font-medium text-neutral-600 dark:text-neutral-300">Session ID:</span>

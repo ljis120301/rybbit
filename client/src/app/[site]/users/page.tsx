@@ -107,17 +107,20 @@ export default function UsersPage() {
     columnHelper.accessor("user_id", {
       header: "User",
       cell: info => {
-        const userId = info.getValue();
+        const deviceId = info.getValue(); // user_id is always device fingerprint
+        const identifiedUserId = info.row.original.identified_user_id;
         const isIdentified = info.row.original.is_identified;
         const traits = info.row.original.traits;
-        // Priority: username > name > userId (for identified) or generated name (for anonymous)
+        // For links: use identified_user_id for identified users, device ID for anonymous
+        const linkId = isIdentified ? identifiedUserId : deviceId;
+        // Priority: username > name > identified_user_id (for identified) or generated name (for anonymous)
         const displayName = isIdentified
-          ? (traits?.username as string) || (traits?.name as string) || userId
-          : generateName(userId);
+          ? (traits?.username as string) || (traits?.name as string) || identifiedUserId
+          : generateName(deviceId);
 
         return (
-          <Link href={`/${site}/user/${userId}`} className="flex items-center gap-2">
-            <Avatar size={20} id={userId as string} />
+          <Link href={`/${site}/user/${linkId}`} className="flex items-center gap-2">
+            <Avatar size={20} id={linkId as string} />
             <span className="max-w-32 truncate hover:underline" title={displayName}>
               {displayName}
             </span>
@@ -347,8 +350,9 @@ export default function UsersPage() {
                   </tr>
                 ) : (
                   table.getRowModel().rows.map(row => {
-                    const userId = row.original.user_id;
-                    const href = `/${site}/user/${userId}`;
+                    // Use identified_user_id for identified users, device ID (user_id) for anonymous
+                    const linkId = row.original.is_identified ? row.original.identified_user_id : row.original.user_id;
+                    const href = `/${site}/user/${linkId}`;
 
                     return (
                       <tr key={row.id} className="border-b border-neutral-100 dark:border-neutral-800 group">

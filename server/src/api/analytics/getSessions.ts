@@ -5,8 +5,8 @@ import { FilterParams } from "@rybbit/shared";
 
 export type GetSessionsResponse = {
   session_id: string;
-  user_id: string;
-  anonymous_id: string;
+  user_id: string; // Device fingerprint
+  identified_user_id: string; // Custom user ID when identified, empty string otherwise
   is_identified: boolean;
   traits: Record<string, unknown> | null;
   country: string;
@@ -77,8 +77,8 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
   WITH AggregatedSessions AS (
       SELECT
           session_id,
-          user_id,
-          argMax(anonymous_id, timestamp) AS anonymous_id,
+          argMax(user_id, timestamp) AS user_id,
+          argMax(identified_user_id, timestamp) AS identified_user_id,
           argMax(country, timestamp) AS country,
           argMax(region, timestamp) AS region,
           argMax(city, timestamp) AS city,
@@ -113,19 +113,18 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       FROM events
       WHERE
           site_id = {siteId:Int32}
-          ${userId ? ` AND user_id = {user_id:String}` : ""}
+          ${userId ? ` AND (user_id = {user_id:String} OR identified_user_id = {user_id:String})` : ""}
           ${timeStatement}
       GROUP BY
-          session_id,
-          user_id
+          session_id
       ORDER BY session_end DESC
   )
   SELECT
       *,
-      if(user_id != anonymous_id AND anonymous_id != '', true, false) AS is_identified
+      if(identified_user_id != '', true, false) AS is_identified
   FROM AggregatedSessions
   WHERE 1 = 1 ${filterStatement}
-  ${filterIdentified ? "AND user_id != anonymous_id AND anonymous_id != ''" : ""}
+  ${filterIdentified ? "AND identified_user_id != ''" : ""}
   LIMIT {limit:Int32} OFFSET {offset:Int32}
   `;
 

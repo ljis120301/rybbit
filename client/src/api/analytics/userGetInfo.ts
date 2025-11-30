@@ -9,7 +9,8 @@ export type LinkedDevice = {
 export type UserInfo = {
   duration: number;
   sessions: number;
-  anonymous_id: string;
+  user_id: string; // Device fingerprint
+  identified_user_id: string; // Custom user ID when identified, empty string otherwise
   is_identified: boolean;
   country: string;
   region: string;

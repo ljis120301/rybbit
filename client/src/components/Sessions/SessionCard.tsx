@@ -53,9 +53,9 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
 
   const isIdentified = session.is_identified;
   const traits = session.traits;
-  // Priority: username > name > userId (for identified) or generated name (for anonymous)
+  // Priority: username > name > identified_user_id (for identified) or generated name (for anonymous)
   const displayName = isIdentified
-    ? (traits?.username as string) || (traits?.name as string) || session.user_id
+    ? (traits?.username as string) || (traits?.name as string) || session.identified_user_id
     : generateName(session.user_id);
 
   return (

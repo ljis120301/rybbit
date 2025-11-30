@@ -8,7 +8,8 @@ import { processResults } from "./utils.js";
 interface UserPageviewData {
   sessions: number;
   duration: number;
-  anonymous_id: string;
+  user_id: string; // Device fingerprint
+  identified_user_id: string; // Custom user ID when identified
   country: string;
   region: string;
   city: string;
@@ -60,8 +61,8 @@ export async function getUserInfo(
     WITH sessions AS (
         SELECT
             session_id,
-            user_id,
-            argMax(anonymous_id, timestamp) AS anonymous_id,
+            argMax(user_id, timestamp) AS user_id,
+            argMax(identified_user_id, timestamp) AS identified_user_id,
             argMax(country, timestamp) AS country,
             argMax(region, timestamp) AS region,
             argMax(city, timestamp) AS city,
@@ -85,18 +86,18 @@ export async function getUserInfo(
         FROM
             events
         WHERE
-            user_id = {userId:String}
+            (identified_user_id = {userId:String} OR user_id = {userId:String})
             AND site_id = {site:Int32}
         GROUP BY
-            session_id,
-            user_id
+            session_id
         ORDER BY
             session_end DESC
     )
     SELECT
         COUNT(DISTINCT session_id) AS sessions,
         ROUND(avg(session_duration)) AS duration,
-        any(anonymous_id) AS anonymous_id,
+        any(user_id) AS user_id,
+        any(identified_user_id) AS identified_user_id,
         any(country) as country,
         any(region) AS region,
         any(city) AS city,
@@ -153,9 +154,8 @@ export async function getUserInfo(
       created_at: alias.created_at,
     }));
 
-    // Compute is_identified: user is identified if user_id differs from anonymous_id
-    const anonymousId = data[0].anonymous_id;
-    const is_identified = userId !== anonymousId && anonymousId !== "";
+    // User is identified if identified_user_id is set
+    const is_identified = data[0].identified_user_id !== "";
 
     return res.send({
       data: {
