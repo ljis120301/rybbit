@@ -25,6 +25,7 @@ import { useGetSiteImports, useCreateSiteImport, useDeleteSiteImport } from "@/a
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { IS_CLOUD } from "@/lib/const";
 import { CsvParser } from "@/lib/import/csvParser";
+import { ImportPlatform } from "@/types/import";
 
 interface ImportManagerProps {
   siteId: number;
@@ -59,11 +60,19 @@ function formatFileSize(bytes: number): string {
   }
 }
 
+function formatPlatformName(platform: ImportPlatform): string {
+  const platformNames: Record<ImportPlatform, string> = {
+    umami: "Umami",
+    simple_analytics: "Simple Analytics",
+  };
+  return platformNames[platform];
+}
+
 export function ImportManager({ siteId, disabled }: ImportManagerProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [importToDelete, setImportToDelete] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPlatform, setSelectedPlatform] = useState<"umami" | "simple_analytics" | "">("");
+  const [selectedPlatform, setSelectedPlatform] = useState<ImportPlatform | "">("");
   const [fileError, setFileError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const workerManagerRef = useRef<CsvParser | null>(null);
@@ -204,7 +213,7 @@ export function ImportManager({ siteId, disabled }: ImportManagerProps) {
             {/* Platform Selection */}
             <div className="space-y-2">
               <Label htmlFor="platform">Platform</Label>
-              <Select value={selectedPlatform} onValueChange={(value: "umami" | "simple_analytics") => setSelectedPlatform(value)}>
+              <Select value={selectedPlatform} onValueChange={(value: ImportPlatform) => setSelectedPlatform(value)}>
                 <SelectTrigger id="platform" disabled={disabled || createImportMutation.isPending || hasActiveImport}>
                   <SelectValue placeholder="Select platform" />
                 </SelectTrigger>
@@ -322,9 +331,7 @@ export function ImportManager({ siteId, disabled }: ImportManagerProps) {
                       <TableRow key={imp.importId}>
                         <TableCell className="font-medium">{startedAt}</TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="capitalize">
-                            {imp.platform}
-                          </Badge>
+                          <Badge variant="outline">{formatPlatformName(imp.platform)}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge className={`${statusInfo.color} flex items-center gap-1`}>
