@@ -1,4 +1,8 @@
 export default {
+  "paid-search-analytics":
+    "Paid Search Analytics - How to Optimize Ad Spend and Maximize ROI",
+  "is-google-analytics-free":
+    "Is Google Analytics Free? The Hidden Costs You're Not Seeing",
   "rybbit-pricing":
     "Rybbit vs Heap Pricing - A Clear, Affordable Alternative to Heap Analytics",
   "5k-stars":
