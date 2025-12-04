@@ -91,6 +91,10 @@ import { getGSCStatus } from "./api/gsc/status.js";
 import { disconnectGSC } from "./api/gsc/disconnect.js";
 import { getGSCData } from "./api/gsc/getData.js";
 import { selectGSCProperty } from "./api/gsc/selectProperty.js";
+import { getSiteImports } from "./api/sites/getSiteImports.js";
+import { createSiteImport } from "./api/sites/createSiteImport.js";
+import { batchImportEvents } from "./api/sites/batchImportEvents.js";
+import { deleteSiteImport } from "./api/sites/deleteSiteImport.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -358,10 +362,10 @@ server.get("/api/session-replay/:sessionId/:site", getSessionReplayEvents);
 server.delete("/api/session-replay/:sessionId/:site", deleteSessionReplay);
 
 // Imports
-// server.get("/api/get-site-imports/:site", getSiteImports);
-// server.post("/api/create-site-import/:site", createSiteImport);
-// server.post("/api/batch-import-events/:site/:importId", batchImportEvents);
-// server.delete("/api/delete-site-import/:site/:importId", deleteSiteImport);
+server.get("/api/get-site-imports/:site", getSiteImports);
+server.post("/api/create-site-import/:site", createSiteImport);
+server.post("/api/batch-import-events/:site/:importId", batchImportEvents);
+server.delete("/api/delete-site-import/:site/:importId", deleteSiteImport);
 
 // Administrative
 server.get("/api/config", getConfig);
