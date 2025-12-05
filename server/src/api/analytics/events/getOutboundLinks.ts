@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { clickhouse } from "../../../db/clickhouse/clickhouse.js";
-import { getTimeStatement, processResults } from "../utils.js";
+import { getTimeStatement, processResults } from "../utils/utils.js";
 import { FilterParams } from "@rybbit/shared";
-import { getFilterStatement } from "../getFilterStatement.js";
+import { getFilterStatement } from "../utils/getFilterStatement.js";
 
 export type GetOutboundLinksResponse = {
   url: string;

@@ -4,10 +4,10 @@ import {
   SessionReplayListItem,
   GetSessionReplayEventsResponse,
 } from "../../types/sessionReplay.js";
-import { processResults, getTimeStatement } from "../../api/analytics/utils.js";
+import { processResults, getTimeStatement } from "../../api/analytics/utils/utils.js";
 import { FilterParams } from "@rybbit/shared";
 import { r2Storage } from "../storage/r2StorageService.js";
-import { getFilterStatement } from "../../api/analytics/getFilterStatement.js";
+import { getFilterStatement } from "../../api/analytics/utils/getFilterStatement.js";
 
 /**
  * Service responsible for querying/retrieving session replay data

@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { clickhouse } from "../../db/clickhouse/clickhouse.js";
 import { FilterParameter } from "./types.js";
-import { getTimeStatement, processResults } from "./utils.js";
-import { getFilterStatement, getSqlParam } from "./getFilterStatement.js";
+import { getTimeStatement, processResults } from "./utils/utils.js";
+import { getFilterStatement, getSqlParam } from "./utils/getFilterStatement.js";
 import { FilterParams } from "@rybbit/shared";
 
 interface GetMetricRequest {

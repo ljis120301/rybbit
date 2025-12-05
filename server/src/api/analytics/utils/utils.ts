@@ -2,8 +2,8 @@ import { ResultSet } from "@clickhouse/client";
 import { FilterParams } from "@rybbit/shared";
 import { and, eq, inArray } from "drizzle-orm";
 import SqlString from "sqlstring";
-import { db } from "../../db/postgres/postgres.js";
-import { userProfiles } from "../../db/postgres/schema.js";
+import { db } from "../../../db/postgres/postgres.js";
+import { userProfiles } from "../../../db/postgres/schema.js";
 import { validateTimeStatementParams } from "./query-validation.js";
 
 export function getTimeStatement(

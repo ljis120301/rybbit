@@ -1,6 +1,6 @@
 import SqlString from "sqlstring";
 import { filterParamSchema, validateFilters } from "./query-validation.js";
-import { FilterParameter, FilterType } from "./types.js";
+import { FilterParameter, FilterType } from "../types.js";
 
 const filterTypeToOperator = (type: FilterType) => {
   switch (type) {
@@ -222,9 +222,7 @@ export function getFilterStatement(filters: string, siteId?: number, timeStateme
           try {
             new RegExp(pattern);
           } catch (e) {
-            throw new Error(
-              `Invalid regex pattern: ${e instanceof Error ? e.message : "Unknown error"}`
-            );
+            throw new Error(`Invalid regex pattern: ${e instanceof Error ? e.message : "Unknown error"}`);
           }
 
           // Additional safety: limit pattern length to prevent abuse

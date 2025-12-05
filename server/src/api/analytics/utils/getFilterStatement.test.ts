@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getFilterStatement, getSqlParam } from "./getFilterStatement.js";
-import { FilterParameter } from "./types.js";
+import { FilterParameter } from "../types.js";
 
 describe("getSqlParam", () => {
   describe("UTM parameters", () => {
@@ -311,9 +311,7 @@ describe("getFilterStatement", () => {
     });
 
     it("should handle multiple exit_page values", () => {
-      const filters = JSON.stringify([
-        { parameter: "exit_page", type: "equals", value: ["/checkout", "/thank-you"] },
-      ]);
+      const filters = JSON.stringify([{ parameter: "exit_page", type: "equals", value: ["/checkout", "/thank-you"] }]);
       const result = getFilterStatement(filters);
       expect(result).toContain("exit_pathname = '/checkout'");
       expect(result).toContain("exit_pathname = '/thank-you'");
@@ -337,7 +335,9 @@ describe("getFilterStatement", () => {
 
   describe("SQL injection prevention", () => {
     it("should escape single quotes in values", () => {
-      const filters = JSON.stringify([{ parameter: "browser", type: "equals", value: ["Chrome'; DROP TABLE users;--"] }]);
+      const filters = JSON.stringify([
+        { parameter: "browser", type: "equals", value: ["Chrome'; DROP TABLE users;--"] },
+      ]);
       const result = getFilterStatement(filters);
       // SqlString.escape escapes the single quote with a backslash, making the SQL safe
       expect(result).toContain("\\'");

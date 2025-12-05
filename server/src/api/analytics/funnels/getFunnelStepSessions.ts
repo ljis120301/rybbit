@@ -2,9 +2,9 @@ import { FilterParams } from "@rybbit/shared";
 import { FastifyReply, FastifyRequest } from "fastify";
 import SqlString from "sqlstring";
 import { clickhouse } from "../../../db/clickhouse/clickhouse.js";
-import { getTimeStatement, patternToRegex, processResults } from "../utils.js";
+import { getTimeStatement, patternToRegex, processResults } from "../utils/utils.js";
 import { GetSessionsResponse } from "../getSessions.js";
-import { getFilterStatement } from "../getFilterStatement.js";
+import { getFilterStatement } from "../utils/getFilterStatement.js";
 
 type FunnelStep = {
   value: string;
