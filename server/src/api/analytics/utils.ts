@@ -101,6 +101,13 @@ const filterTypeToOperator = (type: FilterType) => {
       return "LIKE";
     case "not_contains":
       return "NOT LIKE";
+    case "greater_than":
+      return ">";
+    case "less_than":
+      return "<";
+    case "regex":
+    case "not_regex":
+      return null; // Handled separately with match() function
   }
 };
 
@@ -291,7 +298,44 @@ export function getFilterStatement(filters: string, siteId?: number, timeStateme
           }
         }
 
-        // Special handling for lat/lon with tolerance
+        // Handle regex filters using ClickHouse match() function
+        if (filter.type === "regex" || filter.type === "not_regex") {
+          const pattern = String(filter.value[0] ?? "");
+
+          // Validate regex pattern
+          if (!pattern) {
+            throw new Error("Regex pattern cannot be empty");
+          }
+
+          // Check if it's a valid regex by trying to compile it
+          try {
+            new RegExp(pattern);
+          } catch (e) {
+            throw new Error(
+              `Invalid regex pattern: ${e instanceof Error ? e.message : "Unknown error"}`
+            );
+          }
+
+          // Additional safety: limit pattern length to prevent abuse
+          if (pattern.length > 500) {
+            throw new Error("Regex pattern too long (max 500 characters)");
+          }
+
+          const regexPattern = SqlString.escape(pattern);
+          const matchExpr = `match(${getSqlParam(filter.parameter)}, ${regexPattern})`;
+          return filter.type === "regex" ? matchExpr : `NOT ${matchExpr}`;
+        }
+
+        // Handle numeric comparison filters (>, <)
+        if (filter.type === "greater_than" || filter.type === "less_than") {
+          const numericValue = Number(filter.value[0]);
+          if (isNaN(numericValue)) {
+            throw new Error(`Invalid numeric value for ${filter.type} filter: ${filter.value[0]}`);
+          }
+          return `${getSqlParam(filter.parameter)} ${filterTypeToOperator(filter.type)} ${numericValue}`;
+        }
+
+        // Special handling for lat/lon with tolerance (only for equals/not_equals)
         if (filter.parameter === "lat" || filter.parameter === "lon") {
           const tolerance = 0.001;
           if (filter.value.length === 1) {

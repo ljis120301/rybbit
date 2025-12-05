@@ -1,4 +1,12 @@
-export type FilterType = "equals" | "not_equals" | "contains" | "not_contains";
+export type FilterType =
+  | "equals"
+  | "not_equals"
+  | "contains"
+  | "not_contains"
+  | "regex"
+  | "not_regex"
+  | "greater_than"
+  | "less_than";
 
 export type FilterParameter =
   | "browser"
@@ -44,3 +52,11 @@ export interface Filter {
   value: (string | number)[];
   type: FilterType;
 }
+
+export const NUMERIC_FILTER_PARAMETERS: FilterParameter[] = [
+  "lat",
+  "lon",
+];
+
+export const isNumericFilterParameter = (param: FilterParameter): boolean =>
+  NUMERIC_FILTER_PARAMETERS.includes(param);
