@@ -121,7 +121,7 @@ function ErrorEventItem({ errorEvent }: { errorEvent: ErrorEvent }) {
             href={`https://${errorEvent.hostname}${errorEvent.pathname}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-neutral-600 dark:text-neutral-300 break-words hover:underline"
+            className="text-sm text-neutral-600 dark:text-neutral-300 wrap-break-word hover:underline"
           >
             {errorEvent.hostname && errorEvent.pathname
               ? `${errorEvent.hostname}${errorEvent.pathname}`
@@ -160,10 +160,10 @@ function ErrorEventItem({ errorEvent }: { errorEvent: ErrorEvent }) {
       {/* Error message */}
       <div className="mb-3">
         <div className="flex items-start gap-2 text-red-400">
-          <TriangleAlert className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <TriangleAlert className="w-4 h-4 mt-0.5 shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium mb-1">Error</p>
-            <p className="text-sm text-neutral-600 dark:text-neutral-300 break-words">
+            <p className="text-sm text-neutral-600 dark:text-neutral-300 wrap-break-word">
               {errorEvent.message || "No message available"}
             </p>
           </div>
@@ -174,7 +174,7 @@ function ErrorEventItem({ errorEvent }: { errorEvent: ErrorEvent }) {
       {errorEvent.stack && (
         <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
           <div className="flex items-start gap-2">
-            <Code className="w-4 h-4 text-neutral-900 dark:text-neutral-100 mt-0.5 flex-shrink-0" />
+            <Code className="w-4 h-4 text-neutral-900 dark:text-neutral-100 mt-0.5 shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-1">Stack Trace:</p>
               {/* File and line info */}
@@ -183,7 +183,7 @@ function ErrorEventItem({ errorEvent }: { errorEvent: ErrorEvent }) {
                   <div className="flex-1 min-w-0">
                     <Link
                       href={`${errorEvent.fileName}`}
-                      className="text-sm text-neutral-600 dark:text-neutral-300 break-words hover:underline"
+                      className="text-sm text-neutral-600 dark:text-neutral-300 wrap-break-word hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -198,7 +198,7 @@ function ErrorEventItem({ errorEvent }: { errorEvent: ErrorEvent }) {
                   </div>
                 </div>
               )}
-              <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap break-words">
+              <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap wrap-break-word">
                 {errorEvent.stack}
               </pre>
             </div>

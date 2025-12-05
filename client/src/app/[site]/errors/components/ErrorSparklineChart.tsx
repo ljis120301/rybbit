@@ -36,7 +36,7 @@ export function ErrorSparklineChart({ data, isHovering, errorMessage, isLoading 
   if (isLoading) {
     return (
       <div className="h-full w-full flex items-center justify-center animate-pulse">
-        <div className="h-[1px] w-full bg-border opacity-50"></div>
+        <div className="h-px w-full bg-border opacity-50"></div>
       </div>
     );
   }
@@ -44,7 +44,7 @@ export function ErrorSparklineChart({ data, isHovering, errorMessage, isLoading 
   if (!chartData || chartData.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <div className="h-[1px] w-full bg-border opacity-50"></div>
+        <div className="h-px w-full bg-border opacity-50"></div>
       </div>
     );
   }

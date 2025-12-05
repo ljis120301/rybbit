@@ -63,7 +63,7 @@ function SiteSelectorContent({ onSiteSelect }: { onSiteSelect: () => void }) {
                 )}
               >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <Favicon domain={site.domain} className="w-4 h-4 flex-shrink-0" />
+                  <Favicon domain={site.domain} className="w-4 h-4 shrink-0" />
                   <div className="text-sm text-neutral-900 dark:text-white truncate">{site.domain}</div>
                 </div>
               </div>
@@ -106,7 +106,7 @@ function SiteSelectorContent({ onSiteSelect }: { onSiteSelect: () => void }) {
                   )}
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <Favicon domain={site.domain} className="w-4 h-4 flex-shrink-0" />
+                    <Favicon domain={site.domain} className="w-4 h-4 shrink-0" />
                     <div className="text-sm text-neutral-900 dark:text-white truncate">{site.domain}</div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ function SiteSelectorContent({ onSiteSelect }: { onSiteSelect: () => void }) {
                 className="flex items-center justify-between p-2 animate-pulse rounded-md border-b border-neutral-300 dark:border-neutral-800 last:border-b-0"
               >
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-4 h-4 bg-neutral-200 dark:bg-neutral-700 rounded flex-shrink-0"></div>
+                  <div className="w-4 h-4 bg-neutral-200 dark:bg-neutral-700 rounded shrink-0"></div>
                   <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-32"></div>
                 </div>
                 <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>

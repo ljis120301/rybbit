@@ -143,7 +143,7 @@ function SessionCard({ session, onClick }: { session: GetSessionsResponse[number
           </TooltipContent>
         </Tooltip>
 
-        <ArrowRight className="mx-2 w-3 h-3 flex-shrink-0 text-neutral-400" />
+        <ArrowRight className="mx-2 w-3 h-3 shrink-0 text-neutral-400" />
 
         <Tooltip>
           <TooltipTrigger asChild>

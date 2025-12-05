@@ -497,7 +497,7 @@ export function SpinningGlobe() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full [&_.mapboxgl-ctrl-bottom-left]:!hidden [&_.mapboxgl-ctrl-logo]:!hidden"
+      className="w-full h-full [&_.mapboxgl-ctrl-bottom-left]:hidden! [&_.mapboxgl-ctrl-logo]:hidden!"
     />
   );
 }

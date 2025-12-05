@@ -210,7 +210,7 @@ export function StandardSectionDialog({
 
   return (
     <Dialog open={expanded} onOpenChange={close}>
-      <DialogContent className="max-w-[1000px] w-[100vw] max-h-[1000px] h-[calc(100vh-2rem)] p-2 sm:p-4 flex flex-col gap-2">
+      <DialogContent className="max-w-[1000px] w-screen max-h-[1000px] h-[calc(100vh-2rem)] p-2 sm:p-4 flex flex-col gap-2">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -267,7 +267,7 @@ export function StandardSectionDialog({
                       <td
                         key={cell.id}
                         className={cn(
-                          "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+                          "p-2 align-middle [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-[2px]",
                           "relative",
                           cellIndex !== 0 && "text-right"
                         )}

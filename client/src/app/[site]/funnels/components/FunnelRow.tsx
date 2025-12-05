@@ -64,7 +64,7 @@ export function FunnelRow({ funnel, index }: FunnelRowProps) {
     <Card className="mb-4 overflow-hidden">
       {/* Header row (always visible) */}
       <div className="flex items-center justify-between py-2 px-5">
-        <div className="flex items-center flex-grow cursor-pointer transition-colors" onClick={handleExpand}>
+        <div className="flex items-center grow cursor-pointer transition-colors" onClick={handleExpand}>
           <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400 flex flex-col gap-3">
             {/* Steps visualization */}
             <div className="flex flex-wrap gap-1">

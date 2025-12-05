@@ -335,7 +335,7 @@ export function Chart({
                 {diffPercentage.toFixed(2)}%
               </div>
             )}
-            <div className="w-full h-[1px] bg-neutral-100 dark:bg-neutral-750"></div>
+            <div className="w-full h-px bg-neutral-100 dark:bg-neutral-750"></div>
 
             <div className="m-2">
               <div className="flex justify-between text-sm w-40">

@@ -114,7 +114,7 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
               </TooltipContent>
             </Tooltip>
 
-            <ArrowRight className="mx-2 w-3 h-3 flex-shrink-0 text-neutral-500 dark:text-neutral-400" />
+            <ArrowRight className="mx-2 w-3 h-3 shrink-0 text-neutral-500 dark:text-neutral-400" />
 
             <Tooltip>
               <TooltipTrigger asChild>
@@ -144,7 +144,7 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
           </div>
 
           {/* Expand/Collapse icon */}
-          <div className="ml-2 flex-shrink-0 hidden md:flex">
+          <div className="ml-2 shrink-0 hidden md:flex">
             {expanded ? (
               <ChevronDown className="w-4 h-4 text-neutral-500 dark:text-neutral-400" strokeWidth={3} />
             ) : (
@@ -213,7 +213,7 @@ export const SessionCardSkeleton = memo(({ userId }: { userId?: string }) => {
           {/* Entry/Exit paths with randomized widths */}
           <div className="items-center ml-3 flex-1 min-w-0 hidden md:flex">
             <Skeleton className={cn("h-3 max-w-[200px]", getRandomWidth())} />
-            <ArrowRight className="mx-2 w-3 h-3 flex-shrink-0 text-neutral-500 dark:text-neutral-400 opacity-20" />
+            <ArrowRight className="mx-2 w-3 h-3 shrink-0 text-neutral-500 dark:text-neutral-400 opacity-20" />
             <Skeleton className={cn("h-3 max-w-[200px]", getRandomWidth())} />
           </div>
 
@@ -225,7 +225,7 @@ export const SessionCardSkeleton = memo(({ userId }: { userId?: string }) => {
           </div>
 
           {/* Expand icon */}
-          <div className="ml-2 flex-shrink-0 hidden md:flex">
+          <div className="ml-2 shrink-0 hidden md:flex">
             <Skeleton className="h-4 w-4" />
           </div>
         </div>

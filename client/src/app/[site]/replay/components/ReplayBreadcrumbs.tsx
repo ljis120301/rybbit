@@ -300,7 +300,7 @@ export function ReplayBreadcrumbs() {
                   <div className="text-xs text-neutral-600 dark:text-neutral-400 w-10">
                     {Duration.fromMillis(startTimeMs).toFormat("mm:ss")}
                   </div>
-                  <Icon className={cn("w-4 h-4 flex-shrink-0", color)} />
+                  <Icon className={cn("w-4 h-4 shrink-0", color)} />
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-neutral-900 dark:text-neutral-200 font-medium truncate">
                       {description}

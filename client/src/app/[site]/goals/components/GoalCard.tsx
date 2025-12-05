@@ -131,7 +131,7 @@ export default function GoalCard({ goal, siteId }: GoalCardProps) {
           </div>
 
           {/* Right section - Actions */}
-          <div className="flex flex-shrink-0 gap-1 pl-4">
+          <div className="flex shrink-0 gap-1 pl-4">
             <div onClick={e => e.stopPropagation()}>
               <GoalFormModal
                 siteId={siteId}

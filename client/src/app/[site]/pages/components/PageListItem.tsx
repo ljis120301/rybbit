@@ -89,7 +89,7 @@ export function PageListItem({ pageData, isLoading = false }: PageListItemProps)
           {/* Left side: Page title/path with thumbnail */}
           <div className="flex gap-3 flex-1 min-w-0">
             {thumbnailUrl && !isLoadingMetadata && (
-              <div className="hidden sm:block flex-shrink-0 h-12 w-16 relative rounded-md overflow-hidden border border-neutral-100 dark:border-neutral-800">
+              <div className="hidden sm:block shrink-0 h-12 w-16 relative rounded-md overflow-hidden border border-neutral-100 dark:border-neutral-800">
                 <img
                   src={thumbnailUrl}
                   alt={`Thumbnail for ${pageData.title || pageData.value}`}

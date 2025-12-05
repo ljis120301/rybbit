@@ -201,7 +201,7 @@ export function FunnelForm({
                   className="flex flex-col space-y-2 border border-neutral-200 dark:border-neutral-750 p-4 rounded-lg bg-white dark:bg-neutral-850"
                 >
                   <div className="flex items-start gap-2">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-400 bg-neutral-100 dark:bg-neutral-750 flex items-center justify-center text-xs mt-1.5">
+                    <div className="shrink-0 w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-400 bg-neutral-100 dark:bg-neutral-750 flex items-center justify-center text-xs mt-1.5">
                       {index + 1}
                     </div>
                     <Select value={step.type} onValueChange={value => updateStepType(index, value as "page" | "event")}>
@@ -214,7 +214,7 @@ export function FunnelForm({
                       </SelectContent>
                     </Select>
 
-                    <div className="flex-grow space-y-2">
+                    <div className="grow space-y-2">
                       <div className="flex gap-2">
                         <InputWithSuggestions
                           suggestions={hostnameSuggestions}

@@ -18,7 +18,7 @@ import { FunnelRow } from "./components/FunnelRow";
 const FunnelRowSkeleton = () => (
   <div className="rounded-md shadow-sm bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 mb-4 overflow-hidden">
     <div className="flex items-center justify-between py-2 px-5 animate-pulse">
-      <div className="flex items-center flex-grow">
+      <div className="flex items-center grow">
         <div className="mt-1 text-xs flex flex-col gap-3 w-full">
           {/* Funnel name and steps skeleton */}
           <div className="flex flex-wrap gap-1 items-center">

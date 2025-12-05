@@ -50,7 +50,7 @@ export const MultiSelect = forwardRef<any, MultiSelectProps<any>>(({ className, 
         valueContainer: () => "gap-1 flex flex-wrap items-center",
         clearIndicator: () => "p-1 text-muted-foreground hover:text-foreground",
         dropdownIndicator: () => "p-1 text-muted-foreground hover:text-foreground",
-        indicatorSeparator: () => "bg-input mx-2 my-2 w-[1px]",
+        indicatorSeparator: () => "bg-input mx-2 my-2 w-px",
         noOptionsMessage: () => "text-muted-foreground p-2 text-sm",
       }}
       {...props}

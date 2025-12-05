@@ -245,7 +245,7 @@ export function PricingCard({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
 
         {/* Pro Plan Card */}
-        <div className="bg-white dark:bg-neutral-800/100 rounded-xl border-2 border-emerald-500 overflow-hidden text-neutral-900 dark:text-neutral-100 shadow-lg">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border-2 border-emerald-500 overflow-hidden text-neutral-900 dark:text-neutral-100 shadow-lg">
           <div className="p-6">
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-2">

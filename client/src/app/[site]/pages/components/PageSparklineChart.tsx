@@ -20,7 +20,7 @@ export function PageSparklineChart({ data, isHovering, pageTitle, isLoading }: P
   if (isLoading) {
     return (
       <div className="h-full w-full flex items-center justify-center animate-pulse">
-        <div className="h-[1px] w-full bg-border opacity-50"></div>
+        <div className="h-px w-full bg-border opacity-50"></div>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export function PageSparklineChart({ data, isHovering, pageTitle, isLoading }: P
   if (!sparklineData || sparklineData.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <div className="h-[1px] w-full bg-border opacity-50"></div>
+        <div className="h-px w-full bg-border opacity-50"></div>
       </div>
     );
   }

@@ -55,10 +55,10 @@ function PageviewItem({
   return (
     <div className="flex mb-3">
       {/* Timeline circle with number */}
-      <div className="relative flex-shrink-0">
+      <div className="relative shrink-0">
         {!isLast && (
           <div
-            className="absolute top-8 left-4 w-[1px] bg-neutral-200 dark:bg-neutral-600/25"
+            className="absolute top-8 left-4 w-px bg-neutral-200 dark:bg-neutral-600/25"
             style={{
               height: "calc(100% - 20px)",
             }}
@@ -77,7 +77,7 @@ function PageviewItem({
 
       <div className="flex flex-col ml-3 flex-1">
         <div className="flex items-center flex-1 py-1">
-          <div className="flex-shrink-0 mr-3">
+          <div className="shrink-0 mr-3">
             {isEvent ? (
               <EventIcon />
             ) : isError ? (
@@ -124,7 +124,7 @@ function PageviewItem({
             )}
           </div>
 
-          <div className="text-xs text-neutral-500 dark:text-neutral-400 flex-shrink-0">{formattedTime}</div>
+          <div className="text-xs text-neutral-500 dark:text-neutral-400 shrink-0">{formattedTime}</div>
         </div>
         {isPageview && duration && (
           <div className="flex items-center pl-7 mt-1">
@@ -208,7 +208,7 @@ function PageviewItem({
                   {item.props.stack && (
                     <div>
                       <p className="mt-2 mb-1 text-neutral-600 dark:text-neutral-300 font-light">Stack Trace:</p>
-                      <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap break-words">
+                      <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap wrap-break-word">
                         {item.props.stack}
                       </pre>
                     </div>
@@ -249,7 +249,7 @@ const SessionDetailsTimelineSkeleton = memo(({ itemCount }: { itemCount: number 
               <div className="flex items-center">
                 <Skeleton className="h-4 w-4 mr-3" />
                 <Skeleton className={cn("h-4", getRandomWidth(), "max-w-md mr-4")} />
-                <Skeleton className="h-3 w-16 flex-shrink-0 ml-auto" />
+                <Skeleton className="h-3 w-16 shrink-0 ml-auto" />
               </div>
               <div className="mt-1 pl-7">
                 {Math.random() > 0.5 && <Skeleton className={cn("h-3", Math.random() > 0.7 ? "w-48" : "w-32")} />}
@@ -393,7 +393,7 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                 <div className="space-y-3">
                   {sessionDetails?.user_id && (
                     <div className="flex items-center gap-2">
-                      <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full flex items-center justify-center flex-shrink-0">
+                      <div className="h-10 w-10 bg-neutral-200 dark:bg-neutral-800 rounded-full flex items-center justify-center shrink-0">
                         <Avatar size={40} id={isIdentified ? session.identified_user_id : sessionDetails.user_id} />
                       </div>
                       <div>

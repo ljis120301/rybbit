@@ -44,7 +44,7 @@ const GoalCardSkeleton = () => (
       </div>
 
       {/* Right section skeleton */}
-      <div className="flex flex-shrink-0 gap-1 pl-4">
+      <div className="flex shrink-0 gap-1 pl-4">
         <div className="w-7 h-7 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
         <div className="w-7 h-7 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
         <div className="w-7 h-7 bg-neutral-200 dark:bg-neutral-800 rounded"></div>

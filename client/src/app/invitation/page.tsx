@@ -120,7 +120,7 @@ function InvitationContent() {
 export default function AcceptInvitation() {
   return (
     <div className="flex flex-col min-h-dvh">
-      <div className="flex justify-center items-center flex-grow p-4">
+      <div className="flex justify-center items-center grow p-4">
         <Suspense fallback={<ThreeDotLoader />}>
           <InvitationContent />
         </Suspense>
