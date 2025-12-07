@@ -4,8 +4,8 @@ import { SessionsList } from "@/components/Sessions/SessionsList";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { useUserInfo } from "../../../../api/analytics/userGetInfo";
-import { useGetSessions, useGetUserSessionCount } from "../../../../api/analytics/useGetUserSessions";
+import { useUserInfo } from "../../../../api/analytics/hooks/userGetInfo";
+import { useGetSessions, useGetUserSessionCount } from "../../../../api/analytics/hooks/useGetUserSessions";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -3,7 +3,7 @@
 import { ChartColumnDecreasing } from "lucide-react";
 import { DateTime } from "luxon"; // Import Luxon for date formatting
 import { Fragment, useMemo, useState } from "react";
-import { useGetRetention } from "../../../api/analytics/useGetRetention";
+import { useGetRetention } from "../../../api/analytics/hooks/useGetRetention";
 import { RetentionMode } from "../../../api/analytics/endpoints";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { ThreeDotLoader } from "../../../components/Loaders";

@@ -5,7 +5,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { ErrorDetails } from "./ErrorDetails";
 import { ErrorSparklineChart } from "./ErrorSparklineChart";
-import { useGetErrorBucketed } from "@/api/analytics/errors/useGetErrorBucketed";
+import { useGetErrorBucketed } from "@/api/analytics/hooks/errors/useGetErrorBucketed";
 import { ErrorNameItem } from "../../../../api/analytics/endpoints";
 
 // Maximum length for error messages

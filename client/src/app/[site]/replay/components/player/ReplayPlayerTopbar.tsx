@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
-import { useGetSessionReplayEvents } from "../../../../../api/analytics/sessionReplay/useGetSessionReplayEvents";
+import { useGetSessionReplayEvents } from "../../../../../api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
 import {
   BrowserTooltipIcon,
   CountryFlagTooltipIcon,

@@ -3,7 +3,7 @@ import NumberFlow from "@number-flow/react";
 import { round } from "lodash";
 import { ChevronDown, ChevronRight, SquareArrowOutUpRight } from "lucide-react";
 import { ReactNode, useState, useCallback } from "react";
-import { usePaginatedMetric } from "../../../../../api/analytics/useGetMetric";
+import { usePaginatedMetric } from "../../../../../api/analytics/hooks/useGetMetric";
 import { MetricResponse } from "../../../../../api/analytics/endpoints";
 import { addFilter, removeFilter, useStore } from "../../../../../lib/store";
 

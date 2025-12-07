@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useGetGoals } from "../../../api/analytics/goals/useGetGoals";
+import { useGetGoals } from "../../../api/analytics/hooks/goals/useGetGoals";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { NothingFound } from "../../../components/NothingFound";
 import { Pagination } from "../../../components/pagination";

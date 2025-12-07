@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
 import { Card, CardContent, CardLoader } from "../../../../../components/ui/card";
 import { Button } from "../../../../../components/ui/button";
-import { useGetEventNames } from "../../../../../api/analytics/events/useGetEventNames";
+import { useGetEventNames } from "../../../../../api/analytics/hooks/events/useGetEventNames";
 import { EventList } from "../../../events/components/EventList";
 import { OutboundLinksList } from "../../../events/components/OutboundLinksList";
 import { OutboundLinksDialog } from "./OutboundLinksDialog";
-import { useGetOutboundLinks } from "../../../../../api/analytics/events/useGetOutboundLinks";
+import { useGetOutboundLinks } from "../../../../../api/analytics/hooks/events/useGetOutboundLinks";
 import { Expand } from "lucide-react";
 
 type Tab = "events" | "outbound";

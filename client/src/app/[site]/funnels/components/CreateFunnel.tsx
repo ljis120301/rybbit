@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useGetFunnel, useSaveFunnel } from "../../../../api/analytics/funnels/useGetFunnel";
+import { useGetFunnel, useSaveFunnel } from "../../../../api/analytics/hooks/funnels/useGetFunnel";
 import { FunnelStep } from "../../../../api/analytics/endpoints";
 import { FunnelForm } from "./FunnelForm";
 

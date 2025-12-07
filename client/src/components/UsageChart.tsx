@@ -3,7 +3,7 @@ import { useNivoTheme } from "@/lib/nivo";
 import { ResponsiveLine } from "@nivo/line";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { DateTime } from "luxon";
-import { useGetOrgEventCount } from "../api/analytics/useGetOrgEventCount";
+import { useGetOrgEventCount } from "../api/analytics/hooks/useGetOrgEventCount";
 import { userLocale } from "../lib/dateTimeUtils";
 import { formatter } from "../lib/utils";
 import { Badge } from "./ui/badge";

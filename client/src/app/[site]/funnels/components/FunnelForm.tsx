@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { FunnelResponse, FunnelStep } from "../../../../api/analytics/endpoints";
-import { useMetric } from "../../../../api/analytics/useGetMetric";
+import { useMetric } from "../../../../api/analytics/hooks/useGetMetric";
 import { ThreeDotLoader } from "../../../../components/Loaders";
 import { Label } from "../../../../components/ui/label";
 import { Switch } from "../../../../components/ui/switch";

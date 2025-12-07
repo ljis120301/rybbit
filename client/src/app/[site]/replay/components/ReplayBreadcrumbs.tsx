@@ -28,7 +28,7 @@ import { Duration } from "luxon";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
-import { useGetSessionReplayEvents } from "../../../../api/analytics/sessionReplay/useGetSessionReplayEvents";
+import { useGetSessionReplayEvents } from "../../../../api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
 import { Avatar } from "../../../../components/Avatar";
 import { IdentifiedBadge } from "../../../../components/IdentifiedBadge";
 import { Button } from "../../../../components/ui/button";

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
-import { useGetOverviewBucketed } from "../../../../../api/analytics/useGetOverviewBucketed";
+import { useGetOverviewBucketed } from "../../../../../api/analytics/hooks/useGetOverviewBucketed";
 import { ChartTooltip } from "../../../../../components/charts/ChartTooltip";
 import { Tabs, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
 import { Card, CardContent, CardLoader } from "../../../../../components/ui/card";
@@ -173,7 +173,10 @@ export function Weekdays() {
             {Array(24)
               .fill(0)
               .map((_, hour) => (
-                <div key={hour} className="h-4 text-xs flex items-center justify-end pr-2 text-neutral-600 dark:text-neutral-400">
+                <div
+                  key={hour}
+                  className="h-4 text-xs flex items-center justify-end pr-2 text-neutral-600 dark:text-neutral-400"
+                >
                   {hour % 2 === 1 ? hourLabels[hour] : ""}
                 </div>
               ))}
@@ -223,7 +226,9 @@ export function Weekdays() {
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <span className="font-semibold">{formatMetricValue(value)}</span>
-                                  <span className="text-neutral-500 dark:text-neutral-400 text-xs">{getMetricDisplayName(metric)}</span>
+                                  <span className="text-neutral-500 dark:text-neutral-400 text-xs">
+                                    {getMetricDisplayName(metric)}
+                                  </span>
                                 </div>
                               </div>
                             </ChartTooltip>

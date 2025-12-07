@@ -4,7 +4,7 @@ import { Filter, FilterParameter } from "@rybbit/shared";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { usePaginatedMetric } from "../../../../../api/analytics/useGetMetric";
+import { usePaginatedMetric } from "../../../../../api/analytics/hooks/useGetMetric";
 import { MetricResponse } from "../../../../../api/analytics/endpoints";
 import { ErrorState } from "../../../../../components/ErrorState";
 import { CardLoader } from "../../../../../components/ui/card";

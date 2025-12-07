@@ -1,7 +1,7 @@
 import { Clock, MousePointerClick, Trash2 } from "lucide-react";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import { useDeleteSessionReplay } from "../../../../api/analytics/sessionReplay/useDeleteSessionReplay";
+import { useDeleteSessionReplay } from "../../../../api/analytics/hooks/sessionReplay/useDeleteSessionReplay";
 import { Avatar } from "../../../../components/Avatar";
 import { IdentifiedBadge } from "../../../../components/IdentifiedBadge";
 import {

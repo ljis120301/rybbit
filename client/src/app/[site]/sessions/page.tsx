@@ -2,7 +2,7 @@
 
 import { SessionsList } from "@/components/Sessions/SessionsList";
 import { useState } from "react";
-import { useGetSessions } from "../../../api/analytics/useGetUserSessions";
+import { useGetSessions } from "../../../api/analytics/hooks/useGetUserSessions";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { useSetPageTitle } from "../../../hooks/useSetPageTitle";
 import { SESSION_PAGE_FILTERS } from "../../../lib/filterGroups";

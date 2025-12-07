@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetPageTitlesPaginated } from "@/api/analytics/useGetPageTitles";
+import { useGetPageTitlesPaginated } from "@/api/analytics/hooks/useGetPageTitles";
 import { PageTitleItem } from "@/api/analytics/endpoints";
 import { Pagination } from "@/components/pagination";
 import { useSetPageTitle } from "@/hooks/useSetPageTitle";

@@ -2,7 +2,7 @@
 
 import { FilterParameter } from "@rybbit/shared";
 import { useMemo } from "react";
-import { useMetric } from "../../../../../api/analytics/useGetMetric";
+import { useMetric } from "../../../../../api/analytics/hooks/useGetMetric";
 import { MultiSelect } from "../../../../../components/MultiSelect";
 import { useGetRegionName } from "../../../../../lib/geo";
 import { getCountryName, getLanguageName } from "../../../../../lib/utils";

@@ -5,7 +5,7 @@ import { GOALS_PAGE_FILTERS } from "@/lib/filterGroups";
 import { useStore } from "@/lib/store";
 import { ArrowRight, Funnel } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useGetFunnels } from "../../../api/analytics/funnels/useGetFunnels";
+import { useGetFunnels } from "../../../api/analytics/hooks/funnels/useGetFunnels";
 import { SavedFunnel } from "../../../api/analytics/endpoints";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { ErrorState } from "../../../components/ErrorState";

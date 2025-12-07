@@ -3,7 +3,7 @@ import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { Loader2, Video } from "lucide-react";
 import { NothingFound } from "../../../../components/NothingFound";
 import { ReplayCard, ReplayCardSkeleton } from "./ReplayCard";
-import { useGetSessionReplays } from "../../../../api/analytics/sessionReplay/useGetSessionReplays";
+import { useGetSessionReplays } from "../../../../api/analytics/hooks/sessionReplay/useGetSessionReplays";
 import { SessionReplayListItem } from "../../../../api/analytics/endpoints";
 import { useReplayStore } from "./replayStore";
 import { ScrollArea } from "../../../../components/ui/scroll-area";

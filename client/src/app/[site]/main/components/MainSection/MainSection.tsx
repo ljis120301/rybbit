@@ -2,8 +2,8 @@
 import { Card, CardContent, CardLoader } from "@/components/ui/card";
 import { Tilt_Warp } from "next/font/google";
 import Link from "next/link";
-import { useGetOverview } from "../../../../../api/analytics/useGetOverview";
-import { useGetOverviewBucketed } from "../../../../../api/analytics/useGetOverviewBucketed";
+import { useGetOverview } from "../../../../../api/analytics/hooks/useGetOverview";
+import { useGetOverviewBucketed } from "../../../../../api/analytics/hooks/useGetOverviewBucketed";
 import { BucketSelection } from "../../../../../components/BucketSelection";
 import { RybbitLogo } from "../../../../../components/RybbitLogo";
 import { authClient } from "../../../../../lib/auth";

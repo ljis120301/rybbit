@@ -3,7 +3,7 @@
 import { useMeasure } from "@uidotdev/usehooks";
 import "ol/ol.css";
 import { useEffect, useState } from "react";
-import { useMetric } from "../../../../../api/analytics/useGetMetric";
+import { useMetric } from "../../../../../api/analytics/hooks/useGetMetric";
 import { useCountries, useSubdivisions } from "../../../../../lib/geo";
 import { ChartTooltip } from "../../../../../components/charts/ChartTooltip";
 import { CountryFlag } from "../icons/CountryFlag";
@@ -123,7 +123,9 @@ export function MapComponent({ height, mapView: controlledMapView }: MapComponen
               </div>
               <div>
                 <span className="font-bold text-accent-400">{tooltipContent.count.toLocaleString()}</span>{" "}
-                <span className="text-neutral-500 dark:text-neutral-300">({tooltipContent.percentage.toFixed(1)}%) sessions</span>
+                <span className="text-neutral-500 dark:text-neutral-300">
+                  ({tooltipContent.percentage.toFixed(1)}%) sessions
+                </span>
               </div>
             </div>
           </ChartTooltip>

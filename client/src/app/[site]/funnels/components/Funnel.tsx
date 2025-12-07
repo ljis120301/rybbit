@@ -4,7 +4,7 @@ import { round } from "lodash";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { FunnelResponse, FunnelStep } from "../../../../api/analytics/endpoints";
-import { useGetFunnelStepSessions } from "../../../../api/analytics/funnels/useGetFunnelStepSessions";
+import { useGetFunnelStepSessions } from "../../../../api/analytics/hooks/funnels/useGetFunnelStepSessions";
 import { EventIcon, PageviewIcon } from "../../../../components/EventIcons";
 import { SessionsList } from "../../../../components/Sessions/SessionsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../components/ui/tabs";
