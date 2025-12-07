@@ -4,7 +4,7 @@ import { getFilteredFilters, useStore } from "../../lib/store";
 import { USER_PAGE_FILTERS } from "../../lib/filterGroups";
 import { APIResponse } from "../types";
 import { getStartAndEndDate, timeZone } from "../utils";
-import { fetchUsers, UsersResponse } from "./standalone";
+import { fetchUsers, UsersResponse } from "./endpoints";
 
 export interface GetUsersOptions {
   page: number;

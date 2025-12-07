@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFilteredFilters, useStore } from "../../../lib/store";
 import { EVENT_FILTERS } from "../../../lib/filterGroups";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchEventProperties, EventProperty } from "../standalone";
+import { fetchEventProperties, EventProperty } from "../endpoints";
 
 export function useGetEventProperties(eventName: string | null) {
   const { site, time } = useStore();

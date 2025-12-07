@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useCreateGoal } from "../../../../api/analytics/goals/useCreateGoal";
-import { Goal } from "../../../../api/analytics/standalone";
+import { Goal } from "../../../../api/analytics/endpoints";
 import { useUpdateGoal } from "../../../../api/analytics/goals/useUpdateGoal";
 import { useMetric } from "../../../../api/analytics/useGetMetric";
 import { EventIcon, PageviewIcon } from "../../../../components/EventIcons";

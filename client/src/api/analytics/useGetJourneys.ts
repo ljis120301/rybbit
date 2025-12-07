@@ -3,7 +3,7 @@ import { Time } from "../../components/DateSelector/types";
 import { JOURNEY_PAGE_FILTERS } from "../../lib/filterGroups";
 import { getFilteredFilters } from "../../lib/store";
 import { getStartAndEndDate, timeZone } from "../utils";
-import { fetchJourneys, Journey, JourneysResponse } from "./standalone";
+import { fetchJourneys, Journey, JourneysResponse } from "./endpoints";
 
 export interface JourneyParams {
   siteId?: number;

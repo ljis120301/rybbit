@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Time } from "../../../components/DateSelector/types";
 import { useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchEvents, Event, EventsResponse } from "../standalone";
+import { fetchEvents, Event, EventsResponse } from "../endpoints";
 
 export interface GetEventsOptions {
   time?: Time;

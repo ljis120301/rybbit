@@ -3,7 +3,7 @@ import { Time } from "../../../components/DateSelector/types";
 import { FUNNEL_PAGE_FILTERS } from "../../../lib/filterGroups";
 import { getFilteredFilters } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchFunnelStepSessions, FunnelStep, GetSessionsResponse } from "../standalone";
+import { fetchFunnelStepSessions, FunnelStep, GetSessionsResponse } from "../endpoints";
 
 export function useGetFunnelStepSessions({
   steps,

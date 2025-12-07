@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetErrorNamesPaginated } from "@/api/analytics/errors/useGetErrorNames";
-import { ErrorNameItem } from "@/api/analytics/standalone";
+import { ErrorNameItem } from "@/api/analytics/endpoints";
 import { Pagination } from "@/components/pagination";
 import { useSetPageTitle } from "@/hooks/useSetPageTitle";
 import { useStore } from "@/lib/store";

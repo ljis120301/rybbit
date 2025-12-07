@@ -13,7 +13,7 @@ import {
   SessionEvent,
   SessionPageviewsAndEvents,
   UserSessionCountResponse,
-} from "./standalone";
+} from "./endpoints";
 
 export function useGetSessions(
   userId?: string,

@@ -4,7 +4,7 @@ import { round } from "lodash";
 import { ChevronDown, ChevronRight, SquareArrowOutUpRight } from "lucide-react";
 import { ReactNode, useState, useCallback } from "react";
 import { usePaginatedMetric } from "../../../../../api/analytics/useGetMetric";
-import { MetricResponse } from "../../../../../api/analytics/standalone";
+import { MetricResponse } from "../../../../../api/analytics/endpoints";
 import { addFilter, removeFilter, useStore } from "../../../../../lib/store";
 
 // Custom hook for filter handling logic

@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Rewind } from "lucide-react";
-import { GetSessionsResponse } from "../../api/analytics/standalone";
+import { GetSessionsResponse } from "../../api/analytics/endpoints";
 import { NothingFound } from "../NothingFound";
 import { Button } from "../ui/button";
 import { SessionCard, SessionCardSkeleton } from "./SessionCard";

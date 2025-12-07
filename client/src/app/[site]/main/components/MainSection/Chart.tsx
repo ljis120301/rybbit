@@ -5,7 +5,7 @@ import { StatType, useStore } from "@/lib/store";
 import { LineCustomSvgLayer, LineCustomSvgLayerProps, LineSeries, ResponsiveLine } from "@nivo/line";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { DateTime } from "luxon";
-import { GetOverviewBucketedResponse } from "../../../../../api/analytics/standalone";
+import { GetOverviewBucketedResponse } from "../../../../../api/analytics/endpoints";
 import { APIResponse } from "../../../../../api/types";
 import { Time } from "../../../../../components/DateSelector/types";
 import { formatSecondsAsMinutesAndSeconds, formatter } from "../../../../../lib/utils";

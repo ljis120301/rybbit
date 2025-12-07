@@ -5,7 +5,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { DateTime } from "luxon";
 import { useTheme } from "next-themes";
 import { useMemo } from "react";
-import { ProcessedRetentionData, RetentionMode } from "../../../api/analytics/standalone";
+import { ProcessedRetentionData, RetentionMode } from "../../../api/analytics/endpoints";
 import { ChartTooltip } from "../../../components/charts/ChartTooltip";
 import { Skeleton } from "../../../components/ui/skeleton";
 

@@ -9,16 +9,12 @@ import {
   fetchMetric,
   fetchOutboundLinks,
   fetchOverviewBucketed,
-} from "../../../../api/analytics/standalone";
+} from "../../../../api/analytics/endpoints";
 import { getStartAndEndDate, timeZone } from "../../../../api/utils";
 import { fetchGSCConnectionStatus } from "../../../../api/gsc/useGSCConnection";
 import { fetchGSCData, GSCDimension } from "../../../../api/gsc/useGSCData";
 import { Button } from "../../../../components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "../../../../components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../components/ui/tooltip";
 import { IS_CLOUD } from "../../../../lib/const";
 import { CSVFile, downloadZip, formatDateForFilename } from "../../../../lib/export";
 import { useStore } from "../../../../lib/store";
@@ -204,15 +200,14 @@ export function ExportButton() {
       })();
 
       // Wait for all fetches to complete
-      const [metricResults, overview, weekdays, events, outbound, gscResults] =
-        await Promise.all([
-          Promise.all(metricPromises),
-          overviewPromise,
-          weekdaysPromise,
-          eventsPromise,
-          outboundPromise,
-          gscPromises,
-        ]);
+      const [metricResults, overview, weekdays, events, outbound, gscResults] = await Promise.all([
+        Promise.all(metricPromises),
+        overviewPromise,
+        weekdaysPromise,
+        eventsPromise,
+        outboundPromise,
+        gscPromises,
+      ]);
 
       // Collect all CSV files
       csvFiles.push(...metricResults);
@@ -223,7 +218,7 @@ export function ExportButton() {
       csvFiles.push(...gscResults);
 
       // Filter out empty files
-      const nonEmptyFiles = csvFiles.filter((f) => f.data.length > 0);
+      const nonEmptyFiles = csvFiles.filter(f => f.data.length > 0);
 
       if (nonEmptyFiles.length === 0) {
         toast.error("No data to export");
@@ -249,17 +244,8 @@ export function ExportButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          size="smIcon"
-          onClick={handleExport}
-          disabled={isExporting}
-        >
-          {isExporting ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Download className="h-4 w-4" />
-          )}
+        <Button variant="ghost" size="smIcon" onClick={handleExport} disabled={isExporting}>
+          {isExporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         </Button>
       </TooltipTrigger>
       <TooltipContent>

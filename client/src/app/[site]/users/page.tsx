@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useGetUsers } from "../../../api/analytics/useGetUsers";
-import { UsersResponse } from "../../../api/analytics/standalone";
+import { UsersResponse } from "../../../api/analytics/endpoints";
 import { Avatar } from "../../../components/Avatar";
 import { extractDomain, getChannelIcon, getDisplayName } from "../../../components/Channel";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";

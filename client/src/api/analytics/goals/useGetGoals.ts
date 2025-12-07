@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getFilteredFilters, useStore } from "../../../lib/store";
 import { GOALS_PAGE_FILTERS } from "../../../lib/filterGroups";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchGoals, Goal, PaginationMeta, GoalsResponse } from "../standalone";
+import { fetchGoals, Goal, PaginationMeta, GoalsResponse } from "../endpoints";
 
 export function useGetGoals({
   page = 1,

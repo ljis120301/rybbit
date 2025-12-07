@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createGoal } from "../standalone";
+import { createGoal } from "../endpoints";
 
 export interface CreateGoalRequest {
   siteId: number;

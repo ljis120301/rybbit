@@ -1,12 +1,7 @@
 import { useStore } from "@/lib/store";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getStartAndEndDate, timeZone } from "../utils";
-import {
-  fetchPageTitles,
-  PageTitleItem,
-  PageTitlesPaginatedResponse,
-  PageTitlesStandardResponse,
-} from "./standalone";
+import { fetchPageTitles, PageTitleItem, PageTitlesPaginatedResponse, PageTitlesStandardResponse } from "./endpoints";
 
 type UseGetPageTitlesOptions = {
   limit?: number;

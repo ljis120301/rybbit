@@ -4,7 +4,7 @@ import { usePerformanceStore } from "../../../app/[site]/performance/performance
 import { useStore } from "../../../lib/store";
 import { APIResponse } from "../../types";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchPerformanceTimeSeries, GetPerformanceTimeSeriesResponse } from "../standalone";
+import { fetchPerformanceTimeSeries, GetPerformanceTimeSeriesResponse } from "../endpoints";
 
 type PeriodTime = "current" | "previous";
 

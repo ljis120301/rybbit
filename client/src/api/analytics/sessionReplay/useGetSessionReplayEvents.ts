@@ -4,7 +4,7 @@ import {
   SessionReplayEvent,
   SessionReplayMetadata,
   GetSessionReplayEventsResponse,
-} from "../standalone";
+} from "../endpoints";
 
 export function useGetSessionReplayEvents(siteId: number, sessionId: string) {
   return useQuery({

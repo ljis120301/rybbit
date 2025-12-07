@@ -3,7 +3,7 @@ import { UseQueryOptions, UseQueryResult, useQuery } from "@tanstack/react-query
 import { useStore } from "../../lib/store";
 import { APIResponse } from "../types";
 import { getStartAndEndDate, timeZone } from "../utils";
-import { fetchOverviewBucketed, GetOverviewBucketedResponse } from "./standalone";
+import { fetchOverviewBucketed, GetOverviewBucketedResponse } from "./endpoints";
 
 type PeriodTime = "current" | "previous";
 

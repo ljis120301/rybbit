@@ -1,12 +1,7 @@
 import { useStore } from "@/lib/store";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import {
-  fetchErrorEvents,
-  ErrorEvent,
-  ErrorEventsPaginatedResponse,
-  ErrorEventsStandardResponse,
-} from "../standalone";
+import { fetchErrorEvents, ErrorEvent, ErrorEventsPaginatedResponse, ErrorEventsStandardResponse } from "../endpoints";
 
 // Hook for infinite scrolling
 export function useGetErrorEventsInfinite(errorMessage: string, enabled: boolean = true) {

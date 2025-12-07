@@ -1,12 +1,7 @@
 import { useStore } from "@/lib/store";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import {
-  fetchErrorNames,
-  ErrorNameItem,
-  ErrorNamesPaginatedResponse,
-  ErrorNamesStandardResponse,
-} from "../standalone";
+import { fetchErrorNames, ErrorNameItem, ErrorNamesPaginatedResponse, ErrorNamesStandardResponse } from "../endpoints";
 
 type UseGetErrorNamesOptions = {
   limit?: number;

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "../../lib/store";
 import { getStartAndEndDate, timeZone } from "../utils";
-import { fetchOverview, GetOverviewResponse } from "./standalone";
+import { fetchOverview, GetOverviewResponse } from "./endpoints";
 
 type PeriodTime = "current" | "previous";
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserInfo, UserInfo } from "./standalone";
+import { fetchUserInfo, UserInfo } from "./endpoints";
 
 export function useUserInfo(siteId: number, userId: string) {
   return useQuery<UserInfo>({

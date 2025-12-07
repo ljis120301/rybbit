@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useStore } from "../../../lib/store";
-import { deleteSessionReplay } from "../standalone";
+import { deleteSessionReplay } from "../endpoints";
 
 interface DeleteSessionReplayParams {
   sessionId: string;

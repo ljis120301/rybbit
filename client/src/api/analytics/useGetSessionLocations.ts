@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "../../lib/store";
 import { getStartAndEndDate, timeZone } from "../utils";
-import { fetchSessionLocations, LiveSessionLocation } from "./standalone";
+import { fetchSessionLocations, LiveSessionLocation } from "./endpoints";
 
 export function useGetSessionLocations() {
   const { time, site, filters } = useStore();

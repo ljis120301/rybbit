@@ -10,7 +10,7 @@ import { useStore } from "../../lib/store";
 import { APIResponse } from "../types";
 import { getStartAndEndDate, timeZone } from "../utils";
 import { Time } from "../../components/DateSelector/types";
-import { fetchMetric, MetricResponse } from "./standalone";
+import { fetchMetric, MetricResponse } from "./endpoints";
 
 type PeriodTime = "current" | "previous";
 

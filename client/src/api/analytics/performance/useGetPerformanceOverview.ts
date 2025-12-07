@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { usePerformanceStore } from "../../../app/[site]/performance/performanceStore";
 import { useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchPerformanceOverview, GetPerformanceOverviewResponse } from "../standalone";
+import { fetchPerformanceOverview, GetPerformanceOverviewResponse } from "../endpoints";
 
 type PeriodTime = "current" | "previous";
 

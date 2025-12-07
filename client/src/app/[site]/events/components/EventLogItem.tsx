@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { memo } from "react";
-import { Event } from "../../../../api/analytics/standalone";
+import { Event } from "../../../../api/analytics/endpoints";
 import { getCountryName } from "../../../../lib/utils";
 import { Browser } from "../../components/shared/icons/Browser";
 import { CountryFlag } from "../../components/shared/icons/CountryFlag";
@@ -166,7 +166,9 @@ export function EventLogItem({ event }: EventLogItemProps) {
           </div>
 
           {/* Timestamp (right-aligned) */}
-          <div className="text-sm shrink-0 text-neutral-500 dark:text-neutral-400 ml-auto">{eventTime.toRelative()}</div>
+          <div className="text-sm shrink-0 text-neutral-500 dark:text-neutral-400 ml-auto">
+            {eventTime.toRelative()}
+          </div>
         </div>
 
         {/* Bottom row with event properties */}

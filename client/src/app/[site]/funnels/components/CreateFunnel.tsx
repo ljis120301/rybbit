@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useGetFunnel, useSaveFunnel } from "../../../../api/analytics/funnels/useGetFunnel";
-import { FunnelStep } from "../../../../api/analytics/standalone";
+import { FunnelStep } from "../../../../api/analytics/endpoints";
 import { FunnelForm } from "./FunnelForm";
 
 export function CreateFunnelDialog() {

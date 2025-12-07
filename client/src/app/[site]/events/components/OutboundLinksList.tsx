@@ -4,7 +4,7 @@ import NumberFlow from "@number-flow/react";
 import { Info } from "lucide-react";
 import { DateTime } from "luxon";
 import { memo } from "react";
-import { OutboundLink } from "../../../../api/analytics/standalone";
+import { OutboundLink } from "../../../../api/analytics/endpoints";
 import { Favicon } from "../../../../components/Favicon";
 import { cn } from "../../../../lib/utils";
 

@@ -3,7 +3,7 @@
 import NumberFlow from "@number-flow/react";
 import { BookOpen, ChevronDown, ChevronRight, Info } from "lucide-react";
 import { memo, useState } from "react";
-import { EventName } from "../../../../api/analytics/standalone";
+import { EventName } from "../../../../api/analytics/endpoints";
 import { useGetEventProperties } from "../../../../api/analytics/events/useGetEventProperties";
 import { NothingFound } from "../../../../components/NothingFound";
 import { cn } from "../../../../lib/utils";

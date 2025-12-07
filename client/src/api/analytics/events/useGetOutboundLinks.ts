@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { EVENT_FILTERS } from "../../../lib/filterGroups";
 import { getFilteredFilters, useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchOutboundLinks, OutboundLink } from "../standalone";
+import { fetchOutboundLinks, OutboundLink } from "../endpoints";
 
 export function useGetOutboundLinks() {
   const { site, time } = useStore();

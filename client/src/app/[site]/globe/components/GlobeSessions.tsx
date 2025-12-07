@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 import { useCurrentSite } from "../../../../api/admin/sites";
 import { useGetSessionsInfinite } from "../../../../api/analytics/useGetUserSessions";
-import { GetSessionsResponse } from "../../../../api/analytics/standalone";
+import { GetSessionsResponse } from "../../../../api/analytics/endpoints";
 import { Avatar, generateName } from "../../../../components/Avatar";
 import { Channel } from "../../../../components/Channel";
 import { EventIcon, PageviewIcon } from "../../../../components/EventIcons";

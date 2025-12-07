@@ -5,7 +5,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { GetSessionsResponse } from "../api/analytics/standalone";
+import type { GetSessionsResponse } from "../api/analytics/endpoints";
 import { useConfigs } from "../lib/configs";
 import "../app/[site]/globe/globe.css";
 

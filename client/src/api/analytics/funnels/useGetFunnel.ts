@@ -3,14 +3,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { FUNNEL_PAGE_FILTERS } from "../../../lib/filterGroups";
 import { getFilteredFilters, useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import {
-  analyzeFunnel,
-  saveFunnel,
-  FunnelStep,
-  FunnelRequest,
-  SaveFunnelRequest,
-  FunnelResponse,
-} from "../standalone";
+import { analyzeFunnel, saveFunnel, FunnelStep, FunnelRequest, SaveFunnelRequest, FunnelResponse } from "../endpoints";
 
 /**
  * Hook for analyzing conversion funnels through a series of steps

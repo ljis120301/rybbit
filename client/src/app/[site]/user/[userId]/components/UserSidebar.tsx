@@ -13,7 +13,7 @@ import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
 import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
 import { VisitCalendar } from "./Calendar";
 import { EventIcon, PageviewIcon } from "../../../../../components/EventIcons";
-import { UserInfo, UserSessionCountResponse } from "../../../../../api/analytics/standalone";
+import { UserInfo, UserSessionCountResponse } from "../../../../../api/analytics/endpoints";
 
 interface UserSidebarProps {
   data: UserInfo | undefined;

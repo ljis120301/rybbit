@@ -1,6 +1,6 @@
 "use client";
 
-import { GetOverviewBucketedResponse } from "@/api/analytics/standalone";
+import { GetOverviewBucketedResponse } from "@/api/analytics/endpoints";
 import { APIResponse } from "@/api/types";
 import { ChartTooltip } from "@/components/charts/ChartTooltip";
 import { hour12, userLocale } from "@/lib/dateTimeUtils";

@@ -6,7 +6,7 @@ import { useStore } from "@/lib/store";
 import { ArrowRight, Funnel } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useGetFunnels } from "../../../api/analytics/funnels/useGetFunnels";
-import { SavedFunnel } from "../../../api/analytics/standalone";
+import { SavedFunnel } from "../../../api/analytics/endpoints";
 import { DisabledOverlay } from "../../../components/DisabledOverlay";
 import { ErrorState } from "../../../components/ErrorState";
 import { NothingFound } from "../../../components/NothingFound";

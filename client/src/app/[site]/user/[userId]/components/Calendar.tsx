@@ -2,7 +2,7 @@ import { ResponsiveTimeRange } from "@nivo/calendar";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useTheme } from "next-themes";
-import { UserSessionCountResponse } from "../../../../../api/analytics/standalone";
+import { UserSessionCountResponse } from "../../../../../api/analytics/endpoints";
 import { useNivoTheme } from "../../../../../lib/nivo";
 import { ChartTooltip } from "../../../../../components/charts/ChartTooltip";
 

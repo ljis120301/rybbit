@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchOrgEventCount, OrgEventCountResponse, GetOrgEventCountResponse } from "./standalone";
+import { fetchOrgEventCount, OrgEventCountResponse, GetOrgEventCountResponse } from "./endpoints";
 
 export function useGetOrgEventCount({
   organizationId,

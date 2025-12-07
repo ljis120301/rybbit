@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useStore } from "../../../lib/store";
-import { deleteFunnel } from "../standalone";
+import { deleteFunnel } from "../endpoints";
 
 /**
  * Hook for deleting a saved funnel report

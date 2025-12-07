@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchSessionReplays, SessionReplayListItem, SessionReplayListResponse } from "../standalone";
+import { fetchSessionReplays, SessionReplayListItem, SessionReplayListResponse } from "../endpoints";
 
 type UseGetSessionReplaysOptions = {
   limit?: number;

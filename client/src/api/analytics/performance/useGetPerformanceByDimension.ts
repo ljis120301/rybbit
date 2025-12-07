@@ -3,7 +3,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { usePerformanceStore } from "../../../app/[site]/performance/performanceStore";
 import { useStore } from "../../../lib/store";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchPerformanceByDimension, PaginatedPerformanceResponse, PerformanceByDimensionItem } from "../standalone";
+import { fetchPerformanceByDimension, PaginatedPerformanceResponse, PerformanceByDimensionItem } from "../endpoints";
 
 // Keep the old type for backward compatibility
 export type PerformanceByPathItem = PerformanceByDimensionItem & {

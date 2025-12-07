@@ -3,7 +3,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { ArrowRight, ChevronDown, ChevronRight } from "lucide-react";
 import { DateTime } from "luxon";
 import { memo, useState } from "react";
-import { GetSessionsResponse } from "../../api/analytics/standalone";
+import { GetSessionsResponse } from "../../api/analytics/endpoints";
 import { formatShortDuration, hour12, userLocale } from "../../lib/dateTimeUtils";
 import { cn, formatter, getUserDisplayName } from "../../lib/utils";
 import { Avatar } from "../Avatar";

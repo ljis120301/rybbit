@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useStore } from "../../../lib/store";
-import { deleteGoal } from "../standalone";
+import { deleteGoal } from "../endpoints";
 
 export function useDeleteGoal() {
   const queryClient = useQueryClient();

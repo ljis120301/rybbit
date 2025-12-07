@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useGetFunnel, useSaveFunnel } from "../../../../api/analytics/funnels/useGetFunnel";
-import { FunnelStep, SavedFunnel } from "../../../../api/analytics/standalone";
+import { FunnelStep, SavedFunnel } from "../../../../api/analytics/endpoints";
 import { FunnelForm } from "./FunnelForm";
 
 interface EditFunnelDialogProps {

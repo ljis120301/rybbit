@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useStore } from "../../../lib/store";
-import { updateGoal } from "../standalone";
+import { updateGoal } from "../endpoints";
 
 export interface UpdateGoalRequest {
   goalId: number;

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchFunnels, SavedFunnel } from "../standalone";
+import { fetchFunnels, SavedFunnel } from "../endpoints";
 
 export function useGetFunnels(siteId?: string | number) {
   return useQuery<SavedFunnel[]>({

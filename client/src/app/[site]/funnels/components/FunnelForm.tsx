@@ -5,7 +5,7 @@ import { InputWithSuggestions, SuggestionOption } from "@/components/ui/input-wi
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { FunnelResponse, FunnelStep } from "../../../../api/analytics/standalone";
+import { FunnelResponse, FunnelStep } from "../../../../api/analytics/endpoints";
 import { useMetric } from "../../../../api/analytics/useGetMetric";
 import { ThreeDotLoader } from "../../../../components/Loaders";
 import { Label } from "../../../../components/ui/label";

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { memo, useMemo } from "react";
 import { useGetSessionDetailsInfinite } from "../../api/analytics/useGetUserSessions";
-import { GetSessionsResponse, SessionEvent } from "../../api/analytics/standalone";
+import { GetSessionsResponse, SessionEvent } from "../../api/analytics/endpoints";
 import { Browser } from "../../app/[site]/components/shared/icons/Browser";
 import { CountryFlag } from "../../app/[site]/components/shared/icons/CountryFlag";
 import { OperatingSystem } from "../../app/[site]/components/shared/icons/OperatingSystem";

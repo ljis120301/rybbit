@@ -2,7 +2,7 @@ import { useNivoTheme } from "@/lib/nivo";
 import { ResponsiveLine } from "@nivo/line";
 import { DateTime } from "luxon";
 import { useMemo } from "react";
-import { GetOverviewBucketedResponse } from "../api/analytics/standalone";
+import { GetOverviewBucketedResponse } from "../api/analytics/endpoints";
 import { hour12 } from "../lib/dateTimeUtils";
 import { formatter } from "../lib/utils";
 import { ChartTooltip } from "./charts/ChartTooltip";

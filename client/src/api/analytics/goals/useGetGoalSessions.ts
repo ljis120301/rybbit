@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Time } from "../../../components/DateSelector/types";
 import { getStartAndEndDate, timeZone } from "../../utils";
-import { fetchGoalSessions, GetSessionsResponse } from "../standalone";
+import { fetchGoalSessions, GetSessionsResponse } from "../endpoints";
 
 export function useGetGoalSessions({
   goalId,

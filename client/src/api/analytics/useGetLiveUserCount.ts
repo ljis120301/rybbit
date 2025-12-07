@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "../../lib/store";
-import { fetchLiveUserCount, LiveUserCountResponse } from "./standalone";
+import { fetchLiveUserCount, LiveUserCountResponse } from "./endpoints";
 
 export function useGetLiveUsercount(minutes = 5) {
   const { site } = useStore();
