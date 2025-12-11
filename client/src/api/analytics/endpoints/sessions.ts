@@ -40,6 +40,7 @@ export type GetSessionsResponse = {
   ip: string;
   lat: number;
   lon: number;
+  has_replay: number;
 }[];
 
 // Session details type
