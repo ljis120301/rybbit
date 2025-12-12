@@ -4,7 +4,7 @@ import { RybbitEvent } from "./rybbit.js";
 import { z } from "zod";
 import { deriveKeyOnlySchema } from "./utils.js";
 
-export type UmamiEvent = z.input<typeof UmamiImportMapper.umamiEventSchema>;
+export type UmamiEvent = z.input<typeof UmamiImportMapper.umamiEventKeyOnlySchema>;
 
 export class UmamiImportMapper {
   private static readonly browserMap: Record<string, string> = {
@@ -67,7 +67,7 @@ export class UmamiImportMapper {
       return UmamiImportMapper.deviceMap[key] ?? device;
     });
 
-  static readonly umamiEventSchema = z.object({
+  private static readonly umamiEventSchema = z.object({
     session_id: z.string().uuid(),
 
     hostname: z.string().max(253),
