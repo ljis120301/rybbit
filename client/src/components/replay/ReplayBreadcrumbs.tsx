@@ -67,6 +67,87 @@ const INCREMENTAL_TYPES = {
   15: "Adopted Style Sheet",
 };
 
+const getEventDescription = (event: any) => {
+  const eventTypeStr = String(event.type);
+  const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO] || {
+    name: `Unknown (${eventTypeStr})`,
+    icon: Globe,
+    color: "text-neutral-400",
+  };
+
+  // For incremental snapshots, get more detail
+  if (eventTypeStr === "3" && event.data?.source !== undefined) {
+    const incrementalType = INCREMENTAL_TYPES[event.data.source as keyof typeof INCREMENTAL_TYPES] || "Unknown";
+    return `${incrementalType}`;
+  }
+
+  // For meta events, show URL if available
+  if (eventTypeStr === "4" && event.data?.href) {
+    const url = event.data.href;
+    try {
+      const urlObj = new URL(url);
+      return urlObj.pathname;
+    } catch {
+      return url;
+    }
+  }
+
+  return eventInfo.name;
+};
+
+const getEventIcon = (event: any) => {
+  const eventTypeStr = String(event.type);
+  const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO];
+
+  // Special icons for specific incremental snapshot types
+  if (eventTypeStr === "3" && event.data?.source !== undefined) {
+    switch (event.data.source) {
+      case 0:
+        return FileEdit; // Mutation
+      case 1:
+        return Mouse; // Mouse Move
+      case 2:
+        return MousePointerClick; // Mouse Interaction
+      case 3:
+        return ScrollText; // Scroll
+      case 4:
+        return Maximize2; // Viewport Resize
+      case 5:
+        return Keyboard; // Input
+      case 6:
+        return Smartphone; // Touch Move
+      case 7:
+        return Play; // Media Interaction
+      case 8:
+        return Palette; // Style Sheet Rule
+      case 9:
+        return Brush; // Canvas Mutation
+      case 10:
+        return Type; // Font
+      case 11:
+        return Terminal; // Log
+      case 12:
+        return Move; // Drag
+      case 13:
+        return PaintBucket; // Style Declaration
+      case 14:
+        return TextSelect; // Selection
+      case 15:
+        return FileCode; // Adopted Style Sheet
+      default:
+        return MousePointer; // Fallback
+    }
+  }
+
+  return eventInfo?.icon || Globe;
+};
+
+const getEventColor = (event: any) => {
+  const eventTypeStr = String(event.type);
+  const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO];
+  return eventInfo?.color || "text-neutral-400";
+};
+
 export function ReplayBreadcrumbs() {
   const params = useParams();
   const siteId = Number(params.site);
@@ -147,87 +228,6 @@ export function ReplayBreadcrumbs() {
     setCurrentTime(timeInSeconds);
   };
 
-  const getEventDescription = (event: any) => {
-    const eventTypeStr = String(event.type);
-    const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO] || {
-      name: `Unknown (${eventTypeStr})`,
-      icon: Globe,
-      color: "text-neutral-400",
-    };
-
-    // For incremental snapshots, get more detail
-    if (eventTypeStr === "3" && event.data?.source !== undefined) {
-      const incrementalType = INCREMENTAL_TYPES[event.data.source as keyof typeof INCREMENTAL_TYPES] || "Unknown";
-      return `${incrementalType}`;
-    }
-
-    // For meta events, show URL if available
-    if (eventTypeStr === "4" && event.data?.href) {
-      const url = event.data.href;
-      try {
-        const urlObj = new URL(url);
-        return urlObj.pathname;
-      } catch {
-        return url;
-      }
-    }
-
-    return eventInfo.name;
-  };
-
-  const getEventIcon = (event: any) => {
-    const eventTypeStr = String(event.type);
-    const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO];
-
-    // Special icons for specific incremental snapshot types
-    if (eventTypeStr === "3" && event.data?.source !== undefined) {
-      switch (event.data.source) {
-        case 0:
-          return FileEdit; // Mutation
-        case 1:
-          return Mouse; // Mouse Move
-        case 2:
-          return MousePointerClick; // Mouse Interaction
-        case 3:
-          return ScrollText; // Scroll
-        case 4:
-          return Maximize2; // Viewport Resize
-        case 5:
-          return Keyboard; // Input
-        case 6:
-          return Smartphone; // Touch Move
-        case 7:
-          return Play; // Media Interaction
-        case 8:
-          return Palette; // Style Sheet Rule
-        case 9:
-          return Brush; // Canvas Mutation
-        case 10:
-          return Type; // Font
-        case 11:
-          return Terminal; // Log
-        case 12:
-          return Move; // Drag
-        case 13:
-          return PaintBucket; // Style Declaration
-        case 14:
-          return TextSelect; // Selection
-        case 15:
-          return FileCode; // Adopted Style Sheet
-        default:
-          return MousePointer; // Fallback
-      }
-    }
-
-    return eventInfo?.icon || Globe;
-  };
-
-  const getEventColor = (event: any) => {
-    const eventTypeStr = String(event.type);
-    const eventInfo = EVENT_TYPE_INFO[eventTypeStr as keyof typeof EVENT_TYPE_INFO];
-    return eventInfo?.color || "text-neutral-400";
-  };
-
   if (isLoading || !data?.events) {
     return (
       <div className="rounded-lg border border-neutral-100 dark:border-neutral-800 p-4 flex items-center justify-center h-full">
@@ -278,54 +278,52 @@ export function ReplayBreadcrumbs() {
           <Button size="sm">View User</Button>
         </Link>
       </div>
-      <div className="rounded-lg border border-neutral-100 dark:border-neutral-800 flex flex-col flex-1 min-h-0">
-        <div className="p-2 border-b border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs text-neutral-600 dark:text-neutral-400 shrink-0">
+      <div className="rounded-lg border border-neutral-100 dark:border-neutral-800 flex flex-col h-full bg-white dark:bg-neutral-900">
+        <div className="p-2 border-b border-neutral-100 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-400 shrink-0">
           {data.events.length} events captured ({groupedEvents.length} groups)
         </div>
-        <ScrollArea className="flex-1">
-          <div className="flex flex-col">
-            {groupedEvents.map((group, index) => {
-              const firstEvent = group.events[0];
-              const Icon = getEventIcon(firstEvent);
-              const color = getEventColor(firstEvent);
-              const description = getGroupDescription(group);
-              const startTimeMs = getTime(group.startTime);
-              const endTimeMs = getTime(group.endTime);
-              const durationMs = endTimeMs - startTimeMs;
+        <ScrollArea className="flex-1 rounded-lg">
+          {groupedEvents.map((group, index) => {
+            const firstEvent = group.events[0];
+            const Icon = getEventIcon(firstEvent);
+            const color = getEventColor(firstEvent);
+            const description = getGroupDescription(group);
+            const startTimeMs = getTime(group.startTime);
+            const endTimeMs = getTime(group.endTime);
+            const durationMs = endTimeMs - startTimeMs;
 
-              return (
-                <div
-                  key={`${group.startTime}-${index}`}
-                  className={cn(
-                    "p-2 border-b border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900",
-                    "hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors cursor-pointer",
-                    "flex items-center gap-2 group"
-                  )}
-                  onClick={() => handleGroupClick(group)}
-                >
-                  <div className="text-xs text-neutral-600 dark:text-neutral-400 w-10">
-                    {Duration.fromMillis(startTimeMs).toFormat("mm:ss")}
+            return (
+              <div
+                key={`${group.startTime}-${index}`}
+                className={cn(
+                  "p-2 border-b border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900",
+                  "hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors cursor-pointer",
+                  "flex items-center gap-2 group"
+                )}
+                onClick={() => handleGroupClick(group)}
+              >
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 w-10">
+                  {Duration.fromMillis(startTimeMs).toFormat("mm:ss")}
+                </div>
+                <Icon className={cn("w-4 h-4 shrink-0", color)} />
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs text-neutral-900 dark:text-neutral-200 font-medium truncate">
+                    {description}
                   </div>
-                  <Icon className={cn("w-4 h-4 shrink-0", color)} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs text-neutral-900 dark:text-neutral-200 font-medium truncate">
-                      {description}
-                    </div>
-                    {group.count > 1 && durationMs > 0 && (
-                      <div className="text-xs text-neutral-500 dark:text-neutral-500 mt-0.5">
-                        {Duration.fromMillis(durationMs).toFormat("s.SSS")}s duration
-                      </div>
-                    )}
-                  </div>
-                  {group.count > 5 && (
-                    <div className="text-xs text-neutral-700 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded">
-                      {group.count}
+                  {group.count > 1 && durationMs > 0 && (
+                    <div className="text-xs text-neutral-500 dark:text-neutral-500 mt-0.5">
+                      {Duration.fromMillis(durationMs).toFormat("s.SSS")}s duration
                     </div>
                   )}
                 </div>
-              );
-            })}
-          </div>
+                {group.count > 5 && (
+                  <div className="text-xs text-neutral-700 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded">
+                    {group.count}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </ScrollArea>
       </div>
     </div>

@@ -63,7 +63,7 @@ export function ReplayList() {
         </div>
       </div>
       <div className="rounded-lg border border-neutral-100 dark:border-neutral-800 flex flex-col">
-        <ScrollArea className="h-[calc(100vh-138px)]">
+        <ScrollArea className="h-[calc(100vh-130px)] rounded-lg">
           {isLoading ? (
             Array.from({ length: 20 }).map((_, index) => <ReplayCardSkeleton key={`loading-${index}`} />)
           ) : flattenedData.length === 0 ? (
