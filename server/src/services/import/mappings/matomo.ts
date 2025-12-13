@@ -124,11 +124,11 @@ export class MatomoImportMapper {
       (action as any)[field] = value;
     }
 
-    // Convert map to sorted array and filter for pageviews only
+    // Convert map to sorted array (import all action types, not just pageviews)
     return Array.from(actionMap.entries())
       .sort(([a], [b]) => a - b)
       .map(([_, action]) => action)
-      .filter(action => action.type === "action");
+      .filter(action => action.type); // Only filter out actions without a type
   }
 
   private static parseUrl(url: string): { hostname: string; pathname: string; querystring: string } {
@@ -245,8 +245,13 @@ export class MatomoImportMapper {
         // Build referrer URL
         const referrer = clearSelfReferrer(data.referrerUrl, hostname.replace(/^www\./, ""));
 
-        // Generate session ID (use visit ID + action timestamp for uniqueness)
-        const sessionId = `${data.idVisit}-${action.timestamp}`;
+        // Use Matomo visit ID as session ID (all actions in same visit = same session)
+        const sessionId = data.idVisit;
+
+        // Determine event type and name based on action type
+        const isPageview = action.type === "action";
+        const eventType = isPageview ? "pageview" : "custom_event";
+        const eventName = isPageview ? "" : action.type || "unknown";
 
         // Build campaign querystring if present
         let campaignQuery = "";
@@ -293,8 +298,8 @@ export class MatomoImportMapper {
           screen_width: screenWidth,
           screen_height: screenHeight,
           device_type: deviceType,
-          type: "pageview",
-          event_name: "",
+          type: eventType,
+          event_name: eventName,
           props: {},
           import_id: importId,
         });
