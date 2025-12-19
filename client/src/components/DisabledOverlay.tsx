@@ -171,7 +171,7 @@ export const DisabledOverlay: React.FC<DisabledOverlayProps> = ({
     };
   }, [disabled, overlayRemoved, blur]);
 
-  if (!disabled || data?.user?.role === "admin" || globalThis.location.hostname === DEMO_HOSTNAME) {
+  if (!disabled || data?.user?.role === "admin" || globalThis?.location?.hostname === DEMO_HOSTNAME) {
     return <>{children}</>;
   }
 

@@ -1,8 +1,8 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import "rrweb-player/dist/style.css";
-import { useGetSessionReplayEvents } from "../../../../../api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
-import { ThreeDotLoader } from "../../../../../components/Loaders";
+import { useGetSessionReplayEvents } from "@/api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
+import { ThreeDotLoader } from "@/components/Loaders";
 import { useReplayStore } from "../replayStore";
 import { useActivityPeriods } from "./hooks/useActivityPeriods";
 import { useReplayKeyboardShortcuts } from "./hooks/useReplayKeyboardShortcuts";
@@ -11,7 +11,7 @@ import { ReplayPlayerCore } from "./ReplayPlayerCore";
 import { SKIP_SECONDS } from "./utils/replayUtils";
 import { ReplayPlayerTopbar } from "./ReplayPlayerTopbar";
 
-export function ReplayPlayer({ width, height }: { width: number; height: number }) {
+export function ReplayPlayer({ width, height, isDrawer }: { width: number; height: number; isDrawer?: boolean }) {
   const params = useParams();
   const siteId = Number(params.site);
   const {
@@ -22,9 +22,7 @@ export function ReplayPlayer({ width, height }: { width: number; height: number 
     currentTime,
     setCurrentTime,
     duration,
-    playbackSpeed,
     setPlaybackSpeed,
-    activityPeriods,
     resetPlayerState,
   } = useReplayStore();
 
@@ -97,30 +95,29 @@ export function ReplayPlayer({ width, height }: { width: number; height: number 
     );
   }
 
-  if (isLoading || !data) {
-    return (
-      <div className="bg-black h-full flex items-center justify-center">
-        <ThreeDotLoader className="w-full" />
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col overflow-hidden" style={{ width: width, height: height }}>
+    <div
+      className="bg-black flex flex-col justify-between overflow-hidden rounded-lg"
+      style={{ width: width, height: height }}
+    >
       <ReplayPlayerTopbar />
-      <ReplayPlayerCore data={data} width={width} height={height} onPlayPause={handlePlayPause} isPlaying={isPlaying} />
-
+      {isLoading || !data ? (
+        <ThreeDotLoader className="w-full" />
+      ) : (
+        <ReplayPlayerCore
+          data={data}
+          width={width}
+          height={height}
+          onPlayPause={handlePlayPause}
+          isPlaying={isPlaying}
+        />
+      )}
       <ReplayPlayerControls
-        player={player}
-        isPlaying={isPlaying}
-        currentTime={currentTime}
-        duration={duration}
-        playbackSpeed={playbackSpeed}
-        activityPeriods={activityPeriods}
         events={data?.events || []}
         onPlayPause={handlePlayPause}
         onSliderChange={handleSliderChange}
         onSpeedChange={handleSpeedChange}
+        isDrawer={isDrawer}
       />
     </div>
   );

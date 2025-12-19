@@ -5,7 +5,7 @@ import { NothingFound } from "../../../../components/NothingFound";
 import { ReplayCard, ReplayCardSkeleton } from "./ReplayCard";
 import { useGetSessionReplays } from "../../../../api/analytics/hooks/sessionReplay/useGetSessionReplays";
 import { SessionReplayListItem } from "../../../../api/analytics/endpoints";
-import { useReplayStore } from "./replayStore";
+import { useReplayStore } from "@/components/replay/replayStore";
 import { ScrollArea } from "../../../../components/ui/scroll-area";
 import { Input } from "../../../../components/ui/input";
 
@@ -63,7 +63,7 @@ export function ReplayList() {
         </div>
       </div>
       <div className="rounded-lg border border-neutral-100 dark:border-neutral-800 flex flex-col">
-        <ScrollArea className="h-[calc(100vh-178px)]">
+        <ScrollArea className="h-[calc(100vh-130px)] rounded-lg">
           {isLoading ? (
             Array.from({ length: 20 }).map((_, index) => <ReplayCardSkeleton key={`loading-${index}`} />)
           ) : flattenedData.length === 0 ? (

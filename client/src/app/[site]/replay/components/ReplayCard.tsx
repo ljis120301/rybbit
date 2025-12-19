@@ -25,7 +25,7 @@ import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { cn, formatter, getUserDisplayName } from "../../../../lib/utils";
-import { useReplayStore } from "./replayStore";
+import { useReplayStore } from "@/components/replay/replayStore";
 
 interface SessionReplayListItem {
   session_id: string;
@@ -82,8 +82,7 @@ export function ReplayCard({ replay }: { replay: SessionReplayListItem }) {
   return (
     <div
       className={cn(
-        "bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors cursor-pointer w-[200px] group relative",
-        // "bg-neutral-900 border border-neutral-800 rounded-lg p-3 hover:bg-neutral-800/50 transition-colors cursor-pointer",
+        "border-b border-neutral-100 dark:border-neutral-800 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors cursor-pointer w-[200px] group relative",
         sessionId === replay.session_id && "bg-neutral-100 dark:bg-neutral-800/80"
       )}
       onClick={() => {
@@ -182,7 +181,7 @@ export function ReplayCard({ replay }: { replay: SessionReplayListItem }) {
 
 export function ReplayCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors">
+    <div className="border-b border-neutral-100 dark:border-neutral-800 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/80 transition-colors">
       {/* Time and duration row */}
       <div className="flex items-center gap-2 mb-1">
         <Skeleton className="h-3 w-16" />

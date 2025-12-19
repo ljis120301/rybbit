@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
-import { useGetSessionReplayEvents } from "../../../../../api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
+import { useGetSessionReplayEvents } from "@/api/analytics/hooks/sessionReplay/useGetSessionReplayEvents";
 import {
   BrowserTooltipIcon,
   CountryFlagTooltipIcon,
   DeviceTypeTooltipIcon,
   OperatingSystemTooltipIcon,
-} from "../../../../../components/TooltipIcons/TooltipIcons";
+} from "@/components/TooltipIcons/TooltipIcons";
 import { useReplayStore } from "../replayStore";
 
 export function ReplayPlayerTopbar() {
@@ -17,9 +17,36 @@ export function ReplayPlayerTopbar() {
 
   const { data } = useGetSessionReplayEvents(siteId, sessionId);
 
-  if (!data?.metadata) {
+  const { metadata } = data ?? {};
+  const screenDimensions = `${metadata?.screen_width} × ${metadata?.screen_height}`;
+
+  const pageViewEvents = useMemo(() => {
+    return data?.events?.filter(event => event.type === 4);
+  }, [data?.events]);
+
+  // Get the current page URL based on the replay currentTime
+  const pageUrl = useMemo(() => {
+    if (!pageViewEvents || currentTime === 0) {
+      return metadata?.page_url;
+    }
+
+    let currentUrl = metadata?.page_url;
+    const firstTimestamp = pageViewEvents[0].timestamp;
+
+    // Find the most recent Meta event (type 4) with href before currentTime
+    for (const event of pageViewEvents) {
+      if (event.timestamp - firstTimestamp > currentTime) break;
+      if (event.data?.href) {
+        currentUrl = event.data.href;
+      }
+    }
+
+    return currentUrl;
+  }, [pageViewEvents, currentTime, metadata?.page_url]);
+
+  if (!pageUrl || !metadata) {
     return (
-      <div className="border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-2 py-2 rounded-t-lg overflow-hidden">
+      <div className="border border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-2 py-2 rounded-t-lg overflow-hidden">
         <div className="flex items-center justify-between min-w-0">
           <div className="flex items-center gap-2 min-w-0 flex-1">
             <div className="h-4 w-32 bg-neutral-150 dark:bg-neutral-700 rounded animate-pulse" />
@@ -32,9 +59,6 @@ export function ReplayPlayerTopbar() {
     );
   }
 
-  const { metadata } = data;
-  const screenDimensions = `${metadata.screen_width} × ${metadata.screen_height}`;
-
   // Extract pathname from full URL for display
   const getDisplayPath = (url: string): string => {
     try {
@@ -44,30 +68,6 @@ export function ReplayPlayerTopbar() {
       return url;
     }
   };
-
-  const pageViewEvents = useMemo(() => {
-    return data?.events?.filter(event => event.type === 4);
-  }, [data?.events]);
-
-  // Get the current page URL based on the replay currentTime
-  const pageUrl = useMemo(() => {
-    if (!pageViewEvents || currentTime === 0) {
-      return metadata.page_url;
-    }
-
-    let currentUrl = metadata.page_url;
-    const firstTimestamp = pageViewEvents[0].timestamp;
-
-    // Find the most recent Meta event (type 4) with href before currentTime
-    for (const event of pageViewEvents) {
-      if (event.timestamp - firstTimestamp > currentTime) break;
-      if (event.data?.href) {
-        currentUrl = event.data.href;
-      }
-    }
-
-    return currentUrl;
-  }, [pageViewEvents, currentTime, metadata.page_url]);
 
   return (
     <div className="border border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-2 py-2 rounded-t-lg overflow-hidden">

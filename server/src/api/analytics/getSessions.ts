@@ -42,6 +42,7 @@ export type GetSessionsResponse = {
   ip: string;
   lat: number;
   lon: number;
+  has_replay: number;
 }[];
 
 export interface GetSessionsRequest {
@@ -118,12 +119,21 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       GROUP BY
           session_id
       ORDER BY session_end DESC
+  ),
+  ReplaySessions AS (
+      SELECT DISTINCT session_id
+      FROM session_replay_metadata
+      FINAL
+      WHERE site_id = {siteId:Int32}
+        AND event_count >= 2
   )
   SELECT
-      *
-  FROM AggregatedSessions
+      a.*,
+      if(r.session_id != '', 1, 0) AS has_replay
+  FROM AggregatedSessions a
+  LEFT JOIN ReplaySessions r ON a.session_id = r.session_id
   WHERE 1 = 1 ${filterStatement}
-  ${filterIdentified ? "AND identified_user_id != ''" : ""}
+  ${filterIdentified ? "AND a.identified_user_id != ''" : ""}
   LIMIT {limit:Int32} OFFSET {offset:Int32}
   `;
 
