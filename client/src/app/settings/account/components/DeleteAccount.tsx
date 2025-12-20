@@ -2,7 +2,6 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { AlertTriangle } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -24,7 +23,6 @@ export function DeleteAccount() {
   const { data: subscription } = useStripeSubscription();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const handleAccountDeletion = async () => {
