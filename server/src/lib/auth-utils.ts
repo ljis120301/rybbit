@@ -5,6 +5,7 @@ import { db } from "../db/postgres/postgres.js";
 import { member, sites, user } from "../db/postgres/schema.js";
 import { auth } from "./auth.js";
 import { siteConfig } from "./siteConfig.js";
+import { logger } from "./logger/logger.js";
 
 export function mapHeaders(headers: any) {
   const entries = Object.entries(headers);
@@ -102,6 +103,70 @@ export async function getSitesUserHasAccessTo(req: FastifyRequest, adminOnly = f
   return promise;
 }
 
+export async function checkApiKey(
+  req: FastifyRequest,
+  options: { organizationId?: string; siteId?: string | number }
+) {
+  // Check if a valid API key was provided
+  // Priority: 1. Authorization: Bearer header (recommended), 2. Query parameter (testing only)
+  const authHeader = req.headers["authorization"];
+  const bearerToken =
+    authHeader && typeof authHeader === "string" && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
+
+  const queryApiKey = (req.query as any)?.api_key;
+  const apiKey = bearerToken || queryApiKey;
+
+  if (apiKey && typeof apiKey === "string") {
+    try {
+      // Verify the API key using Better Auth
+      const result = await auth.api.verifyApiKey({
+        body: { key: apiKey },
+      });
+
+      if (result.valid && result.key) {
+        // Get the userId from the API key
+        const apiKeyUserId = result.key.userId;
+
+        // Determine the organization ID - either directly provided or looked up from site
+        let organizationId = options.organizationId;
+
+        if (!organizationId && options.siteId) {
+          // Get the site's organization
+          const siteRecords = await db
+            .select({
+              organizationId: sites.organizationId,
+            })
+            .from(sites)
+            .where(eq(sites.siteId, Number(options.siteId)))
+            .limit(1);
+
+          if (siteRecords.length > 0 && siteRecords[0].organizationId) {
+            organizationId = siteRecords[0].organizationId;
+          }
+        }
+
+        if (organizationId) {
+          // Check if the API key's user is a member of the organization
+          const userMembership = await db
+            .select()
+            .from(member)
+            .where(and(eq(member.userId, apiKeyUserId), eq(member.organizationId, organizationId)))
+            .limit(1);
+
+          if (userMembership.length > 0) {
+            return { valid: true, role: userMembership[0].role };
+          }
+        }
+        return { valid: false, role: null };
+      }
+    } catch (error) {
+      logger.error(error, "Error verifying API key");
+      // Continue to return false if API key verification fails
+    }
+  }
+  return { valid: false, role: null };
+}
+
 // for routes that are potentially public
 export async function getUserHasAccessToSitePublic(req: FastifyRequest, siteId: string | number) {
   const [userSites, config] = await Promise.all([getSitesUserHasAccessTo(req), siteConfig.getConfig(siteId)]);
@@ -123,53 +188,9 @@ export async function getUserHasAccessToSitePublic(req: FastifyRequest, siteId: 
     return true;
   }
 
-  // Check if a valid API key was provided
-  // Priority: 1. Authorization: Bearer header (recommended), 2. Query parameter (testing only)
-  const authHeader = req.headers["authorization"];
-  const bearerToken = authHeader && typeof authHeader === "string" && authHeader.startsWith("Bearer ")
-    ? authHeader.substring(7)
-    : null;
-
-  const queryApiKey = (req.query as any)?.api_key;
-  const apiKey = bearerToken || queryApiKey;
-
-  if (apiKey && typeof apiKey === "string") {
-    try {
-      // Verify the API key using Better Auth
-      const result = await auth.api.verifyApiKey({
-        body: { key: apiKey },
-      });
-
-      if (result.valid && result.key) {
-        // Get the userId from the API key
-        const apiKeyUserId = result.key.userId;
-
-        // Get the site's organization
-        const siteRecords = await db
-          .select({
-            organizationId: sites.organizationId,
-          })
-          .from(sites)
-          .where(eq(sites.siteId, Number(siteId)))
-          .limit(1);
-
-        if (siteRecords.length > 0 && siteRecords[0].organizationId) {
-          // Check if the API key's user is a member of the organization
-          const userMembership = await db
-            .select()
-            .from(member)
-            .where(and(eq(member.userId, apiKeyUserId), eq(member.organizationId, siteRecords[0].organizationId)))
-            .limit(1);
-
-          if (userMembership.length > 0) {
-            return true;
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error verifying API key:", error);
-      // Continue to return false if API key verification fails
-    }
+  const result = await checkApiKey(req, { siteId });
+  if (result.valid) {
+    return true;
   }
 
   return false;

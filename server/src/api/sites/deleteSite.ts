@@ -3,14 +3,17 @@ import { eq } from "drizzle-orm";
 import { clickhouse } from "../../db/clickhouse/clickhouse.js";
 import { db } from "../../db/postgres/postgres.js";
 import { sites } from "../../db/postgres/schema.js";
-import { getUserHasAdminAccessToSite } from "../../lib/auth-utils.js";
+import { checkApiKey, getUserHasAdminAccessToSite } from "../../lib/auth-utils.js";
 import { siteConfig } from "../../lib/siteConfig.js";
 
 export async function deleteSite(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
   const { id } = request.params;
 
+  const apiKeyResult = await checkApiKey(request, { siteId: id });
+  const validApiKey = apiKeyResult.valid && (apiKeyResult.role === "admin" || apiKeyResult.role === "owner");
+
   const userHasAdminAccessToSite = await getUserHasAdminAccessToSite(request, id);
-  if (!userHasAdminAccessToSite) {
+  if (!userHasAdminAccessToSite && !validApiKey) {
     return reply.status(403).send({ error: "Forbidden" });
   }
 

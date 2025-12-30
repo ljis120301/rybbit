@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { db } from "../../db/postgres/postgres.js";
 import { sites } from "../../db/postgres/schema.js";
-import { getSessionFromReq } from "../../lib/auth-utils.js";
+import { checkApiKey, getSessionFromReq } from "../../lib/auth-utils.js";
 
 export async function addSite(
   request: FastifyRequest<{
@@ -30,13 +30,6 @@ export async function addSite(
   try {
     const session = await getSessionFromReq(request);
 
-    if (!session?.user?.id) {
-      return reply.status(401).send({
-        error: "Unauthorized",
-        message: "You must be logged in to add a site",
-      });
-    }
-
     // Check if the organization exists
     if (!organizationId) {
       return reply.status(400).send({
@@ -44,21 +37,34 @@ export async function addSite(
       });
     }
 
+    const apiKeyResult = await checkApiKey(request, { organizationId });
+
+    console.log(apiKeyResult);
+
+    const validApiKey = apiKeyResult.valid && (apiKeyResult.role === "admin" || apiKeyResult.role === "owner");
+
+    if (!session?.user?.id && !validApiKey) {
+      return reply.status(401).send({
+        error: "Unauthorized",
+        message: "You must be logged in to add a site",
+      });
+    }
+
     // Check if the user is an owner or admin of the organization
     // First, get the user's role in the organization
     const member = await db.query.member.findFirst({
       where: (member, { and, eq }) =>
-        and(eq(member.userId, session.user.id), eq(member.organizationId, organizationId)),
+        and(eq(member.userId, session?.user.id || ""), eq(member.organizationId, organizationId)),
     });
 
-    if (!member) {
+    if (!member && !validApiKey) {
       return reply.status(403).send({
         error: "You are not a member of this organization",
       });
     }
 
     // Check if the user's role is admin or owner
-    if (member.role !== "admin" && member.role !== "owner") {
+    if (member?.role !== "admin" && member?.role !== "owner" && !validApiKey) {
       return reply.status(403).send({
         error: "You must be an admin or owner to add sites to this organization",
       });
@@ -74,7 +80,7 @@ export async function addSite(
         id,
         domain,
         name,
-        createdBy: session.user.id,
+        createdBy: session?.user.id,
         organizationId,
         public: isPublic || false,
         saltUserIds: saltUserIds || false,

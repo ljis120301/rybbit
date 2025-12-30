@@ -358,6 +358,85 @@ export const endpointCategories: EndpointCategory[] = [
       },
     ],
   },
+  {
+    name: "Sites",
+    endpoints: [
+      {
+        method: "POST",
+        path: "/sites",
+        name: "Create Site",
+        description: "Creates a new site in an organization",
+        hasCommonParams: true,
+        hasRequestBody: true,
+        requestBodyExample: {
+          domain: "example.com",
+          name: "My Website",
+          organizationId: "org_123",
+          public: false,
+          blockBots: true,
+        },
+      },
+      {
+        method: "GET",
+        path: "/sites/:site",
+        name: "Get Site",
+        description: "Returns details for a specific site",
+        hasCommonParams: true,
+      },
+      {
+        method: "DELETE",
+        path: "/sites/:site",
+        name: "Delete Site",
+        description: "Permanently deletes a site and all its data",
+        hasCommonParams: true,
+      },
+      {
+        method: "PUT",
+        path: "/sites/:site/config",
+        name: "Update Site Config",
+        description: "Updates site configuration settings",
+        hasCommonParams: true,
+        hasRequestBody: true,
+        requestBodyExample: {
+          public: true,
+          blockBots: true,
+          excludedCountries: ["CN", "RU"],
+        },
+      },
+      {
+        method: "GET",
+        path: "/sites/:site/excluded-ips",
+        name: "Get Excluded IPs",
+        description: "Returns the list of excluded IP addresses",
+        hasCommonParams: true,
+      },
+      {
+        method: "GET",
+        path: "/sites/:site/excluded-countries",
+        name: "Get Excluded Countries",
+        description: "Returns the list of excluded country codes",
+        hasCommonParams: true,
+      },
+      {
+        method: "GET",
+        path: "/sites/:site/private-link-config",
+        name: "Get Private Link Config",
+        description: "Returns the private link key configuration",
+        hasCommonParams: true,
+      },
+      {
+        method: "POST",
+        path: "/sites/:site/private-link-config",
+        name: "Update Private Link",
+        description: "Generates or revokes a private link key",
+        hasCommonParams: true,
+        hasRequestBody: true,
+        requestBodyExample: {
+          action: "generate_private_link_key",
+        },
+      },
+    ],
+  },
 ];
 
 // Flatten all endpoints for easy lookup
@@ -446,6 +525,13 @@ export const parameterMetadata: Record<
   sessionId: { label: "Session ID", type: "text", placeholder: "Session ID" },
   userId: { label: "User ID", type: "text", placeholder: "User ID" },
   stepNumber: { label: "Step Number", type: "number", placeholder: "Step number (1-indexed)" },
+  siteId: { label: "Site ID", type: "number", placeholder: "Site ID" },
+  // Sites-specific params
+  action: {
+    label: "Action",
+    type: "select",
+    options: ["generate_private_link_key", "revoke_private_link_key"],
+  },
 };
 
 // Method colors for UI
