@@ -129,9 +129,9 @@ export function fetchSite(siteId: string | number) {
 }
 
 export function fetchSiteHasData(siteId: string) {
-  return authedFetch<{ hasData: boolean }>(`/site-has-data/${siteId}`);
+  return authedFetch<{ hasData: boolean }>(`/sites/${siteId}/has-data`);
 }
 
 export function fetchSiteIsPublic(siteId: string | number) {
-  return authedFetch<{ isPublic: boolean }>(`/site-is-public/${siteId}`);
+  return authedFetch<{ isPublic: boolean }>(`/sites/${siteId}/is-public`);
 }

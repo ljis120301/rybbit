@@ -74,7 +74,7 @@ export async function fetchGoals(
     order: params.order,
   };
 
-  const response = await authedFetch<GoalsResponse>(`/goals/${site}`, queryParams);
+  const response = await authedFetch<GoalsResponse>(`/sites/${site}/goals`, queryParams);
   return response;
 }
 
@@ -93,7 +93,7 @@ export async function fetchGoalSessions(
   };
 
   const response = await authedFetch<{ data: GetSessionsResponse }>(
-    `/goals/${params.goalId}/sessions/${site}`,
+    `/sites/${site}/goals/${params.goalId}/sessions`,
     queryParams
   );
   return response;
@@ -108,7 +108,7 @@ export async function createGoal(
   params: CreateGoalParams
 ): Promise<{ success: boolean; goalId: number }> {
   const response = await authedFetch<{ success: boolean; goalId: number }>(
-    `/goals/${site}`,
+    `/sites/${site}/goals`,
     undefined,
     {
       method: "POST",
@@ -127,7 +127,7 @@ export async function updateGoal(
   params: UpdateGoalParams
 ): Promise<{ success: boolean; goalId: number }> {
   const response = await authedFetch<{ success: boolean; goalId: number }>(
-    `/goals/${params.goalId}/${site}`,
+    `/sites/${site}/goals/${params.goalId}`,
     undefined,
     {
       method: "PUT",
@@ -146,7 +146,7 @@ export async function deleteGoal(
   goalId: number
 ): Promise<{ success: boolean }> {
   const response = await authedFetch<{ success: boolean }>(
-    `/goals/${goalId}/${site}`,
+    `/sites/${site}/goals/${goalId}`,
     undefined,
     {
       method: "DELETE",

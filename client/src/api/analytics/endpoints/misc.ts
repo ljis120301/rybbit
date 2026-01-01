@@ -73,7 +73,7 @@ export async function fetchRetention(
   const { mode = "week", range = 90 } = params;
 
   const response = await authedFetch<{ data: ProcessedRetentionData }>(
-    `/retention/${site}`,
+    `/sites/${site}/retention`,
     { mode, range }
   );
   return response.data;
@@ -98,7 +98,7 @@ export async function fetchJourneys(
   };
 
   const response = await authedFetch<JourneysResponse>(
-    `/journeys/${site}`,
+    `/sites/${site}/journeys`,
     queryParams
   );
   return response;
@@ -129,7 +129,7 @@ export async function fetchPageTitles(
   };
 
   const response = await authedFetch<{ data: PageTitlesPaginatedResponse }>(
-    `/page-titles/${site}`,
+    `/sites/${site}/page-titles`,
     queryParams
   );
   return response.data;

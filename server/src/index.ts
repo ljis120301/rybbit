@@ -245,52 +245,52 @@ async function analyticsRoutes(fastify: FastifyInstance) {
   // WEB & PRODUCT ANALYTICS
 
   // This endpoint gets called a lot so we don't want to log it
-  fastify.get("/live-user-count/:siteId", { logLevel: "silent", ...publicSite }, getLiveUsercount);
-  fastify.get("/overview/:siteId", publicSite, getOverview);
-  fastify.get("/overview-bucketed/:siteId", publicSite, getOverviewBucketed);
-  fastify.get("/metric/:siteId", publicSite, getMetric);
-  fastify.get("/page-titles/:siteId", publicSite, getPageTitles);
-  fastify.get("/error-names/:siteId", publicSite, getErrorNames);
-  fastify.get("/error-events/:siteId", publicSite, getErrorEvents);
-  fastify.get("/error-bucketed/:siteId", publicSite, getErrorBucketed);
-  fastify.get("/retention/:siteId", publicSite, getRetention);
-  fastify.get("/site-has-data/:siteId", publicSite, getSiteHasData);
-  fastify.get("/site-is-public/:siteId", publicSite, getSiteIsPublic);
-  fastify.get("/sessions/:siteId", publicSite, getSessions);
-  fastify.get("/sessions/:sessionId/:siteId", publicSite, getSession);
-  fastify.get("/events/:siteId", publicSite, getEvents);
-  fastify.get("/users/:siteId", publicSite, getUsers);
-  fastify.get("/users/session-count/:siteId", publicSite, getUserSessionCount);
-  fastify.get("/users/:userId/:siteId", publicSite, getUserInfo);
-  fastify.get("/session-locations/:siteId", publicSite, getSessionLocations);
-  fastify.get("/funnels/:siteId", publicSite, getFunnels);
-  fastify.get("/journeys/:siteId", publicSite, getJourneys);
-  fastify.post("/funnels/analyze/:siteId", publicSite, getFunnel);
-  fastify.post("/funnels/:stepNumber/sessions/:siteId", publicSite, getFunnelStepSessions);
-  fastify.post("/funnels/:siteId", authSite, createFunnel);
-  fastify.delete("/funnels/:funnelId/:siteId", authSite, deleteFunnel);
-  fastify.get("/goals/:siteId", publicSite, getGoals);
-  fastify.get("/goals/:goalId/sessions/:siteId", publicSite, getGoalSessions);
-  fastify.post("/goals/:siteId", authSite, createGoal);
-  fastify.delete("/goals/:goalId/:siteId", authSite, deleteGoal);
-  fastify.put("/goals/:goalId/:siteId", authSite, updateGoal);
-  fastify.get("/events/names/:siteId", publicSite, getEventNames);
-  fastify.get("/events/properties/:siteId", publicSite, getEventProperties);
-  fastify.get("/events/outbound/:siteId", publicSite, getOutboundLinks);
+  fastify.get("/sites/:siteId/live-user-count", { logLevel: "silent", ...publicSite }, getLiveUsercount);
+  fastify.get("/sites/:siteId/overview", publicSite, getOverview);
+  fastify.get("/sites/:siteId/overview-bucketed", publicSite, getOverviewBucketed);
+  fastify.get("/sites/:siteId/metric", publicSite, getMetric);
+  fastify.get("/sites/:siteId/page-titles", publicSite, getPageTitles);
+  fastify.get("/sites/:siteId/error-names", publicSite, getErrorNames);
+  fastify.get("/sites/:siteId/error-events", publicSite, getErrorEvents);
+  fastify.get("/sites/:siteId/error-bucketed", publicSite, getErrorBucketed);
+  fastify.get("/sites/:siteId/retention", publicSite, getRetention);
+  fastify.get("/sites/:siteId/has-data", publicSite, getSiteHasData);
+  fastify.get("/sites/:siteId/is-public", publicSite, getSiteIsPublic);
+  fastify.get("/sites/:siteId/sessions", publicSite, getSessions);
+  fastify.get("/sites/:siteId/sessions/:sessionId", publicSite, getSession);
+  fastify.get("/sites/:siteId/events", publicSite, getEvents);
+  fastify.get("/sites/:siteId/users", publicSite, getUsers);
+  fastify.get("/sites/:siteId/users/session-count", publicSite, getUserSessionCount);
+  fastify.get("/sites/:siteId/users/:userId", publicSite, getUserInfo);
+  fastify.get("/sites/:siteId/session-locations", publicSite, getSessionLocations);
+  fastify.get("/sites/:siteId/funnels", publicSite, getFunnels);
+  fastify.get("/sites/:siteId/journeys", publicSite, getJourneys);
+  fastify.post("/sites/:siteId/funnels/analyze", publicSite, getFunnel);
+  fastify.post("/sites/:siteId/funnels/:stepNumber/sessions", publicSite, getFunnelStepSessions);
+  fastify.post("/sites/:siteId/funnels", authSite, createFunnel);
+  fastify.delete("/sites/:siteId/funnels/:funnelId", authSite, deleteFunnel);
+  fastify.get("/sites/:siteId/goals", publicSite, getGoals);
+  fastify.get("/sites/:siteId/goals/:goalId/sessions", publicSite, getGoalSessions);
+  fastify.post("/sites/:siteId/goals", authSite, createGoal);
+  fastify.delete("/sites/:siteId/goals/:goalId", authSite, deleteGoal);
+  fastify.put("/sites/:siteId/goals/:goalId", authSite, updateGoal);
+  fastify.get("/sites/:siteId/events/names", publicSite, getEventNames);
+  fastify.get("/sites/:siteId/events/properties", publicSite, getEventProperties);
+  fastify.get("/sites/:siteId/events/outbound", publicSite, getOutboundLinks);
   fastify.get("/org-event-count/:organizationId", orgMember, getOrgEventCount);
 
   // Performance Analytics
-  fastify.get("/performance/overview/:siteId", publicSite, getPerformanceOverview);
-  fastify.get("/performance/time-series/:siteId", publicSite, getPerformanceTimeSeries);
-  fastify.get("/performance/by-dimension/:siteId", publicSite, getPerformanceByDimension);
+  fastify.get("/sites/:siteId/performance/overview", publicSite, getPerformanceOverview);
+  fastify.get("/sites/:siteId/performance/time-series", publicSite, getPerformanceTimeSeries);
+  fastify.get("/sites/:siteId/performance/by-dimension", publicSite, getPerformanceByDimension);
 }
 
 async function sessionReplayRoutes(fastify: FastifyInstance) {
   // Session Replay
-  fastify.post("/session-replay/record/:siteId", recordSessionReplay); // Public - tracking endpoint
-  fastify.get("/session-replay/list/:siteId", publicSite, getSessionReplays);
-  fastify.get("/session-replay/:sessionId/:siteId", publicSite, getSessionReplayEvents);
-  fastify.delete("/session-replay/:sessionId/:siteId", authSite, deleteSessionReplay);
+  fastify.post("/sites/:siteId/session-replay/record", recordSessionReplay); // Public - tracking endpoint
+  fastify.get("/sites/:siteId/session-replay/list", publicSite, getSessionReplays);
+  fastify.get("/sites/:siteId/session-replay/:sessionId", publicSite, getSessionReplayEvents);
+  fastify.delete("/sites/:siteId/session-replay/:sessionId", authSite, deleteSessionReplay);
 }
 
 async function sitesRoutes(fastify: FastifyInstance) {
@@ -331,12 +331,12 @@ async function userRoutes(fastify: FastifyInstance) {
 
 async function gscRoutes(fastify: FastifyInstance) {
   // GOOGLE SEARCH CONSOLE
-  fastify.get("/gsc/connect/:siteId", authSite, connectGSC);
+  fastify.get("/sites/:siteId/gsc/connect", authSite, connectGSC);
   fastify.get("/gsc/callback", gscCallback); // Public - OAuth callback
-  fastify.get("/gsc/status/:siteId", publicSite, getGSCStatus);
-  fastify.delete("/gsc/disconnect/:siteId", authSite, disconnectGSC);
-  fastify.post("/gsc/select-property/:siteId", authSite, selectGSCProperty);
-  fastify.get("/gsc/data/:siteId", publicSite, getGSCData);
+  fastify.get("/sites/:siteId/gsc/status", publicSite, getGSCStatus);
+  fastify.delete("/sites/:siteId/gsc/disconnect", authSite, disconnectGSC);
+  fastify.post("/sites/:siteId/gsc/select-property", authSite, selectGSCProperty);
+  fastify.get("/sites/:siteId/gsc/data", publicSite, getGSCData);
 }
 
 async function stripeAdminRoutes(fastify: FastifyInstance) {

@@ -24,14 +24,14 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/overview/:site",
+        path: "/sites/:site/overview",
         name: "Get Overview",
         description: "Returns high-level analytics metrics for a site",
         hasCommonParams: true,
       },
       {
         method: "GET",
-        path: "/overview-bucketed/:site",
+        path: "/sites/:site/overview-bucketed",
         name: "Get Overview (Time Series)",
         description: "Returns time-series analytics data broken down by time buckets",
         hasCommonParams: true,
@@ -39,7 +39,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/metric/:site",
+        path: "/sites/:site/metric",
         name: "Get Metric",
         description: "Returns dimensional analytics broken down by a specific parameter",
         hasCommonParams: true,
@@ -48,7 +48,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/live-user-count/:site",
+        path: "/sites/:site/live-user-count",
         name: "Get Live Visitors",
         description: "Returns the count of active sessions within the specified time window",
         hasCommonParams: false,
@@ -61,7 +61,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/events/:site",
+        path: "/sites/:site/events",
         name: "Get Events",
         description: "Returns a paginated list of events",
         hasCommonParams: true,
@@ -69,14 +69,14 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/events/names/:site",
+        path: "/sites/:site/events/names",
         name: "Get Event Names",
         description: "Returns list of unique custom event names with counts",
         hasCommonParams: true,
       },
       {
         method: "GET",
-        path: "/events/properties/:site",
+        path: "/sites/:site/events/properties",
         name: "Get Event Properties",
         description: "Returns property key-value pairs for a specific event",
         hasCommonParams: true,
@@ -85,7 +85,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/events/outbound/:site",
+        path: "/sites/:site/events/outbound",
         name: "Get Outbound Links",
         description: "Returns outbound link clicks with occurrence counts",
         hasCommonParams: true,
@@ -97,7 +97,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/error-names/:site",
+        path: "/sites/:site/error-names",
         name: "Get Error Names",
         description: "Returns unique error messages with occurrence and session counts",
         hasCommonParams: true,
@@ -105,7 +105,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/error-events/:site",
+        path: "/sites/:site/error-events",
         name: "Get Error Events",
         description: "Returns individual error occurrences with context and stack traces",
         hasCommonParams: true,
@@ -114,7 +114,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/error-bucketed/:site",
+        path: "/sites/:site/error-bucketed",
         name: "Get Error Time Series",
         description: "Returns error occurrence counts over time",
         hasCommonParams: true,
@@ -128,7 +128,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/goals/:site",
+        path: "/sites/:site/goals",
         name: "Get Goals",
         description: "Returns paginated list of goals with conversion metrics",
         hasCommonParams: true,
@@ -136,7 +136,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/goals/:goalId/sessions/:site",
+        path: "/sites/:site/goals/:goalId/sessions",
         name: "Get Goal Sessions",
         description: "Returns sessions that completed a specific goal",
         hasCommonParams: true,
@@ -145,7 +145,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "POST",
-        path: "/goals/:site",
+        path: "/sites/:site/goals",
         name: "Create Goal",
         description: "Creates a new goal",
         hasCommonParams: false,
@@ -160,7 +160,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "PUT",
-        path: "/goals/:goalId/:site",
+        path: "/sites/:site/goals/:goalId",
         name: "Update Goal",
         description: "Updates an existing goal",
         hasCommonParams: false,
@@ -176,7 +176,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "DELETE",
-        path: "/goals/:goalId/:site",
+        path: "/sites/:site/goals/:goalId",
         name: "Delete Goal",
         description: "Deletes a goal",
         hasCommonParams: false,
@@ -189,14 +189,14 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/funnels/:site",
+        path: "/sites/:site/funnels",
         name: "Get Funnels",
         description: "Returns all saved funnels for a site",
         hasCommonParams: false,
       },
       {
         method: "POST",
-        path: "/funnels/analyze/:site",
+        path: "/sites/:site/funnels/analyze",
         name: "Analyze Funnel",
         description: "Analyzes funnel conversion data step-by-step",
         hasCommonParams: true,
@@ -211,7 +211,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "POST",
-        path: "/funnels/:stepNumber/sessions/:site",
+        path: "/sites/:site/funnels/:stepNumber/sessions",
         name: "Get Funnel Step Sessions",
         description: "Returns sessions that reached or dropped at a specific funnel step",
         hasCommonParams: true,
@@ -227,7 +227,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "POST",
-        path: "/funnels/:site",
+        path: "/sites/:site/funnels",
         name: "Create Funnel",
         description: "Creates a saved funnel",
         hasCommonParams: false,
@@ -242,7 +242,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "DELETE",
-        path: "/funnels/:funnelId/:site",
+        path: "/sites/:site/funnels/:funnelId",
         name: "Delete Funnel",
         description: "Deletes a saved funnel",
         hasCommonParams: false,
@@ -255,14 +255,14 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/performance/overview/:site",
+        path: "/sites/:site/performance/overview",
         name: "Get Performance Overview",
         description: "Returns aggregate Core Web Vitals metrics",
         hasCommonParams: true,
       },
       {
         method: "GET",
-        path: "/performance/time-series/:site",
+        path: "/sites/:site/performance/time-series",
         name: "Get Performance Time Series",
         description: "Returns performance metrics over time",
         hasCommonParams: true,
@@ -270,7 +270,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/performance/by-dimension/:site",
+        path: "/sites/:site/performance/by-dimension",
         name: "Get Performance by Dimension",
         description: "Returns performance breakdown by dimension",
         hasCommonParams: true,
@@ -284,7 +284,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/sessions/:site",
+        path: "/sites/:site/sessions",
         name: "Get Sessions",
         description: "Returns a paginated list of sessions",
         hasCommonParams: true,
@@ -292,7 +292,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/sessions/:sessionId/:site",
+        path: "/sites/:site/sessions/:sessionId",
         name: "Get Session",
         description: "Returns detailed session information with events",
         hasCommonParams: false,
@@ -301,7 +301,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/session-locations/:site",
+        path: "/sites/:site/session-locations",
         name: "Get Session Locations",
         description: "Returns aggregated session locations for map visualization",
         hasCommonParams: true,
@@ -313,7 +313,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/users/:site",
+        path: "/sites/:site/users",
         name: "Get Users",
         description: "Returns a paginated list of users",
         hasCommonParams: true,
@@ -321,7 +321,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/users/session-count/:site",
+        path: "/sites/:site/users/session-count",
         name: "Get User Session Count",
         description: "Returns daily session counts for a specific user",
         hasCommonParams: false,
@@ -329,7 +329,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/users/:userId/:site",
+        path: "/sites/:site/users/:userId",
         name: "Get User Info",
         description: "Returns detailed user profile information",
         hasCommonParams: false,
@@ -342,7 +342,7 @@ export const endpointCategories: EndpointCategory[] = [
     endpoints: [
       {
         method: "GET",
-        path: "/retention/:site",
+        path: "/sites/:site/retention",
         name: "Get Retention",
         description: "Returns cohort-based retention analysis",
         hasCommonParams: false,
@@ -350,7 +350,7 @@ export const endpointCategories: EndpointCategory[] = [
       },
       {
         method: "GET",
-        path: "/journeys/:site",
+        path: "/sites/:site/journeys",
         name: "Get Journeys",
         description: "Returns most common page navigation paths",
         hasCommonParams: true,

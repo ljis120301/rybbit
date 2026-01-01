@@ -96,7 +96,7 @@ export async function fetchUsers(site: string | number, params: UsersParams): Pr
     identified_only: params.identifiedOnly,
   };
 
-  const response = await authedFetch<UsersListResponse>(`/users/${site}`, queryParams);
+  const response = await authedFetch<UsersListResponse>(`/sites/${site}/users`, queryParams);
   return response;
 }
 
@@ -108,7 +108,7 @@ export async function fetchUserSessionCount(
   site: string | number,
   params: UserSessionCountParams
 ): Promise<{ data: UserSessionCountResponse[] }> {
-  const response = await authedFetch<{ data: UserSessionCountResponse[] }>(`/users/session-count/${site}`, {
+  const response = await authedFetch<{ data: UserSessionCountResponse[] }>(`/sites/${site}/users/session-count`, {
     user_id: params.userId,
     time_zone: params.timeZone,
   });
@@ -120,6 +120,6 @@ export async function fetchUserSessionCount(
  * GET /api/users/:userId/:site
  */
 export async function fetchUserInfo(site: string | number, userId: string): Promise<UserInfo> {
-  const response = await authedFetch<{ data: UserInfo }>(`/users/${encodeURIComponent(userId)}/${site}`);
+  const response = await authedFetch<{ data: UserInfo }>(`/sites/${site}/users/${encodeURIComponent(userId)}`);
   return response.data;
 }

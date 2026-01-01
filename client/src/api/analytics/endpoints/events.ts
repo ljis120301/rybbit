@@ -73,7 +73,7 @@ export async function fetchEvents(
   };
 
   const response = await authedFetch<EventsResponse>(
-    `/events/${site}`,
+    `/sites/${site}/events`,
     queryParams
   );
   return response;
@@ -88,7 +88,7 @@ export async function fetchEventNames(
   params: CommonApiParams
 ): Promise<EventName[]> {
   const response = await authedFetch<{ data: EventName[] }>(
-    `/events/names/${site}`,
+    `/sites/${site}/events/names`,
     toQueryParams(params)
   );
   return response.data;
@@ -108,7 +108,7 @@ export async function fetchEventProperties(
   };
 
   const response = await authedFetch<{ data: EventProperty[] }>(
-    `/events/properties/${site}`,
+    `/sites/${site}/events/properties`,
     queryParams
   );
   return response.data;
@@ -123,7 +123,7 @@ export async function fetchOutboundLinks(
   params: CommonApiParams
 ): Promise<OutboundLink[]> {
   const response = await authedFetch<{ data: OutboundLink[] }>(
-    `/events/outbound/${site}`,
+    `/sites/${site}/events/outbound`,
     toQueryParams(params)
   );
   return response.data;

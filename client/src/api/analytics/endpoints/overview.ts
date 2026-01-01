@@ -55,7 +55,7 @@ export async function fetchOverview(
   params: CommonApiParams
 ): Promise<GetOverviewResponse> {
   const response = await authedFetch<{ data: GetOverviewResponse }>(
-    `/overview/${site}`,
+    `/sites/${site}/overview`,
     toQueryParams(params)
   );
   return response.data;
@@ -70,7 +70,7 @@ export async function fetchOverviewBucketed(
   params: BucketedParams
 ): Promise<GetOverviewBucketedResponse> {
   const response = await authedFetch<{ data: GetOverviewBucketedResponse }>(
-    `/overview-bucketed/${site}`,
+    `/sites/${site}/overview-bucketed`,
     toBucketedQueryParams(params)
   );
   return response.data;
@@ -86,7 +86,7 @@ export async function fetchMetric(
 ): Promise<{ data: MetricResponse[]; totalCount: number }> {
   const response = await authedFetch<{
     data: { data: MetricResponse[]; totalCount: number };
-  }>(`/metric/${site}`, toMetricQueryParams(params));
+  }>(`/sites/${site}/metric`, toMetricQueryParams(params));
   return response.data;
 }
 
@@ -99,7 +99,7 @@ export async function fetchLiveUserCount(
   minutes: number = 5
 ): Promise<LiveUserCountResponse> {
   const response = await authedFetch<LiveUserCountResponse>(
-    `/live-user-count/${site}`,
+    `/sites/${site}/live-user-count`,
     { minutes }
   );
   return response;
