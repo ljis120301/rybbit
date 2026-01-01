@@ -598,7 +598,7 @@ const data = await response.json();
 import requests
 
 response = requests.get(
-    'https://api.rybbit.io/api/sites/123/overview',
+    'https://api.rybbit.io/api/sites/123/metric',
     params={
         'parameter': 'country',
         'start_date': '2024-01-01',
@@ -807,7 +807,7 @@ console.log(`Live visitors: ${count}`);
 import requests
 
 response = requests.get(
-    'https://api.rybbit.io/api/sites/123/overview',
+    'https://api.rybbit.io/api/sites/123/live-user-count',
     params={'minutes': 5},
     headers={
         'Authorization': 'Bearer your_api_key_here'
