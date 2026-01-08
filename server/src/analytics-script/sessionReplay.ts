@@ -1,5 +1,34 @@
 import { ScriptConfig, SessionReplayEvent, SessionReplayBatch } from "./types.js";
 
+const SAMPLE_STORAGE_KEY = "rybbit-replay-sampled";
+
+/**
+ * Determines if this session should have replay enabled based on sample rate.
+ * Uses sessionStorage to persist the decision for the entire browser session.
+ */
+function shouldSampleSession(sampleRate: number): boolean {
+  // 100% = always record, 0% = never record
+  if (sampleRate >= 100) return true;
+  if (sampleRate <= 0) return false;
+
+  // Check if we already made a decision for this session
+  try {
+    const existingDecision = sessionStorage.getItem(SAMPLE_STORAGE_KEY);
+    if (existingDecision !== null) {
+      return existingDecision === "1";
+    }
+
+    // Make new sampling decision
+    const sampled = Math.random() * 100 < sampleRate;
+    sessionStorage.setItem(SAMPLE_STORAGE_KEY, sampled ? "1" : "0");
+
+    return sampled;
+  } catch {
+    // sessionStorage not available, default to sampling
+    return Math.random() * 100 < sampleRate;
+  }
+}
+
 // rrweb types (simplified for our use case)
 declare global {
   interface Window {
@@ -42,6 +71,12 @@ export class SessionReplayRecorder {
 
   async initialize(): Promise<void> {
     if (!this.config.enableSessionReplay) {
+      return;
+    }
+
+    // Check sample rate if specified
+    const sampleRate = this.config.sessionReplaySampleRate;
+    if (sampleRate !== undefined && !shouldSampleSession(sampleRate)) {
       return;
     }
 

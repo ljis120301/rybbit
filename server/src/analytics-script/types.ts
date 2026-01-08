@@ -25,6 +25,7 @@ export interface ScriptConfig {
   sessionReplayCollectFonts?: boolean;
   sessionReplaySampling?: Record<string, any>;
   sessionReplaySlimDOMOptions?: Record<string, boolean> | boolean;
+  sessionReplaySampleRate?: number; // 0-100, percentage of sessions to record
 }
 
 export interface BasePayload {

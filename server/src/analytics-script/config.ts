@@ -76,6 +76,11 @@ export async function parseScriptConfig(scriptTag: HTMLScriptElement): Promise<S
     ? parseJsonSafely<Record<string, boolean> | boolean>(slimDOMAttr, {})
     : undefined;
 
+  const sampleRateAttr = scriptTag.getAttribute("data-replay-sample-rate");
+  const sessionReplaySampleRate = sampleRateAttr
+    ? Math.min(100, Math.max(0, parseInt(sampleRateAttr, 10)))
+    : undefined;
+
   // Default config with minimal settings
   const defaultConfig: ScriptConfig = {
     analyticsHost,
@@ -105,6 +110,7 @@ export async function parseScriptConfig(scriptTag: HTMLScriptElement): Promise<S
     sessionReplayCollectFonts,
     sessionReplaySampling,
     sessionReplaySlimDOMOptions,
+    sessionReplaySampleRate,
   };
 
   try {

@@ -99,6 +99,8 @@
     const sessionReplaySampling = samplingAttr ? parseJsonSafely(samplingAttr, {}) : void 0;
     const slimDOMAttr = scriptTag.getAttribute("data-replay-slim-dom-options");
     const sessionReplaySlimDOMOptions = slimDOMAttr ? parseJsonSafely(slimDOMAttr, {}) : void 0;
+    const sampleRateAttr = scriptTag.getAttribute("data-replay-sample-rate");
+    const sessionReplaySampleRate = sampleRateAttr ? Math.min(100, Math.max(0, parseInt(sampleRateAttr, 10))) : void 0;
     const defaultConfig = {
       analyticsHost,
       siteId,
@@ -126,7 +128,8 @@
       sessionReplayMaskInputOptions,
       sessionReplayCollectFonts,
       sessionReplaySampling,
-      sessionReplaySlimDOMOptions
+      sessionReplaySlimDOMOptions,
+      sessionReplaySampleRate
     };
     try {
       const configUrl = `${analyticsHost}/site/tracking-config/${siteId}`;
@@ -159,6 +162,22 @@
   }
 
   // sessionReplay.ts
+  var SAMPLE_STORAGE_KEY = "rybbit-replay-sampled";
+  function shouldSampleSession(sampleRate) {
+    if (sampleRate >= 100) return true;
+    if (sampleRate <= 0) return false;
+    try {
+      const existingDecision = sessionStorage.getItem(SAMPLE_STORAGE_KEY);
+      if (existingDecision !== null) {
+        return existingDecision === "1";
+      }
+      const sampled = Math.random() * 100 < sampleRate;
+      sessionStorage.setItem(SAMPLE_STORAGE_KEY, sampled ? "1" : "0");
+      return sampled;
+    } catch {
+      return Math.random() * 100 < sampleRate;
+    }
+  }
   var SessionReplayRecorder = class {
     constructor(config, userId, sendBatch) {
       this.isRecording = false;
@@ -169,6 +188,10 @@
     }
     async initialize() {
       if (!this.config.enableSessionReplay) {
+        return;
+      }
+      const sampleRate = this.config.sessionReplaySampleRate;
+      if (sampleRate !== void 0 && !shouldSampleSession(sampleRate)) {
         return;
       }
       if (!window.rrweb) {
