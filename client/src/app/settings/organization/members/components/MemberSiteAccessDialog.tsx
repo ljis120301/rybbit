@@ -1,5 +1,14 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+import {
+  getMemberSiteAccess,
+  GetOrganizationMembersResponse,
+  updateMemberSiteAccess,
+} from "@/api/admin/endpoints/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -11,15 +20,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { authClient } from "@/lib/auth";
+
 import { SiteAccessMultiSelect } from "./SiteAccessMultiSelect";
-import {
-  getMemberSiteAccess,
-  updateMemberSiteAccess,
-  GetOrganizationMembersResponse,
-} from "@/api/admin/endpoints/auth";
 
 type Member = GetOrganizationMembersResponse["data"][0];
 
@@ -37,62 +40,60 @@ export function MemberSiteAccessDialog({
   onSuccess,
 }: MemberSiteAccessDialogProps) {
   const { data: activeOrganization } = authClient.useActiveOrganization();
+  const queryClient = useQueryClient();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
   const [restrictSiteAccess, setRestrictSiteAccess] = useState(false);
   const [selectedSiteIds, setSelectedSiteIds] = useState<number[]>([]);
 
-  // Fetch member's current site access when dialog opens
-  useEffect(() => {
-    if (open && member && activeOrganization?.id) {
-      setIsFetching(true);
-      getMemberSiteAccess(activeOrganization.id, member.id)
-        .then(data => {
-          setRestrictSiteAccess(data.hasRestrictedSiteAccess);
-          setSelectedSiteIds(data.siteAccess.map(s => s.siteId));
-        })
-        .catch(error => {
-          console.error("Failed to fetch member site access:", error);
-          // Use fallback from member data
-          setRestrictSiteAccess(member.siteAccess.hasRestrictedSiteAccess);
-          setSelectedSiteIds([]);
-        })
-        .finally(() => {
-          setIsFetching(false);
-        });
-    }
-  }, [open, member, activeOrganization?.id]);
+  const { data: siteAccessData, isLoading: isFetching } = useQuery({
+    queryKey: ["memberSiteAccess", activeOrganization?.id, member?.id],
+    queryFn: () => getMemberSiteAccess(activeOrganization!.id, member!.id),
+    enabled: open && !!member && !!activeOrganization?.id,
+  });
 
-  const handleSave = async () => {
+  // Initialize form state when data loads
+  useEffect(() => {
+    if (siteAccessData) {
+      setRestrictSiteAccess(siteAccessData.hasRestrictedSiteAccess);
+      setSelectedSiteIds(siteAccessData.siteAccess.map(s => s.siteId));
+    } else if (member?.siteAccess) {
+      // Fallback to member data
+      setRestrictSiteAccess(member.siteAccess.hasRestrictedSiteAccess);
+      setSelectedSiteIds([]);
+    }
+  }, [siteAccessData, member?.siteAccess]);
+
+  const updateMutation = useMutation({
+    mutationFn: () =>
+      updateMemberSiteAccess(activeOrganization!.id, member!.id, {
+        hasRestrictedSiteAccess: restrictSiteAccess,
+        siteIds: selectedSiteIds,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["memberSiteAccess", activeOrganization?.id, member?.id] });
+      queryClient.invalidateQueries({ queryKey: ["organizationMembers"] });
+      toast.success("Site access updated successfully");
+      onSuccess();
+      onClose();
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update site access");
+    },
+  });
+
+  const handleSave = () => {
     if (!member || !activeOrganization?.id) return;
 
-    // Validate that at least one site is selected when restricting
     if (restrictSiteAccess && selectedSiteIds.length === 0) {
       toast.error("Please select at least one site or disable site restrictions");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      await updateMemberSiteAccess(activeOrganization.id, member.id, {
-        hasRestrictedSiteAccess: restrictSiteAccess,
-        siteIds: selectedSiteIds,
-      });
-
-      toast.success("Site access updated successfully");
-      onSuccess();
-      onClose();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update site access");
-    } finally {
-      setIsLoading(false);
-    }
+    updateMutation.mutate();
   };
 
   if (!member) return null;
 
-  // Don't allow editing site access for admin/owner roles
   const isRestrictable = member.role === "member";
 
   return (
@@ -129,10 +130,7 @@ export function MemberSiteAccessDialog({
 
             {restrictSiteAccess ? (
               <div className="pl-6">
-                <SiteAccessMultiSelect
-                  selectedSiteIds={selectedSiteIds}
-                  onChange={setSelectedSiteIds}
-                />
+                <SiteAccessMultiSelect selectedSiteIds={selectedSiteIds} onChange={setSelectedSiteIds} />
                 <p className="text-xs text-muted-foreground mt-2">
                   This member will only have access to the selected sites.
                 </p>
@@ -146,8 +144,8 @@ export function MemberSiteAccessDialog({
         ) : (
           <div className="py-4 text-center">
             <p className="text-muted-foreground">
-              {member.role === "owner" ? "Organization owners" : "Admins"} automatically have access
-              to all sites.
+              {member.role === "owner" ? "Organization owners" : "Admins"} automatically have access to all
+              sites.
             </p>
           </div>
         )}
@@ -157,8 +155,8 @@ export function MemberSiteAccessDialog({
             Cancel
           </Button>
           {isRestrictable && (
-            <Button onClick={handleSave} disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
+            <Button onClick={handleSave} disabled={updateMutation.isPending}>
+              {updateMutation.isPending ? "Saving..." : "Save Changes"}
             </Button>
           )}
         </DialogFooter>

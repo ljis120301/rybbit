@@ -54,7 +54,7 @@ export function SiteAccessMultiSelect({ selectedSiteIds, onChange, disabled = fa
           Select all sites ({sites.length})
         </Label>
       </div>
-      <div className="border rounded-md divide-y max-h-48 overflow-y-auto">
+      <div className="border rounded-lg divide-y max-h-48 overflow-y-auto">
         {sites.map(site => (
           <div key={site.siteId} className="flex items-center space-x-3 p-2.5 hover:bg-muted/50">
             <Checkbox
