@@ -165,22 +165,22 @@ export const auth = betterAuth({
         if (newSession) {
           sendWelcomeEmail(newSession.user.email, newSession.user.name);
 
-          // Add contact to marketing audience and schedule onboarding emails
-          try {
-            await addContactToAudience(newSession.user.email, newSession.user.name);
+          // // Add contact to marketing audience and schedule onboarding emails
+          // try {
+          //   await addContactToAudience(newSession.user.email, newSession.user.name);
 
-            const emailIds = await onboardingTipsService.scheduleOnboardingEmails(
-              newSession.user.email,
-              newSession.user.name
-            );
+          //   const emailIds = await onboardingTipsService.scheduleOnboardingEmails(
+          //     newSession.user.email,
+          //     newSession.user.name
+          //   );
 
-            // Store scheduled email IDs for potential cancellation
-            if (emailIds.length > 0) {
-              await db.update(user).set({ scheduledTipEmailIds: emailIds }).where(eq(user.id, newSession.user.id));
-            }
-          } catch (error) {
-            console.error("Error setting up onboarding emails:", error);
-          }
+          //   // Store scheduled email IDs for potential cancellation
+          //   if (emailIds.length > 0) {
+          //     await db.update(user).set({ scheduledTipEmailIds: emailIds }).where(eq(user.id, newSession.user.id));
+          //   }
+          // } catch (error) {
+          //   console.error("Error setting up onboarding emails:", error);
+          // }
         }
       }
 
