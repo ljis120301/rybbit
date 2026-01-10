@@ -1,0 +1,108 @@
+import { FastifyRequest, FastifyReply } from "fastify";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+import { DateTime } from "luxon";
+import { db } from "../../db/postgres/postgres.js";
+import { user } from "../../db/postgres/schema.js";
+import { unsubscribeContact, cancelScheduledEmail } from "../../lib/email/email.js";
+import { onboardingTipsService } from "../../services/onboardingTips/onboardingTipsService.js";
+
+// Authenticated user unsubscribe
+export const unsubscribeMarketing = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  try {
+    const userId = request.user?.id;
+    if (!userId) {
+      return reply.status(401).send({ error: "Unauthorized" });
+    }
+
+    // Get user data
+    const [userData] = await db
+      .select({
+        email: user.email,
+        scheduledTipEmailIds: user.scheduledTipEmailIds,
+      })
+      .from(user)
+      .where(eq(user.id, userId));
+
+    if (!userData) {
+      return reply.status(404).send({ error: "User not found" });
+    }
+
+    // Cancel scheduled tip emails
+    const emailIds = (userData.scheduledTipEmailIds as string[]) || [];
+    await onboardingTipsService.cancelScheduledEmails(emailIds);
+
+    // Clear the scheduled email IDs
+    await db
+      .update(user)
+      .set({
+        scheduledTipEmailIds: [],
+        updatedAt: DateTime.now().toISO(),
+      })
+      .where(eq(user.id, userId));
+
+    // Mark contact as unsubscribed in Resend
+    await unsubscribeContact(userData.email);
+
+    return reply.send({ success: true, message: "Successfully unsubscribed from marketing emails" });
+  } catch (error) {
+    console.error("Error unsubscribing from marketing emails:", error);
+    return reply.status(500).send({ error: "Failed to unsubscribe" });
+  }
+};
+
+// One-click unsubscribe handler (for List-Unsubscribe-Post header)
+// This is called by email clients when user clicks "Unsubscribe" button
+const oneClickUnsubscribeSchema = z.object({
+  email: z.string().email(),
+});
+
+export const oneClickUnsubscribeMarketing = async (
+  request: FastifyRequest<{ Querystring: { email?: string } }>,
+  reply: FastifyReply
+) => {
+  try {
+    const email = request.query.email;
+
+    if (!email) {
+      return reply.status(400).send({ error: "Email is required" });
+    }
+
+    // Find user by email
+    const [userData] = await db
+      .select({
+        id: user.id,
+        scheduledTipEmailIds: user.scheduledTipEmailIds,
+      })
+      .from(user)
+      .where(eq(user.email, email));
+
+    if (userData) {
+      // Cancel scheduled tip emails
+      const emailIds = (userData.scheduledTipEmailIds as string[]) || [];
+      await onboardingTipsService.cancelScheduledEmails(emailIds);
+
+      // Clear the scheduled email IDs
+      await db
+        .update(user)
+        .set({
+          scheduledTipEmailIds: [],
+          updatedAt: DateTime.now().toISO(),
+        })
+        .where(eq(user.id, userData.id));
+    }
+
+    // Mark contact as unsubscribed in Resend (even if user not found in our DB)
+    await unsubscribeContact(email);
+
+    // For one-click unsubscribe, return 200 OK as per RFC 8058
+    return reply.status(200).send();
+  } catch (error) {
+    console.error("Error in one-click unsubscribe:", error);
+    // Still return 200 to not confuse email clients
+    return reply.status(200).send();
+  }
+};

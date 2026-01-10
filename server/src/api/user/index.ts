@@ -6,6 +6,7 @@ export { listOrganizationMembers } from "./listOrganizationMembers.js";
 
 // Account Settings
 export { updateAccountSettings } from "./updateAccountSettings.js";
+export { unsubscribeMarketing, oneClickUnsubscribeMarketing } from "./unsubscribeMarketing.js";
 
 // API Keys
 export { listApiKeys } from "./listApiKeys.js";

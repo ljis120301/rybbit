@@ -9,7 +9,8 @@ import { db } from "../db/postgres/postgres.js";
 import * as schema from "../db/postgres/schema.js";
 import { invitation, member, memberSiteAccess, user } from "../db/postgres/schema.js";
 import { DISABLE_SIGNUP, IS_CLOUD } from "./const.js";
-import { sendInvitationEmail, sendOtpEmail, sendWelcomeEmail } from "./email/email.js";
+import { addContactToAudience, sendInvitationEmail, sendOtpEmail, sendWelcomeEmail } from "./email/email.js";
+import { onboardingTipsService } from "../services/onboardingTips/onboardingTipsService.js";
 
 dotenv.config();
 
@@ -102,6 +103,11 @@ export const auth = betterAuth({
         defaultValue: true,
         input: true,
       },
+      scheduledTipEmailIds: {
+        type: "string[]",
+        required: false,
+        defaultValue: [],
+      },
     },
     deleteUser: {
       enabled: true,
@@ -158,6 +164,23 @@ export const auth = betterAuth({
         const newSession = ctx.context.newSession;
         if (newSession) {
           sendWelcomeEmail(newSession.user.email, newSession.user.name);
+
+          // Add contact to marketing audience and schedule onboarding emails
+          try {
+            await addContactToAudience(newSession.user.email, newSession.user.name);
+
+            const emailIds = await onboardingTipsService.scheduleOnboardingEmails(
+              newSession.user.email,
+              newSession.user.name
+            );
+
+            // Store scheduled email IDs for potential cancellation
+            if (emailIds.length > 0) {
+              await db.update(user).set({ scheduledTipEmailIds: emailIds }).where(eq(user.id, newSession.user.id));
+            }
+          } catch (error) {
+            console.error("Error setting up onboarding emails:", error);
+          }
         }
       }
 

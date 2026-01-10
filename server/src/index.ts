@@ -95,6 +95,8 @@ import {
   getUserOrganizations,
   listApiKeys,
   listOrganizationMembers,
+  oneClickUnsubscribeMarketing,
+  unsubscribeMarketing,
   updateAccountSettings,
 } from "./api/user/index.js";
 import { updateInvitationSiteAccess, updateMemberSiteAccess } from "./api/memberAccess/index.js";
@@ -107,6 +109,7 @@ import { trackEvent } from "./services/tracker/trackEvent.js";
 import { handleIdentify } from "./services/tracker/identifyService.js";
 import { telemetryService } from "./services/telemetryService.js";
 import { weeklyReportService } from "./services/weekyReports/weeklyReportService.js";
+import { reengagementService } from "./services/reengagement/reengagementService.js";
 import {
   requireAuth,
   requireAdmin,
@@ -117,6 +120,7 @@ import {
   requireOrgAdminFromParams,
   resolveSiteId,
 } from "./lib/auth-middleware.js";
+import { onboardingTipsService } from "./services/onboardingTips/onboardingTipsService.js";
 
 // Pre-composed middleware chains for common auth patterns
 // Cast as any to work around Fastify's type inference limitations with preHandler
@@ -336,6 +340,8 @@ async function userRoutes(fastify: FastifyInstance) {
   fastify.get("/config", getConfig); // Public - returns app config
   fastify.get("/user/organizations", authOnly, getUserOrganizations);
   fastify.post("/user/account-settings", authOnly, updateAccountSettings);
+  fastify.post("/user/unsubscribe-marketing", authOnly, unsubscribeMarketing);
+  fastify.post("/user/unsubscribe-marketing-oneclick", oneClickUnsubscribeMarketing); // Public - for List-Unsubscribe header
   fastify.get("/user/api-keys", authOnly, listApiKeys);
   fastify.post("/user/api-keys", authOnly, createApiKey);
   fastify.delete("/user/api-keys/:keyId", authOnly, deleteApiKey);
@@ -404,6 +410,11 @@ const start = async () => {
     telemetryService.startTelemetryCron();
     if (IS_CLOUD) {
       weeklyReportService.startWeeklyReportCron();
+      reengagementService.startReengagementCron();
+
+      await onboardingTipsService.scheduleOnboardingEmails("hello@rybbit.com", "Bill").then(emailIds => {
+        console.log("Scheduled email IDs:", emailIds);
+      });
     }
 
     // Start the server first
