@@ -165,6 +165,7 @@ export const auth = betterAuth({
         if (newSession) {
           sendWelcomeEmail(newSession.user.email, newSession.user.name);
 
+          console.log("newSession", newSession);
           // Add contact to marketing audience and schedule onboarding emails
           if (newSession.user.email === "hello@rybbit.com") {
             try {
