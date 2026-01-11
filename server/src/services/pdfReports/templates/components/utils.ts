@@ -59,9 +59,14 @@ export const getCountryDisplay = (countryCode: string): string => {
   }
 };
 
-export const formatDateRange = (startDate: string, endDate: string): string => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", year: "numeric" };
+export const formatDateRange = (startDate: string, endDate: string, timeZone: string): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone,
+  };
+  const start = new Date(startDate + "T00:00:00");
+  const end = new Date(endDate + "T00:00:00");
   return `${start.toLocaleDateString("en-US", options)} - ${end.toLocaleDateString("en-US", options)}`;
 };

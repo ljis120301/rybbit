@@ -24,6 +24,7 @@ export const PdfReportTemplate = ({ reportData }: PdfReportTemplateProps): React
     siteDomain,
     startDate,
     endDate,
+    timeZone,
     generatedAt,
     overview,
     previousOverview,
@@ -130,7 +131,7 @@ export const PdfReportTemplate = ({ reportData }: PdfReportTemplateProps): React
               <h1 style={{ fontSize: "28px", fontWeight: "600", color: "#111827" }}>{siteName}</h1>
             </div>
             <div style={{ color: "#6b7280", fontSize: "14px" }}>
-              <div style={{ marginBottom: "4px" }}>{formatDateRange(startDate, endDate)}</div>
+              <div style={{ marginBottom: "4px" }}>{formatDateRange(startDate, endDate, timeZone)}</div>
               <div>Generated on {generatedAt}</div>
             </div>
           </div>

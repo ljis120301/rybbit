@@ -105,6 +105,7 @@ class PdfReportService {
       siteDomain: site.domain,
       startDate,
       endDate,
+      timeZone,
       generatedAt: DateTime.now().setZone(timeZone).toFormat("MMMM d, yyyy 'at' h:mm a ZZZZ"),
       overview,
       previousOverview,

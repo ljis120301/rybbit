@@ -35,6 +35,7 @@ export interface PdfReportData {
   siteDomain: string;
   startDate: string;
   endDate: string;
+  timeZone: string;
   generatedAt: string;
   overview: OverviewData;
   previousOverview: OverviewData | null;
