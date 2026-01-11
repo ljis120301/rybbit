@@ -55,6 +55,7 @@ import {
   gscCallback,
   selectGSCProperty,
 } from "./api/gsc/index.js";
+import { updateInvitationSiteAccess, updateMemberSiteAccess } from "./api/memberAccess/index.js";
 import {
   deleteSessionReplay,
   getSessionReplayEvents,
@@ -99,28 +100,26 @@ import {
   unsubscribeMarketing,
   updateAccountSettings,
 } from "./api/user/index.js";
-import { updateInvitationSiteAccess, updateMemberSiteAccess } from "./api/memberAccess/index.js";
 import { initializeClickhouse } from "./db/clickhouse/clickhouse.js";
 import { initPostgres } from "./db/postgres/initPostgres.js";
+import {
+  allowPublicSiteAccess,
+  requireAdmin,
+  requireAuth,
+  requireOrgAdminFromParams,
+  requireOrgMember,
+  requireSiteAccess,
+  requireSiteAdminAccess,
+  resolveSiteId,
+} from "./lib/auth-middleware.js";
 import { mapHeaders } from "./lib/auth-utils.js";
 import { auth } from "./lib/auth.js";
 import { IS_CLOUD } from "./lib/const.js";
-import { trackEvent } from "./services/tracker/trackEvent.js";
-import { handleIdentify } from "./services/tracker/identifyService.js";
-import { telemetryService } from "./services/telemetryService.js";
-import { weeklyReportService } from "./services/weekyReports/weeklyReportService.js";
 import { reengagementService } from "./services/reengagement/reengagementService.js";
-import {
-  requireAuth,
-  requireAdmin,
-  requireSiteAccess,
-  requireSiteAdminAccess,
-  allowPublicSiteAccess,
-  requireOrgMember,
-  requireOrgAdminFromParams,
-  resolveSiteId,
-} from "./lib/auth-middleware.js";
-import { onboardingTipsService } from "./services/onboardingTips/onboardingTipsService.js";
+import { telemetryService } from "./services/telemetryService.js";
+import { handleIdentify } from "./services/tracker/identifyService.js";
+import { trackEvent } from "./services/tracker/trackEvent.js";
+import { weeklyReportService } from "./services/weekyReports/weeklyReportService.js";
 
 // Pre-composed middleware chains for common auth patterns
 // Cast as any to work around Fastify's type inference limitations with preHandler
@@ -134,8 +133,6 @@ const orgAdminParams = { preHandler: [requireOrgAdminFromParams] as any };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const hasAxiom = !!(process.env.AXIOM_DATASET && process.env.AXIOM_TOKEN);
 
 const server = Fastify({
   disableRequestLogging: true,
@@ -153,45 +150,6 @@ const server = Fastify({
         destination: 1, // stdout
       },
     },
-    // transport:
-    //   process.env.NODE_ENV === "production" && IS_CLOUD && hasAxiom
-    //     ? {
-    //         targets: [
-    //           // Send to Axiom
-    //           {
-    //             target: "@axiomhq/pino",
-    //             level: process.env.LOG_LEVEL || "info",
-    //             options: {
-    //               dataset: process.env.AXIOM_DATASET,
-    //               token: process.env.AXIOM_TOKEN,
-    //             },
-    //           },
-    //           // Pretty print to stdout for Docker logs
-    //           {
-    //             target: "pino-pretty",
-    //             level: process.env.LOG_LEVEL || "info",
-    //             options: {
-    //               colorize: true,
-    //               singleLine: true,
-    //               translateTime: "HH:MM:ss",
-    //               ignore: "pid,hostname,name",
-    //               destination: 1, // stdout
-    //             },
-    //           },
-    //         ],
-    //       }
-    //     : process.env.NODE_ENV === "development"
-    //       ? {
-    //           target: "pino-pretty",
-    //           options: {
-    //             colorize: true,
-    //             singleLine: true,
-    //             translateTime: "HH:MM:ss",
-    //             ignore: "pid,hostname,name",
-    //           },
-    //         }
-    //       : undefined, // Production without Axiom - plain JSON to stdout
-
     serializers: {
       req(request) {
         return {

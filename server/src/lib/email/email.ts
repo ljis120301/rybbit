@@ -10,7 +10,6 @@ import { WeeklyReportEmail } from "./templates/WeeklyReportEmail.js";
 import type { OrganizationReport } from "../../services/weekyReports/weeklyReportTypes.js";
 import type { OnboardingTipContent } from "../../services/onboardingTips/onboardingTipsContent.js";
 import type { ReengagementContent } from "../../services/reengagement/reengagementContent.js";
-import { logger } from "../logger/logger.js";
 
 let resend: Resend | undefined;
 let marketingAudienceId: string | null = null;
