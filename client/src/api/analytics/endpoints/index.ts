@@ -128,3 +128,7 @@ export type {
   GetSessionReplayEventsResponse,
   SessionReplaysParams,
 } from "./sessionReplay";
+
+// Export endpoints
+export { exportPdfReport } from "./export";
+export type { ExportPdfParams } from "./export";

@@ -23,7 +23,7 @@ export function ShareSite() {
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" onClick={() => {}} className="h-8 w-8">
-              <Share />
+              <Share className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>

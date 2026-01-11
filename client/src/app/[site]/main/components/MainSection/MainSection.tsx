@@ -10,7 +10,6 @@ import { useWhiteLabel } from "../../../../../hooks/useIsWhiteLabel";
 import { authClient } from "../../../../../lib/auth";
 import { useStore } from "../../../../../lib/store";
 import { cn } from "../../../../../lib/utils";
-import { ExportButton } from "../ExportButton";
 import { Chart } from "./Chart";
 import { Overview } from "./Overview";
 import { PreviousChart } from "./PreviousChart";
@@ -87,14 +86,7 @@ export function MainSection() {
               )}
             </div>
             <span className="text-sm text-neutral-700 dark:text-neutral-200">{SELECTED_STAT_MAP[selectedStat]}</span>
-            <div className="flex items-center">
-              <div className="hidden md:block">
-                <ExportButton />
-              </div>
-              <div className="pl-1">
-                <BucketSelection />
-              </div>
-            </div>
+            <BucketSelection />
           </div>
           <div className="h-[200px] md:h-[290px] relative">
             <div className="absolute top-0 left-0 w-full h-full">
