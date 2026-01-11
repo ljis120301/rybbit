@@ -8,6 +8,7 @@ import { Filters } from "./Filters/Filters";
 import { DateSelector } from "../../../../components/DateSelector/DateSelector";
 import { authClient } from "../../../../lib/auth";
 import { MobileSidebar } from "../Sidebar/MobileSidebar";
+import { ExportButton } from "./Export";
 import { NewFilterButton } from "./Filters/NewFilterButton";
 import { LiveUserCount } from "./LiveUserCount";
 import { ShareSite } from "./ShareSite";
@@ -28,6 +29,9 @@ export function SubHeader({ availableFilters }: { availableFilters?: FilterParam
         <div className="flex items-center gap-2">
           <LiveUserCount />
           {session.data && <ShareSite />}
+          <div className="hidden md:block">
+            <ExportButton />
+          </div>
           <DateSelector time={time} setTime={setTime} />
           <div className="flex items-center">
             <Button

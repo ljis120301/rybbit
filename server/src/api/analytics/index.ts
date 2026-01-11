@@ -23,6 +23,9 @@ export { getPerformanceByDimension } from "./performance/getPerformanceByDimensi
 export { getPerformanceOverview } from "./performance/getPerformanceOverview.js";
 export { getPerformanceTimeSeries } from "./performance/getPerformanceTimeSeries.js";
 
+// Export
+export { generatePdfReport } from "./generatePdfReport.js";
+
 // Core Analytics
 export { getErrorBucketed } from "./getErrorBucketed.js";
 export { getErrorEvents } from "./getErrorEvents.js";

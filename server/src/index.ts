@@ -15,6 +15,7 @@ import {
   createGoal,
   deleteFunnel,
   deleteGoal,
+  generatePdfReport,
   getErrorBucketed,
   getErrorEvents,
   getErrorNames,
@@ -255,11 +256,10 @@ async function analyticsRoutes(fastify: FastifyInstance) {
   fastify.get("/sites/:siteId/events/properties", publicSite, getEventProperties);
   fastify.get("/sites/:siteId/events/outbound", publicSite, getOutboundLinks);
   fastify.get("/org-event-count/:organizationId", orgMember, getOrgEventCount);
-
-  // Performance Analytics
   fastify.get("/sites/:siteId/performance/overview", publicSite, getPerformanceOverview);
   fastify.get("/sites/:siteId/performance/time-series", publicSite, getPerformanceTimeSeries);
   fastify.get("/sites/:siteId/performance/by-dimension", publicSite, getPerformanceByDimension);
+  fastify.get("/sites/:siteId/export/pdf", publicSite, generatePdfReport);
 }
 
 async function sessionReplayRoutes(fastify: FastifyInstance) {
@@ -377,11 +377,10 @@ server.register(apiRoutes, { prefix: "/api" });
 
 const start = async () => {
   try {
-    console.info("Starting server...");
     await Promise.all([initializeClickhouse(), initPostgres()]);
 
     telemetryService.startTelemetryCron();
-    if (IS_CLOUD) {
+    if (IS_CLOUD && process.env.NODE_ENV !== "development") {
       weeklyReportService.startWeeklyReportCron();
       reengagementService.startReengagementCron();
     }
