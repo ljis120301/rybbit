@@ -128,12 +128,30 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        after: async () => {
+        after: async u => {
+          console.log(u);
           const users = await db.select().from(schema.user).orderBy(asc(user.createdAt));
 
           // If this is the first user, make them an admin
           if (users.length === 1) {
             await db.update(user).set({ role: "admin" }).where(eq(user.id, users[0].id));
+          }
+
+          sendWelcomeEmail(u.email, u.name);
+          // Add contact to marketing audience and schedule onboarding emails
+          if (u.email === "hello@rybbit.com") {
+            try {
+              await addContactToAudience(u.email, u.name);
+
+              const emailIds = await onboardingTipsService.scheduleOnboardingEmails(u.email, u.name);
+
+              // Store scheduled email IDs for potential cancellation
+              if (emailIds.length > 0) {
+                await db.update(user).set({ scheduledTipEmailIds: emailIds }).where(eq(user.id, u.id));
+              }
+            } catch (error) {
+              console.error("Error setting up onboarding emails:", error);
+            }
           }
         },
       },
@@ -160,34 +178,6 @@ export const auth = betterAuth({
   },
   hooks: {
     after: createAuthMiddleware(async ctx => {
-      if (ctx.path.startsWith("/sign-up") && IS_CLOUD) {
-        const newSession = ctx.context.newSession;
-        console.log("newSession", newSession);
-        if (newSession) {
-          sendWelcomeEmail(newSession.user.email, newSession.user.name);
-
-          console.log("newSession", newSession);
-          // Add contact to marketing audience and schedule onboarding emails
-          if (newSession.user.email === "hello@rybbit.com") {
-            try {
-              await addContactToAudience(newSession.user.email, newSession.user.name);
-
-              const emailIds = await onboardingTipsService.scheduleOnboardingEmails(
-                newSession.user.email,
-                newSession.user.name
-              );
-
-              // Store scheduled email IDs for potential cancellation
-              if (emailIds.length > 0) {
-                await db.update(user).set({ scheduledTipEmailIds: emailIds }).where(eq(user.id, newSession.user.id));
-              }
-            } catch (error) {
-              console.error("Error setting up onboarding emails:", error);
-            }
-          }
-        }
-      }
-
       // Handle invitation acceptance - copy site access from invitation to member
       if (ctx.path === "/organization/accept-invitation") {
         try {
