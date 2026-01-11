@@ -103,11 +103,11 @@ export const auth = betterAuth({
         defaultValue: true,
         input: true,
       },
-      scheduledTipEmailIds: {
-        type: "string[]",
-        required: false,
-        defaultValue: [],
-      },
+      // scheduledTipEmailIds: {
+      //   type: "string[]",
+      //   required: false,
+      //   defaultValue: [],
+      // },
     },
     deleteUser: {
       enabled: true,
