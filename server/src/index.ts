@@ -142,44 +142,56 @@ const server = Fastify({
   logger: {
     // level: process.env.LOG_LEVEL || (process.env.NODE_ENV === "development" ? "debug" : "info"),
     level: "debug",
-    transport:
-      process.env.NODE_ENV === "production" && IS_CLOUD && hasAxiom
-        ? {
-            targets: [
-              // Send to Axiom
-              {
-                target: "@axiomhq/pino",
-                level: process.env.LOG_LEVEL || "info",
-                options: {
-                  dataset: process.env.AXIOM_DATASET,
-                  token: process.env.AXIOM_TOKEN,
-                },
-              },
-              // Pretty print to stdout for Docker logs
-              {
-                target: "pino-pretty",
-                level: process.env.LOG_LEVEL || "info",
-                options: {
-                  colorize: true,
-                  singleLine: true,
-                  translateTime: "HH:MM:ss",
-                  ignore: "pid,hostname,name",
-                  destination: 1, // stdout
-                },
-              },
-            ],
-          }
-        : process.env.NODE_ENV === "development"
-          ? {
-              target: "pino-pretty",
-              options: {
-                colorize: true,
-                singleLine: true,
-                translateTime: "HH:MM:ss",
-                ignore: "pid,hostname,name",
-              },
-            }
-          : undefined, // Production without Axiom - plain JSON to stdout
+    transport: {
+      target: "pino-pretty",
+      level: process.env.LOG_LEVEL || "debug",
+      options: {
+        colorize: true,
+        singleLine: true,
+        translateTime: "HH:MM:ss",
+        ignore: "pid,hostname,name",
+        destination: 1, // stdout
+      },
+    },
+    // transport:
+    //   process.env.NODE_ENV === "production" && IS_CLOUD && hasAxiom
+    //     ? {
+    //         targets: [
+    //           // Send to Axiom
+    //           {
+    //             target: "@axiomhq/pino",
+    //             level: process.env.LOG_LEVEL || "info",
+    //             options: {
+    //               dataset: process.env.AXIOM_DATASET,
+    //               token: process.env.AXIOM_TOKEN,
+    //             },
+    //           },
+    //           // Pretty print to stdout for Docker logs
+    //           {
+    //             target: "pino-pretty",
+    //             level: process.env.LOG_LEVEL || "info",
+    //             options: {
+    //               colorize: true,
+    //               singleLine: true,
+    //               translateTime: "HH:MM:ss",
+    //               ignore: "pid,hostname,name",
+    //               destination: 1, // stdout
+    //             },
+    //           },
+    //         ],
+    //       }
+    //     : process.env.NODE_ENV === "development"
+    //       ? {
+    //           target: "pino-pretty",
+    //           options: {
+    //             colorize: true,
+    //             singleLine: true,
+    //             translateTime: "HH:MM:ss",
+    //             ignore: "pid,hostname,name",
+    //           },
+    //         }
+    //       : undefined, // Production without Axiom - plain JSON to stdout
+
     serializers: {
       req(request) {
         return {
