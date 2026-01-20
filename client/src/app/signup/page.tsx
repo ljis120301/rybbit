@@ -403,7 +403,9 @@ function SignupPageContent() {
         </div>
 
         <div className="flex-1 flex flex-col justify-center w-full max-w-[550px] mx-auto">
-          <h1 className="text-lg text-neutral-600 dark:text-neutral-300 mb-6">Get started with Rybbit</h1>
+          <h1 className="text-lg text-neutral-600 dark:text-neutral-300 mb-6">
+            {IS_WHITE_LABEL ? "Get started with Rubypowered" : "Get started with Rybbit"}
+          </h1>
 
           {/* Horizontal step indicator */}
           <div className="flex items-center w-full mb-8">
