@@ -145,15 +145,29 @@ describe("getFilterStatement", () => {
 
   describe("Contains filters", () => {
     it("should handle contains filter with LIKE and wildcards", () => {
-      const filters = JSON.stringify([{ parameter: "pathname", type: "contains", value: ["/blog"] }]);
+      const filters = JSON.stringify([{ parameter: "browser", type: "contains", value: ["Chrome"] }]);
       const result = getFilterStatement(filters);
-      expect(result).toBe("AND pathname LIKE '%/blog%'");
+      expect(result).toBe("AND browser LIKE '%Chrome%'");
     });
 
     it("should handle not_contains filter", () => {
+      const filters = JSON.stringify([{ parameter: "browser", type: "not_contains", value: ["Firefox"] }]);
+      const result = getFilterStatement(filters);
+      expect(result).toBe("AND browser NOT LIKE '%Firefox%'");
+    });
+
+    it("should handle pathname contains filter as session-level subquery", () => {
+      const filters = JSON.stringify([{ parameter: "pathname", type: "contains", value: ["/blog"] }]);
+      const result = getFilterStatement(filters);
+      expect(result).toContain("session_id IN");
+      expect(result).toContain("pathname LIKE '%/blog%'");
+    });
+
+    it("should handle pathname not_contains filter as session-level subquery", () => {
       const filters = JSON.stringify([{ parameter: "pathname", type: "not_contains", value: ["/admin"] }]);
       const result = getFilterStatement(filters);
-      expect(result).toBe("AND pathname NOT LIKE '%/admin%'");
+      expect(result).toContain("session_id IN");
+      expect(result).toContain("pathname NOT LIKE '%/admin%'");
     });
   });
 

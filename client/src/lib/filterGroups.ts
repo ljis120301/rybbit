@@ -26,7 +26,7 @@ const BASE_FILTERS: FilterParameter[] = [
   "lon",
 ];
 
-export const SESSION_PAGE_FILTERS: FilterParameter[] = [...BASE_FILTERS, "entry_page", "exit_page", "event_name"];
+export const SESSION_PAGE_FILTERS: FilterParameter[] = [...BASE_FILTERS, "pathname", "entry_page", "exit_page", "event_name"];
 
 export const EVENT_FILTERS: FilterParameter[] = [
   ...BASE_FILTERS,

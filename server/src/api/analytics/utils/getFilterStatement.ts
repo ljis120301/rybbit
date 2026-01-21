@@ -106,6 +106,46 @@ export function getFilterStatement(filters: string, siteId?: number, timeStateme
           )`;
         }
 
+        // Handle pathname as a session-level filter (for non-regex filter types)
+        // This filters to sessions that visited a specific page at any point
+        if (filter.parameter === "pathname" && filter.type !== "regex" && filter.type !== "not_regex") {
+          const whereClause = [siteIdFilter, timeFilter].filter(Boolean).join(" AND ");
+          const pathnameCondition =
+            filter.value.length === 1
+              ? `pathname ${filterTypeToOperator(filter.type)} ${SqlString.escape(x + filter.value[0] + x)}`
+              : `(${filter.value.map(value => `pathname ${filterTypeToOperator(filter.type)} ${SqlString.escape(x + value + x)}`).join(" OR ")})`;
+
+          const finalWhere = whereClause
+            ? `WHERE ${whereClause} AND ${pathnameCondition}`
+            : `WHERE ${pathnameCondition}`;
+
+          return `session_id IN (
+            SELECT DISTINCT session_id
+            FROM events
+            ${finalWhere}
+          )`;
+        }
+
+        // Handle page_title as a session-level filter (for non-regex filter types)
+        // This filters to sessions that viewed a page with a specific title at any point
+        if (filter.parameter === "page_title" && filter.type !== "regex" && filter.type !== "not_regex") {
+          const whereClause = [siteIdFilter, timeFilter].filter(Boolean).join(" AND ");
+          const pageTitleCondition =
+            filter.value.length === 1
+              ? `page_title ${filterTypeToOperator(filter.type)} ${SqlString.escape(x + filter.value[0] + x)}`
+              : `(${filter.value.map(value => `page_title ${filterTypeToOperator(filter.type)} ${SqlString.escape(x + value + x)}`).join(" OR ")})`;
+
+          const finalWhere = whereClause
+            ? `WHERE ${whereClause} AND ${pageTitleCondition}`
+            : `WHERE ${pageTitleCondition}`;
+
+          return `session_id IN (
+            SELECT DISTINCT session_id
+            FROM events
+            ${finalWhere}
+          )`;
+        }
+
         if (filter.parameter === "entry_page") {
           const whereClause = [siteIdFilter, timeFilter].filter(Boolean).join(" AND ");
           const whereStatement = whereClause ? `WHERE ${whereClause}` : "";
