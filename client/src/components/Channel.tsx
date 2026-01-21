@@ -134,13 +134,24 @@ export const extractDomain = (url: string): string | null => {
   }
 };
 
-export function Channel({ channel, referrer }: { channel: string; referrer: string }) {
+export function Channel({
+  channel,
+  referrer,
+  onClick,
+}: {
+  channel: string;
+  referrer: string;
+  onClick?: (e: React.MouseEvent) => void;
+}) {
   const domain = extractDomain(referrer);
 
   if (domain) {
     const displayName = getDisplayName(domain);
     return (
-      <Badge className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+      <Badge
+        className={`flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 ${onClick ? "cursor-pointer hover:opacity-70" : ""}`}
+        onClick={onClick}
+      >
         <Favicon domain={domain} className="w-4 h-4" />
         <span>{displayName}</span>
       </Badge>
@@ -148,7 +159,10 @@ export function Channel({ channel, referrer }: { channel: string; referrer: stri
   }
 
   return (
-    <Badge className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+    <Badge
+      className={`flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 ${onClick ? "cursor-pointer hover:opacity-70" : ""}`}
+      onClick={onClick}
+    >
       <ChannelIcon channel={channel} />
       <span>{channel}</span>
     </Badge>

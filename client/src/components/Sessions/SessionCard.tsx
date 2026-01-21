@@ -1,9 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { getTimezone } from "@/lib/store";
+import { addFilter, getTimezone } from "@/lib/store";
 import { ArrowRight, ChevronDown, ChevronRight, Video } from "lucide-react";
 import { DateTime } from "luxon";
-import { memo, useState } from "react";
+import { FilterParameter } from "@rybbit/shared";
+import { memo, useCallback, useState } from "react";
 import { GetSessionsResponse } from "../../api/analytics/endpoints";
 import { formatShortDuration, hour12, userLocale } from "../../lib/dateTimeUtils";
 import { cn, formatter, getUserDisplayName, truncateString } from "../../lib/utils";
@@ -45,6 +46,19 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
     }
   };
 
+  const handleFilterClick = useCallback(
+    (e: React.MouseEvent, parameter: FilterParameter, value: string | undefined) => {
+      e.stopPropagation();
+      if (!value) return;
+      addFilter({
+        parameter,
+        value: [value],
+        type: "equals",
+      });
+    },
+    []
+  );
+
   return (
     <div className="rounded-lg bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-850 overflow-hidden">
       <div className="p-3 cursor-pointer" onClick={handleCardClick}>
@@ -76,17 +90,28 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
           {/* Bottom row on mobile - Icons, badges, channel */}
           <div className="flex items-center gap-2 flex-wrap">
             {session.country && (
-              <CountryFlagTooltipIcon country={session.country} city={session.city} region={session.region} />
+              <CountryFlagTooltipIcon
+                country={session.country}
+                city={session.city}
+                region={session.region}
+                onClick={e => handleFilterClick(e, "country", session.country)}
+              />
             )}
-            <BrowserTooltipIcon browser={session.browser || "Unknown"} browser_version={session.browser_version} />
+            <BrowserTooltipIcon
+              browser={session.browser || "Unknown"}
+              browser_version={session.browser_version}
+              onClick={e => handleFilterClick(e, "browser", session.browser)}
+            />
             <OperatingSystemTooltipIcon
               operating_system={session.operating_system || ""}
               operating_system_version={session.operating_system_version}
+              onClick={e => handleFilterClick(e, "operating_system", session.operating_system)}
             />
             <DeviceTypeTooltipIcon
               device_type={session.device_type || ""}
               screen_width={session.screen_width}
               screen_height={session.screen_height}
+              onClick={e => handleFilterClick(e, "device_type", session.device_type)}
             />
             {session.has_replay === 1 && (
               <Tooltip>
@@ -122,7 +147,11 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
               </TooltipTrigger>
               <TooltipContent>Events</TooltipContent>
             </Tooltip>
-            <Channel channel={session.channel} referrer={session.referrer} />
+            <Channel
+              channel={session.channel}
+              referrer={session.referrer}
+              onClick={e => handleFilterClick(e, "channel", session.channel)}
+            />
           </div>
         </div>
 
@@ -145,17 +174,28 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
           {/* Icons section */}
           <div className="flex space-x-2 items-center">
             {session.country && (
-              <CountryFlagTooltipIcon country={session.country} city={session.city} region={session.region} />
+              <CountryFlagTooltipIcon
+                country={session.country}
+                city={session.city}
+                region={session.region}
+                onClick={e => handleFilterClick(e, "country", session.country)}
+              />
             )}
-            <BrowserTooltipIcon browser={session.browser || "Unknown"} browser_version={session.browser_version} />
+            <BrowserTooltipIcon
+              browser={session.browser || "Unknown"}
+              browser_version={session.browser_version}
+              onClick={e => handleFilterClick(e, "browser", session.browser)}
+            />
             <OperatingSystemTooltipIcon
               operating_system={session.operating_system || ""}
               operating_system_version={session.operating_system_version}
+              onClick={e => handleFilterClick(e, "operating_system", session.operating_system)}
             />
             <DeviceTypeTooltipIcon
               device_type={session.device_type || ""}
               screen_width={session.screen_width}
               screen_height={session.screen_height}
+              onClick={e => handleFilterClick(e, "device_type", session.device_type)}
             />
             {session.has_replay === 1 && (
               <Tooltip>
@@ -191,14 +231,21 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
               </TooltipTrigger>
               <TooltipContent>Events</TooltipContent>
             </Tooltip>
-            <Channel channel={session.channel} referrer={session.referrer} />
+            <Channel
+              channel={session.channel}
+              referrer={session.referrer}
+              onClick={e => handleFilterClick(e, "channel", session.channel)}
+            />
           </div>
 
           {/* Pages section with tooltips for long paths */}
           <div className="items-center ml-3 flex-1 min-w-0 flex">
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-[200px] inline-block">
+                <span
+                  className="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-[200px] inline-block cursor-pointer hover:opacity-70"
+                  onClick={e => handleFilterClick(e, "entry_page", session.entry_page)}
+                >
                   {truncateString(session.entry_page, 32)}
                 </span>
               </TooltipTrigger>
@@ -211,7 +258,10 @@ export function SessionCard({ session, onClick, userId, expandedByDefault }: Ses
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-[200px] inline-block">
+                <span
+                  className="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-[200px] inline-block cursor-pointer hover:opacity-70"
+                  onClick={e => handleFilterClick(e, "exit_page", session.exit_page)}
+                >
                   {truncateString(session.exit_page, 32)}
                 </span>
               </TooltipTrigger>
