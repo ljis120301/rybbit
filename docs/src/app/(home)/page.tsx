@@ -386,7 +386,7 @@ export default function HomePage() {
               return (
                 <div
                   key={feature.title}
-                  className="bg-neutral-100/50 dark:bg-neutral-900 border border-neutral-300/50 dark:border-neutral-800/50 rounded-lg p-5 transition-colors"
+                  className="bg-neutral-100/50 dark:bg-neutral-800/20 border border-neutral-300/50 dark:border-neutral-800/50 rounded-lg p-5 transition-colors"
                 >
                   <h3 className="font-semibold mb-2 flex items-center gap-2">
                     <Icon size={20} className="text-neutral-600 dark:text-neutral-400" />

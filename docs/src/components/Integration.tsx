@@ -87,8 +87,8 @@ const PlatformLogo = ({ name, icon: Icon, path }: { name: string; icon: Componen
       <div
         className={cn(
           "flex flex-col justify-center gap-4 p-4 w-32",
-          "bg-neutral-100/50 dark:bg-neutral-900 backdrop-blur-sm rounded-lg",
-          "border border-neutral-300/50 dark:border-neutral-700/50 hover:border-neutral-500 dark:hover:border-neutral-500 transition-colors duration-200",
+          "bg-neutral-100/50 dark:bg-neutral-800/20 backdrop-blur-sm rounded-lg",
+          "border border-neutral-300/50 dark:border-neutral-800/50 hover:border-neutral-500 dark:hover:border-neutral-700 transition-colors duration-200",
           "cursor-pointer hover:scale-105 transition-transform"
         )}
       >

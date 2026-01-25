@@ -59,14 +59,14 @@ export function SessionReplay() {
           {/* Mock website content */}
           <div className="relative overflow-hidden">
             {/* Browser chrome */}
-            <div className="bg-neutral-300 dark:bg-neutral-800 h-7 flex items-center px-2 gap-2 rounded-t-lg">
+            <div className="bg-neutral-200 dark:bg-neutral-800 h-7 flex items-center px-2 gap-2 rounded-t-lg">
               <div className="flex gap-1">
                 <div className="w-2 h-2 rounded-full bg-red-500"></div>
                 <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
               </div>
               <div className="flex-1 mx-3">
-                <div className="bg-neutral-400 dark:bg-neutral-700 rounded px-2 py-0.5 text-[10px] text-neutral-900 dark:text-neutral-300">
+                <div className="bg-neutral-100 dark:bg-neutral-700 rounded px-2 py-0.5 text-[10px] text-neutral-900 dark:text-neutral-300">
                   https://example.com/products
                 </div>
               </div>
@@ -158,7 +158,7 @@ export function SessionReplay() {
         </div>
 
         {/* Video controls */}
-        <div className="bg-neutral-300/50 dark:bg-neutral-800/50 backdrop-blur-sm p-2 pb-10">
+        <div className="bg-neutral-100/50 dark:bg-neutral-800/20 backdrop-blur-sm p-2 pb-10">
           <div className="flex items-center gap-3">
             {/* Play/Pause button */}
             <button
