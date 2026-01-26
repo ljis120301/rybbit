@@ -9,6 +9,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { addFilter, getTimezone } from "@/lib/store";
 import { ArrowDown, ArrowUp, ArrowUpDown, Monitor, Smartphone, Tablet } from "lucide-react";
 import { DateTime } from "luxon";
 import Link from "next/link";
@@ -27,8 +28,10 @@ import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
 import { Switch } from "../../../components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../components/ui/tooltip";
+import { Info } from "lucide-react";
 import { useSetPageTitle } from "../../../hooks/useSetPageTitle";
 import { USER_PAGE_FILTERS } from "../../../lib/filterGroups";
+import { FilterParameter } from "@rybbit/shared";
 import { getCountryName, getUserDisplayName } from "../../../lib/utils";
 import { Browser } from "../components/shared/icons/Browser";
 import { CountryFlag } from "../components/shared/icons/CountryFlag";
@@ -37,6 +40,17 @@ import { SubHeader } from "../components/SubHeader/SubHeader";
 
 // Set up column helper
 const columnHelper = createColumnHelper<UsersResponse>();
+
+// Helper to add filter on click
+const handleFilterClick = (e: React.MouseEvent, parameter: FilterParameter, value: string | undefined) => {
+  e.stopPropagation();
+  if (!value) return;
+  addFilter({
+    parameter,
+    value: [value],
+    type: "equals",
+  });
+};
 
 // Create a reusable sort header component
 const SortHeader = ({ column, children }: any) => {
@@ -93,7 +107,7 @@ export default function UsersPage() {
 
   // Format relative time with special handling for times less than 1 minute
   const formatRelativeTime = (dateStr: string) => {
-    const date = DateTime.fromSQL(dateStr, { zone: "utc" }).toLocal();
+    const date = DateTime.fromSQL(dateStr, { zone: "utc" }).setZone(getTimezone());
     const diff = Math.abs(date.diffNow(["minutes"]).minutes);
 
     if (diff < 1) {
@@ -112,11 +126,12 @@ export default function UsersPage() {
         const isIdentified = !!info.row.original.identified_user_id;
         // For links: use identified_user_id for identified users, device ID for anonymous
         const linkId = isIdentified ? identifiedUserId : info.getValue();
+        const encodedLinkId = encodeURIComponent(linkId);
         const displayName = getUserDisplayName(info.row.original);
         const lastSeen = DateTime.fromSQL(info.row.original.last_seen, { zone: "utc" });
 
         return (
-          <Link href={`/${site}/user/${linkId}`} className="flex items-center gap-2">
+          <Link href={`/${site}/user/${encodedLinkId}`} className="flex items-center gap-2">
             <Avatar size={20} id={linkId as string} lastActiveTime={lastSeen} />
             <span className="max-w-32 truncate hover:underline" title={displayName}>
               {displayName}
@@ -129,17 +144,21 @@ export default function UsersPage() {
     columnHelper.accessor("country", {
       header: "Country",
       cell: info => {
+        const country = info.getValue();
         return (
-          <div className="flex items-center gap-2 whitespace-nowrap">
+          <div
+            className="flex items-center gap-2 whitespace-nowrap cursor-pointer hover:opacity-70"
+            onClick={e => handleFilterClick(e, "country", country)}
+          >
             <Tooltip>
               <TooltipTrigger asChild>
-                <CountryFlag country={info.getValue() || ""} />
+                <CountryFlag country={country || ""} />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{info.getValue() ? getCountryName(info.getValue()) : "Unknown"}</p>
+                <p>{country ? getCountryName(country) : "Unknown"}</p>
               </TooltipContent>
             </Tooltip>
-            {info.row.original.city || info.row.original.region || getCountryName(info.getValue())}
+            {info.row.original.city || info.row.original.region || getCountryName(country)}
           </div>
         );
       },
@@ -154,7 +173,10 @@ export default function UsersPage() {
         if (domain) {
           const displayName = getDisplayName(domain);
           return (
-            <div className="flex items-center gap-2">
+            <div
+              className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+              onClick={e => handleFilterClick(e, "channel", channel)}
+            >
               <Favicon domain={domain} className="w-4 h-4" />
               <span>{displayName}</span>
             </div>
@@ -162,7 +184,10 @@ export default function UsersPage() {
         }
 
         return (
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2 cursor-pointer hover:opacity-70"
+            onClick={e => handleFilterClick(e, "channel", channel)}
+          >
             <ChannelIcon channel={channel} />
             <span>{channel}</span>
           </div>
@@ -171,28 +196,43 @@ export default function UsersPage() {
     }),
     columnHelper.accessor("browser", {
       header: "Browser",
-      cell: info => (
-        <div className="flex items-center gap-2 whitespace-nowrap">
-          <Browser browser={info.getValue() || "Unknown"} />
-          {info.getValue() || "Unknown"}
-        </div>
-      ),
+      cell: info => {
+        const browser = info.getValue();
+        return (
+          <div
+            className="flex items-center gap-2 whitespace-nowrap cursor-pointer hover:opacity-70"
+            onClick={e => handleFilterClick(e, "browser", browser)}
+          >
+            <Browser browser={browser || "Unknown"} />
+            {browser || "Unknown"}
+          </div>
+        );
+      },
     }),
     columnHelper.accessor("operating_system", {
       header: "OS",
-      cell: info => (
-        <div className="flex items-center gap-2 whitespace-nowrap">
-          <OperatingSystem os={info.getValue() || ""} />
-          {info.getValue() || "Unknown"}
-        </div>
-      ),
+      cell: info => {
+        const os = info.getValue();
+        return (
+          <div
+            className="flex items-center gap-2 whitespace-nowrap cursor-pointer hover:opacity-70"
+            onClick={e => handleFilterClick(e, "operating_system", os)}
+          >
+            <OperatingSystem os={os || ""} />
+            {os || "Unknown"}
+          </div>
+        );
+      },
     }),
     columnHelper.accessor("device_type", {
       header: "Device",
       cell: info => {
         const deviceType = info.getValue();
         return (
-          <div className="flex items-center gap-2 whitespace-nowrap">
+          <div
+            className="flex items-center gap-2 whitespace-nowrap cursor-pointer hover:opacity-70"
+            onClick={e => handleFilterClick(e, "device_type", deviceType)}
+          >
             {deviceType === "Desktop" && <Monitor className="w-4 h-4" />}
             {deviceType === "Mobile" && <Smartphone className="w-4 h-4" />}
             {deviceType === "Tablet" && <Tablet className="w-4 h-4" />}
@@ -219,7 +259,7 @@ export default function UsersPage() {
       cell: info => {
         const date = DateTime.fromSQL(info.getValue(), {
           zone: "utc",
-        }).toLocal();
+        }).setZone(getTimezone());
         const formattedDate = date.toLocaleString(DateTime.DATETIME_SHORT);
         const relativeTime = formatRelativeTime(info.getValue());
 
@@ -242,7 +282,7 @@ export default function UsersPage() {
       cell: info => {
         const date = DateTime.fromSQL(info.getValue(), {
           zone: "utc",
-        }).toLocal();
+        }).setZone(getTimezone());
         const formattedDate = date.toLocaleString(DateTime.DATETIME_SHORT);
         const relativeTime = formatRelativeTime(info.getValue());
 
@@ -299,6 +339,16 @@ export default function UsersPage() {
           <Label htmlFor="identified-only" className="text-sm text-neutral-600 dark:text-neutral-400 cursor-pointer">
             Identified only
           </Label>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="https://www.rybbit.io/docs/identify-users" target="_blank">
+                <Info className="h-4 w-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 cursor-pointer" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Learn how to identify users</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="rounded-md border border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900">
           <div className="relative overflow-x-auto">
@@ -345,7 +395,7 @@ export default function UsersPage() {
                   table.getRowModel().rows.map(row => {
                     // Use identified_user_id for identified users, device ID (user_id) for anonymous
                     const linkId = row.original.identified_user_id || row.original.user_id;
-                    const href = `/${site}/user/${linkId}`;
+                    const href = `/${site}/user/${encodeURIComponent(linkId)}`;
 
                     return (
                       <tr key={row.id} className="border-b border-neutral-100 dark:border-neutral-800 group">

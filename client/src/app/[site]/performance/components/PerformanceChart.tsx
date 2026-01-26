@@ -13,11 +13,12 @@ import { BucketSelection } from "../../../../components/BucketSelection";
 import { RybbitLogo } from "../../../../components/RybbitLogo";
 import { authClient } from "../../../../lib/auth";
 import { formatChartDateTime, hour12, userLocale } from "../../../../lib/dateTimeUtils";
-import { useStore } from "../../../../lib/store";
+import { getTimezone, useStore } from "../../../../lib/store";
 import { cn } from "../../../../lib/utils";
 import { usePerformanceStore } from "../performanceStore";
 import { formatMetricValue, getMetricUnit, getPerformanceThresholds, METRIC_LABELS } from "../utils/performanceUtils";
 import { ChartTooltip } from "../../../../components/charts/ChartTooltip";
+import { useWhiteLabel } from "../../../../hooks/useIsWhiteLabel";
 
 const tilt_wrap = Tilt_Warp({
   subsets: ["latin"],
@@ -29,6 +30,8 @@ export function PerformanceChart() {
   const { site, bucket } = useStore();
   const { selectedPerformanceMetric, selectedPercentile } = usePerformanceStore();
   const nivoTheme = useNivoTheme();
+  const { isWhiteLabel } = useWhiteLabel();
+  const timezone = getTimezone();
 
   // State for toggling percentile visibility
   const [visiblePercentiles, setVisiblePercentiles] = useState<Set<string>>(new Set(["P50", "P75", "P90", "P99"]));
@@ -57,8 +60,8 @@ export function PerformanceChart() {
   const processedData =
     timeSeriesData?.data
       ?.map((item: any) => {
-        // Parse timestamp properly using luxon (same as Chart.tsx)
-        const timestamp = DateTime.fromSQL(item.time).toUTC();
+        // Parse timestamp in the selected timezone, then convert to UTC for chart
+        const timestamp = DateTime.fromSQL(item.time, { zone: timezone }).toUTC();
 
         // Filter out dates from the future
         if (timestamp > DateTime.now()) {
@@ -127,7 +130,7 @@ export function PerformanceChart() {
   ].filter(series => series.data.length > 0 && visiblePercentiles.has(series.id));
 
   const formatXAxisValue = (value: any) => {
-    const dt = DateTime.fromJSDate(value).setLocale(userLocale);
+    const dt = DateTime.fromJSDate(value, { zone: "utc" }).setZone(timezone).setLocale(userLocale);
     if (
       bucket === "hour" ||
       bucket === "minute" ||
@@ -198,7 +201,7 @@ export function PerformanceChart() {
               className={cn("text-lg font-semibold flex items-center gap-1.5 opacity-75", tilt_wrap.className)}
             >
               <RybbitLogo width={20} height={20} />
-              rybbit.com
+              rybbit
             </Link>
           </div>
           <div className="flex items-center space-x-4">
@@ -297,7 +300,7 @@ export function PerformanceChart() {
               markers={markers}
               lineWidth={1}
               sliceTooltip={({ slice }: any) => {
-                const currentTime = DateTime.fromJSDate(new Date(slice.points[0].data.x));
+                const currentTime = DateTime.fromJSDate(new Date(slice.points[0].data.x), { zone: "utc" }).setZone(timezone);
 
                 return (
                   <ChartTooltip>

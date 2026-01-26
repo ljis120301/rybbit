@@ -109,7 +109,7 @@ function EventCard({ event, index, isNew }: { event: Event; index: number; isNew
 
   return (
     <div
-      className="absolute w-full rounded-md bg-neutral-200/50 dark:bg-neutral-800/50 overflow-hidden p-2 flex flex-col transition-all duration-500"
+      className="absolute w-full rounded-md border border-neutral-300/50 dark:border-neutral-800/50 bg-neutral-100/50 dark:bg-neutral-800/20 overflow-hidden p-2 flex flex-col transition-all duration-500"
       style={{
         transform: isAnimating && index === 0 ? `translateY(-70px)` : `translateY(${index * 70}px)`,
         opacity: isAnimating && index === 0 ? 0 : index < 4 ? 1 : 0,

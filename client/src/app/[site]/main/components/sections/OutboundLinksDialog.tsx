@@ -1,7 +1,13 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "@/components/ui/responsive-dialog";
 import { Input } from "@/components/ui/input";
+import { getTimezone } from "@/lib/store";
 import { useDebounce, useIntersectionObserver } from "@uidotdev/usehooks";
 import { DateTime } from "luxon";
 import { ChevronDown, ChevronUp, Loader2, Search, SquareArrowOutUpRight } from "lucide-react";
@@ -85,11 +91,11 @@ export function OutboundLinksDialog({ outboundLinks, expanded, close }: Outbound
   }
 
   return (
-    <Dialog open={expanded} onOpenChange={close}>
-      <DialogContent className="max-w-[1000px] w-[calc(100vw-2rem)] p-2 sm:p-4">
-        <DialogHeader>
-          <DialogTitle>Outbound Links</DialogTitle>
-        </DialogHeader>
+    <ResponsiveDialog open={expanded} onOpenChange={close}>
+      <ResponsiveDialogContent className="max-w-[1000px] w-[calc(100vw-2rem)] p-2 sm:p-4 space-y-2">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Outbound Links</ResponsiveDialogTitle>
+        </ResponsiveDialogHeader>
         <div className="relative mb-2">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-neutral-600 dark:text-neutral-400" />
           <Input
@@ -180,7 +186,7 @@ export function OutboundLinksDialog({ outboundLinks, expanded, close }: Outbound
                     <td className="px-2 py-2 text-right text-neutral-600 dark:text-neutral-300">
                       {(() => {
                         try {
-                          const dt = DateTime.fromSQL(row.lastClicked, { zone: "utc" }).toLocal();
+                          const dt = DateTime.fromSQL(row.lastClicked, { zone: "utc" }).setZone(getTimezone());
                           return dt.toRelative();
                         } catch {
                           return "-";
@@ -204,7 +210,7 @@ export function OutboundLinksDialog({ outboundLinks, expanded, close }: Outbound
             )}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

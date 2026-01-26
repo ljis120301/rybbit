@@ -140,6 +140,13 @@ const COMPARISON_FEATURES = [
         enterprise: true,
       },
       {
+        name: "API",
+        free: false,
+        standard: true,
+        pro: true,
+        enterprise: true,
+      },
+      {
         name: "Session replays",
         free: false,
         standard: false,
@@ -255,11 +262,12 @@ function FeatureCell({ value }: FeatureCellProps) {
 
 export function ComparisonSection() {
   return (
-    <section className="-mt-8 pb-8 w-full">
-      <div className="max-w-7xl mx-auto px-4 overflow-x-auto">
-        <div className="w-full border border-neutral-300/50 dark:border-neutral-800/50 rounded-lg min-w-[800px] ">
-          {/* Table Header */}
-          <div className="grid grid-cols-5 gap-0 py-6 bg-neutral-100/50 dark:bg-neutral-800/20">
+    <section className="-mt-8 pb-8 w-full relative z-10">
+      <div className="max-w-[1300px] mx-auto px-4 overflow-x-auto">
+        <div className="bg-neutral-200/40 dark:bg-neutral-900/40 p-2 rounded-3xl border border-neutral-300 dark:border-neutral-800">
+          <div className="bg-neutral-50 dark:bg-neutral-900 backdrop-blur-sm rounded-2xl border border-neutral-300 dark:border-neutral-800 overflow-hidden min-w-[800px]">
+            {/* Table Header */}
+            <div className="grid grid-cols-5 gap-0 py-6 bg-neutral-100/50 dark:bg-neutral-800/20">
             <div className="flex items-center px-6 border-r border-neutral-400/50 dark:border-neutral-700/50 text-xl font-semibold text-neutral-800 dark:text-neutral-200">
               Compare Plans
             </div>
@@ -355,6 +363,7 @@ export function ComparisonSection() {
               ))}
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>

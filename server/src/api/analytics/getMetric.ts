@@ -7,7 +7,7 @@ import { FilterParams } from "@rybbit/shared";
 
 interface GetMetricRequest {
   Params: {
-    site: string;
+    siteId: string;
   };
   Querystring: FilterParams<{
     parameter: FilterParameter;
@@ -51,7 +51,7 @@ type GetMetricPaginatedResponse = {
 
 const getQuery = (request: FastifyRequest<GetMetricRequest>, isCountQuery: boolean = false) => {
   const { filters, parameter, limit, page } = request.query;
-  const site = request.params.site;
+  const site = request.params.siteId;
 
   const timeStatement = getTimeStatement(request.query);
 
@@ -397,7 +397,7 @@ const getQuery = (request: FastifyRequest<GetMetricRequest>, isCountQuery: boole
 
 export async function getMetric(req: FastifyRequest<GetMetricRequest>, res: FastifyReply) {
   const { parameter, page } = req.query;
-  const site = req.params.site;
+  const site = req.params.siteId;
 
   const isPaginatedRequest = page !== undefined;
 

@@ -6,17 +6,17 @@ import { getUserHasAdminAccessToSite } from "../../lib/auth-utils.js";
 
 interface GetSiteParams {
   Params: {
-    id: string;
+    siteId: string;
   };
 }
 
 export async function getSite(request: FastifyRequest<GetSiteParams>, reply: FastifyReply) {
-  const { id } = request.params;
+  const { siteId } = request.params;
 
   try {
     // Get site info
     const site = await db.query.sites.findFirst({
-      where: eq(sites.siteId, Number(id)),
+      where: eq(sites.siteId, Number(siteId)),
     });
 
     if (!site) {

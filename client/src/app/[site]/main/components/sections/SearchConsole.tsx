@@ -1,16 +1,19 @@
 import { Expand, Info, Monitor, Smartphone, SquareArrowOutUpRight, Tablet } from "lucide-react";
 import { useState } from "react";
-import { useConnectGSC, useGSCConnection } from "../../../../../api/gsc/useGSCConnection";
-import { GSCDimension, useGSCData } from "../../../../../api/gsc/useGSCData";
+import { useConnectGSC } from "../../../../../api/gsc/hooks/useConnectGSC";
+import { useGetGSCConnection } from "../../../../../api/gsc/hooks/useGetGSCConnection";
+import { useGetGSCData } from "../../../../../api/gsc/hooks/useGetGSCData";
+import { GSCDimension } from "../../../../../api/gsc/endpoints";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../components/ui/basic-tabs";
 import { Button } from "../../../../../components/ui/button";
 import { Card, CardContent, CardLoader } from "../../../../../components/ui/card";
-import { formatter, getCountryName } from "../../../../../lib/utils";
+import { formatter, getCountryName, truncateString } from "../../../../../lib/utils";
 import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
 import { StandardSkeleton } from "../../../components/shared/StandardSection/Skeleton";
 import { SearchConsoleDialog } from "./SearchConsoleDialog";
 import { SiGoogle } from "@icons-pack/react-simple-icons";
 import { round } from "lodash";
+import { ScrollArea } from "../../../../../components/ui/scroll-area";
 
 type Tab = "queries" | "pages" | "countries" | "devices";
 
@@ -39,7 +42,7 @@ interface DataListProps {
 }
 
 function DataList({ dimension, label, renderName, expanded, close }: DataListProps) {
-  const { data, isLoading, isFetching } = useGSCData(dimension);
+  const { data, isLoading, isFetching } = useGetGSCData(dimension);
 
   const totalClicks = data?.reduce((acc, item) => acc + item.clicks, 0) || 0;
 
@@ -61,48 +64,52 @@ function DataList({ dimension, label, renderName, expanded, close }: DataListPro
               <div className="w-24 text-right">Impressions</div>
             </div>
           </div>
-          {data && data.length > 0 ? (
-            data.slice(0, 10).map((item, index) => {
-              const percentage = item.clicks / totalClicks;
-              return (
-                <div
-                  key={index}
-                  className="relative flex flex-row gap-2 justify-between pr-1 text-xs py-1 hover:bg-neutral-150 dark:hover:bg-neutral-850 rounded px-2 group"
-                >
-                  <div
-                    className="absolute inset-0 bg-dataviz py-2 opacity-25 rounded-md"
-                    style={{ width: `${percentage * ratio}%` }}
-                  />
-                  <div className="flex-1 truncate overflow-x-hidden z-10">
-                    {renderName ? renderName(item.name) : item.name}
-                  </div>
-                  <div className="flex flex-row gap-2 z-10">
-                    <div className="w-28 text-right pr-1 flex flex-row gap-2 items-center justify-end">
-                      <div className="hidden group-hover:block text-neutral-600 dark:text-neutral-400">
-                        {round(percentage * 100, 1)}%
+          <ScrollArea className="h-[314px]">
+            <div className="flex flex-col gap-2 overflow-x-hidden">
+              {data && data.length > 0 ? (
+                data.slice(0, 100).map((item, index) => {
+                  const percentage = item.clicks / totalClicks;
+                  return (
+                    <div
+                      key={index}
+                      className="relative flex flex-row gap-2 justify-between pr-1 text-xs py-1 hover:bg-neutral-150 dark:hover:bg-neutral-850 rounded px-2 group"
+                    >
+                      <div
+                        className="absolute inset-0 bg-dataviz py-2 opacity-25 rounded-md"
+                        style={{ width: `${percentage * ratio}%` }}
+                      />
+                      <div className="flex-1 truncate overflow-x-hidden z-10">
+                        {renderName ? renderName(item.name) : truncateString(item.name, 32)}
                       </div>
-                      {formatter(item.clicks)}
+                      <div className="flex flex-row gap-2 z-10">
+                        <div className="w-28 text-right pr-1 flex flex-row gap-2 items-center justify-end">
+                          <div className="hidden group-hover:block text-neutral-600 dark:text-neutral-400">
+                            {round(percentage * 100, 1)}%
+                          </div>
+                          {formatter(item.clicks)}
+                        </div>
+                        <div className="w-24 text-right pr-1">{formatter(item.impressions)}</div>
+                      </div>
                     </div>
-                    <div className="w-24 text-right pr-1">{formatter(item.impressions)}</div>
+                  );
+                })
+              ) : isLoading ? (
+                <StandardSkeleton />
+              ) : (
+                <div className="text-neutral-600 dark:text-neutral-300 w-full text-center mt-6 flex flex-row gap-2 items-center justify-center">
+                  <div className="text-neutral-500 dark:text-neutral-500">
+                    <div className="text-neutral-600 dark:text-neutral-300 w-full text-center flex flex-row gap-2 items-center justify-center">
+                      <Info className="w-5 h-5" />
+                      No Data
+                    </div>
+                    <div className="text-sm mt-2">
+                      Google Search Console data has a 2-3 day delay. Try selecting a wider date range.
+                    </div>
                   </div>
                 </div>
-              );
-            })
-          ) : isLoading ? (
-            <StandardSkeleton />
-          ) : (
-            <div className="text-neutral-600 dark:text-neutral-300 w-full text-center mt-6 flex flex-row gap-2 items-center justify-center">
-              <div className="text-neutral-500 dark:text-neutral-500">
-                <div className="text-neutral-600 dark:text-neutral-300 w-full text-center flex flex-row gap-2 items-center justify-center">
-                  <Info className="w-5 h-5" />
-                  No Data
-                </div>
-                <div className="text-sm mt-2">
-                  Google Search Console data has a 2-3 day delay. Try selecting a wider date range.
-                </div>
-              </div>
+              )}
             </div>
-          )}
+          </ScrollArea>
         </div>
       </div>
       <SearchConsoleDialog
@@ -120,7 +127,7 @@ export function SearchConsole() {
   const [tab, setTab] = useState<Tab>("queries");
   const [expanded, setExpanded] = useState(false);
   const close = () => setExpanded(false);
-  const { data: connection, isLoading: isLoadingConnection } = useGSCConnection();
+  const { data: connection, isLoading: isLoadingConnection } = useGetGSCConnection();
 
   const topSection = (
     <div className="flex flex-row gap-2 justify-between items-center">
@@ -173,7 +180,7 @@ export function SearchConsole() {
                   label="Page"
                   renderName={name => (
                     <div className="flex items-center gap-1">
-                      <span className="truncate">{new URL(name).pathname || "/"}</span>
+                      <span className="truncate">{truncateString(new URL(name).pathname || "/", 32)}</span>
                       <a href={name} target="_blank" rel="noopener noreferrer" className="shrink-0">
                         <SquareArrowOutUpRight
                           className="ml-0.5 w-3.5 h-3.5 text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-100"

@@ -7,6 +7,7 @@ import { sessionsService } from "../sessions/sessionsService.js";
 import { usageService } from "../usageService.js";
 import { pageviewQueue } from "./pageviewQueue.js";
 import { createBasePayload } from "./utils.js";
+import { getLocation } from "../../db/geolocation/geolocation.js";
 
 // Define Zod schema for validation
 export const trackingPayloadSchema = z.discriminatedUnion("type", [
@@ -25,7 +26,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
       event_name: z.string().max(256).optional(),
       properties: z.string().max(2048).optional(),
       user_id: z.string().max(255).optional(),
-      api_key: z.string().max(35).optional(), // rb_ prefix + 32 hex chars
       ip_address: z.string().ip().optional(), // Custom IP for geolocation
       user_agent: z.string().max(512).optional(), // Custom user agent
     })
@@ -59,7 +59,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
         )
         .optional(), // Optional but must be valid JSON if present
       user_id: z.string().max(255).optional(),
-      api_key: z.string().max(35).optional(), // rb_ prefix + 32 hex chars
       ip_address: z.string().ip().optional(), // Custom IP for geolocation
       user_agent: z.string().max(512).optional(), // Custom user agent
     })
@@ -79,7 +78,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
       event_name: z.string().max(256).optional(),
       properties: z.string().max(2048).optional(),
       user_id: z.string().max(255).optional(),
-      api_key: z.string().max(35).optional(), // rb_ prefix + 32 hex chars
       ip_address: z.string().ip().optional(), // Custom IP for geolocation
       user_agent: z.string().max(512).optional(), // Custom user agent
       // Performance metrics (can be null if not collected)
@@ -132,7 +130,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
           }
         ),
       user_id: z.string().max(255).optional(),
-      api_key: z.string().max(35).optional(), // rb_ prefix + 32 hex chars
       ip_address: z.string().ip().optional(), // Custom IP for geolocation
       user_agent: z.string().max(512).optional(), // Custom user agent
     })
@@ -187,7 +184,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
           }
         ),
       user_id: z.string().max(255).optional(),
-      api_key: z.string().max(35).optional(), // rb_ prefix + 32 hex chars
       ip_address: z.string().ip().optional(), // Custom IP for geolocation
       user_agent: z.string().max(512).optional(), // Custom user agent
     })
@@ -224,8 +220,10 @@ export async function trackEvent(request: FastifyRequest, reply: FastifyReply) {
     }
 
     // Check if bot blocking is enabled for this site and if the request is from a bot
-    // Skip bot check for API key authenticated requests
-    if (!validatedPayload.api_key && siteConfiguration.blockBots) {
+    // Skip bot check for Bearer token authenticated requests
+    const authHeader = request.headers["authorization"];
+    const hasBearerToken = typeof authHeader === "string" && authHeader.startsWith("Bearer ");
+    if (!hasBearerToken && siteConfiguration.blockBots) {
       // Use custom user agent if provided, otherwise fall back to header
       const userAgent = validatedPayload.user_agent || (request.headers["user-agent"] as string);
       if (userAgent && isbot(userAgent)) {
@@ -260,7 +258,6 @@ export async function trackEvent(request: FastifyRequest, reply: FastifyReply) {
 
     // Check if the country should be excluded from tracking
     if (siteConfiguration.excludedCountries && siteConfiguration.excludedCountries.length > 0) {
-      const { getLocation } = await import("../../db/geolocation/geolocation.js");
       const locationResults = await getLocation([requestIP]);
       const locationData = locationResults[requestIP];
 

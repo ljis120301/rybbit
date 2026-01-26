@@ -1,7 +1,7 @@
 import { ArrowRight, Crown, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import React, { ReactNode, useMemo, useRef, useEffect, useState } from "react";
-import { useCurrentSite } from "../api/admin/sites";
+import { useCurrentSite } from "../api/admin/hooks/useSites";
 import { DEFAULT_EVENT_LIMIT } from "../lib/subscription/constants";
 import { Button } from "./ui/button";
 import { authClient } from "../lib/auth";
@@ -32,7 +32,7 @@ function ownerMessage(message: string, featurePath?: string, requiredPlan?: "pro
           </p>
           {featurePath && (
             <Link
-              href={`https://${DEMO_HOSTNAME}/21/${featurePath}`}
+              href={`https://${DEMO_HOSTNAME}/1/${featurePath}`}
               target="_blank"
               className="text-sm text-neutral-100 hover:underline flex items-center gap-1"
             >
@@ -63,7 +63,7 @@ function userMessage(message: string, featurePath?: string) {
           </p>
           {featurePath && (
             <Link
-              href={`https://${DEMO_HOSTNAME}/21/${featurePath}`}
+              href={`https://${DEMO_HOSTNAME}/1/${featurePath}`}
               target="_blank"
               className="text-sm text-neutral-100 hover:underline flex items-center gap-1"
             >
@@ -171,7 +171,7 @@ export const DisabledOverlay: React.FC<DisabledOverlayProps> = ({
     };
   }, [disabled, overlayRemoved, blur]);
 
-  if (!disabled || data?.user?.role === "admin" || globalThis.location.hostname === DEMO_HOSTNAME) {
+  if (!disabled || data?.user?.role === "admin" || globalThis?.location?.hostname === DEMO_HOSTNAME) {
     return <>{children}</>;
   }
 

@@ -269,9 +269,7 @@ export function MonitorDialog({ monitor, open, onOpenChange }: MonitorDialogProp
                   (!isEdit && (isPending || !activeOrganization))
                 }
               >
-                {(createMonitor.isPending || updateMonitor.isPending) && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
+                {(createMonitor.isPending || updateMonitor.isPending) && <Loader2 className="h-4 w-4 animate-spin" />}
                 {isEdit ? "Update" : "Create"} Monitor
               </Button>
             </DialogFooter>

@@ -42,36 +42,59 @@ export type GetSessionsResponse = {
   ip: string;
   lat: number;
   lon: number;
+  has_replay: number;
 }[];
 
 export interface GetSessionsRequest {
   Params: {
-    site: string;
+    siteId: string;
   };
   Querystring: FilterParams<{
     limit: number;
     page: number;
     user_id?: string;
     identified_only?: string;
+    min_pageviews?: string;
+    min_events?: string;
+    min_duration?: string;
   }>;
 }
 
+// Field mappings for the CTE which extracts UTM params as separate columns
+const SESSION_FIELD_MAPPINGS = {
+  "url_parameters['utm_source']": "utm_source",
+  "url_parameters['utm_medium']": "utm_medium",
+  "url_parameters['utm_campaign']": "utm_campaign",
+  "url_parameters['utm_term']": "utm_term",
+  "url_parameters['utm_content']": "utm_content",
+};
+
 export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: FastifyReply) {
-  const { filters, page = 1, user_id: userId, limit = 100, identified_only: identifiedOnly = "false" } = req.query;
-  const site = req.params.site;
+  const {
+    filters,
+    page = 1,
+    user_id: userId,
+    limit = 100,
+    identified_only: identifiedOnly = "false",
+    min_pageviews: minPageviewsStr,
+    min_events: minEventsStr,
+    min_duration: minDurationStr,
+  } = req.query;
+  const site = req.params.siteId;
   const filterIdentified = identifiedOnly === "true";
+  const minPageviews = minPageviewsStr ? parseInt(minPageviewsStr, 10) : undefined;
+  const minEvents = minEventsStr ? parseInt(minEventsStr, 10) : undefined;
+  const minDuration = minDurationStr ? parseInt(minDurationStr, 10) : undefined;
 
   const timeStatement = getTimeStatement(req.query);
-  let filterStatement = getFilterStatement(filters, Number(site), timeStatement);
 
-  // Transform filter statement to use extracted UTM columns instead of map access
-  // since the CTE already extracts utm_source, utm_medium, etc. as separate columns
-  filterStatement = filterStatement
-    .replace(/url_parameters\['utm_source'\]/g, "utm_source")
-    .replace(/url_parameters\['utm_medium'\]/g, "utm_medium")
-    .replace(/url_parameters\['utm_campaign'\]/g, "utm_campaign")
-    .replace(/url_parameters\['utm_term'\]/g, "utm_term")
-    .replace(/url_parameters\['utm_content'\]/g, "utm_content");
+  // Use composable filter options:
+  // - sessionLevelParams: pathname and page_title filter at session level (finds sessions that visited a page)
+  // - fieldMappings: CTE extracts UTM params as separate columns, so we need to map the field names
+  const filterStatement = getFilterStatement(filters, Number(site), timeStatement, {
+    sessionLevelParams: ["event_name", "pathname", "page_title"],
+    fieldMappings: SESSION_FIELD_MAPPINGS,
+  });
 
   const query = `
   WITH AggregatedSessions AS (
@@ -118,12 +141,24 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       GROUP BY
           session_id
       ORDER BY session_end DESC
+  ),
+  ReplaySessions AS (
+      SELECT DISTINCT session_id
+      FROM session_replay_metadata
+      FINAL
+      WHERE site_id = {siteId:Int32}
+        AND event_count >= 2
   )
   SELECT
-      *
-  FROM AggregatedSessions
+      a.*,
+      if(r.session_id != '', 1, 0) AS has_replay
+  FROM AggregatedSessions a
+  LEFT JOIN ReplaySessions r ON a.session_id = r.session_id
   WHERE 1 = 1 ${filterStatement}
-  ${filterIdentified ? "AND identified_user_id != ''" : ""}
+  ${filterIdentified ? "AND a.identified_user_id != ''" : ""}
+  ${minPageviews !== undefined ? "AND a.pageviews >= {minPageviews:Int32}" : ""}
+  ${minEvents !== undefined ? "AND a.events >= {minEvents:Int32}" : ""}
+  ${minDuration !== undefined ? "AND a.session_duration >= {minDuration:Int32}" : ""}
   LIMIT {limit:Int32} OFFSET {offset:Int32}
   `;
 
@@ -136,6 +171,9 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
         user_id: userId,
         limit: limit || 100,
         offset: (page - 1) * (limit || 100),
+        minPageviews: minPageviews ?? 0,
+        minEvents: minEvents ?? 0,
+        minDuration: minDuration ?? 0,
       },
     });
 

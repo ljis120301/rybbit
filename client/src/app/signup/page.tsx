@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Used for disabled signup view
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { motion } from "framer-motion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 import React, { Suspense, useEffect, useState } from "react";
-import { addSite } from "../../api/admin/sites";
+import { addSite } from "../../api/admin/endpoints";
 import { RybbitLogo, RybbitTextLogo } from "../../components/RybbitLogo";
 import { SpinningGlobe } from "../../components/SpinningGlobe";
 import { useSetPageTitle } from "../../hooks/useSetPageTitle";
@@ -24,12 +24,6 @@ import { useConfigs } from "../../lib/configs";
 import { IS_CLOUD } from "../../lib/const";
 import { userStore } from "../../lib/userStore";
 import { cn, isValidDomain, normalizeDomain } from "../../lib/utils";
-
-// Animation variants for step transitions
-const contentVariants = {
-  hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
-};
 
 function SignupPageContent() {
   const { configs, isLoading: isLoadingConfigs } = useConfigs();
@@ -56,6 +50,7 @@ function SignupPageContent() {
   // Step 2: Organization creation
   const [orgName, setOrgName] = useState("");
   const [orgSlug, setOrgSlug] = useState("");
+  const [referralSource, setReferralSource] = useState("");
 
   // Step 3: Website addition
   const [organizationId, setOrganizationId] = useState("");
@@ -145,6 +140,13 @@ function SignupPageContent() {
 
       setOrganizationId(data.id);
 
+      // Track how user found Rybbit
+      if (IS_CLOUD && referralSource && userStore.getState().user?.id) {
+        window.rybbit?.identify(userStore.getState().user?.id || "", {
+          source: referralSource,
+        });
+      }
+
       setCurrentStep(3);
     } catch (error) {
       setError(String(error));
@@ -189,7 +191,7 @@ function SignupPageContent() {
     switch (currentStep) {
       case 1:
         return (
-          <motion.div initial="hidden" animate="visible" variants={contentVariants}>
+          <div>
             <h2 className="text-2xl font-semibold mb-4">Signup</h2>
             <div className="space-y-4">
               <SocialButtons onError={setError} callbackURL="/signup?step=2" mode="signup" />
@@ -240,11 +242,11 @@ function SignupPageContent() {
                 </Link>
               </div>
             </div>
-          </motion.div>
+          </div>
         );
       case 2:
         return (
-          <motion.div initial="hidden" animate="visible" variants={contentVariants}>
+          <div>
             <h2 className="text-2xl font-semibold mb-4">Create your organization</h2>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -259,6 +261,32 @@ function SignupPageContent() {
                   className="h-10 transition-all bg-neutral-100 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700"
                 />
               </div>
+
+              {IS_CLOUD && (
+                <div className="space-y-2">
+                  <Label htmlFor="referralSource">How did you find Rybbit?</Label>
+                  <Select value={referralSource} onValueChange={setReferralSource}>
+                    <SelectTrigger className="h-10 bg-neutral-100 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700">
+                      <SelectValue placeholder="Select an option" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="google">Google</SelectItem>
+                      <SelectItem value="reddit">Reddit</SelectItem>
+                      <SelectItem value="twitter">Twitter/X</SelectItem>
+                      <SelectItem value="youtube">YouTube</SelectItem>
+                      <SelectItem value="linkedin">LinkedIn</SelectItem>
+                      <SelectItem value="discord">Discord</SelectItem>
+                      <SelectItem value="producthunt">Product Hunt</SelectItem>
+                      <SelectItem value="hacker-news">Hacker News</SelectItem>
+                      <SelectItem value="github">Github</SelectItem>
+                      <SelectItem value="friends">Friends</SelectItem>
+                      <SelectItem value="work">Work</SelectItem>
+                      <SelectItem value="blog">Blog</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {/* <div className="space-y-2">
                 <Label htmlFor="orgSlug">Organization Slug</Label>
@@ -284,7 +312,7 @@ function SignupPageContent() {
                 <Button
                   className="w-full transition-all duration-300 h-11 bg-emerald-600 hover:bg-emerald-500 text-white"
                   onClick={handleOrganizationSubmit}
-                  disabled={isLoading || !orgName || !orgSlug}
+                  disabled={isLoading || !orgName || !orgSlug || (IS_CLOUD && !referralSource)}
                   variant="success"
                 >
                   Continue
@@ -295,11 +323,11 @@ function SignupPageContent() {
                 </Button>
               </div>
             </div>
-          </motion.div>
+          </div>
         );
       case 3:
         return (
-          <motion.div initial="hidden" animate="visible" variants={contentVariants}>
+          <div>
             <h2 className="text-2xl font-semibold mb-4">Add your site</h2>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -328,7 +356,7 @@ function SignupPageContent() {
                 </Button>
               </div>
             </div>
-          </motion.div>
+          </div>
         );
       default:
         return null;

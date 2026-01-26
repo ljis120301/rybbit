@@ -75,6 +75,7 @@ describe("Tracker", () => {
     });
 
     config = {
+      namespace: "rybbit",
       analyticsHost: "https://analytics.example.com",
       siteId: "123",
       debounceDuration: 0,
@@ -366,7 +367,7 @@ describe("Tracker", () => {
     it("should identify user", () => {
       tracker.identify("user-456");
 
-      expect(window.localStorage.setItem).toHaveBeenCalledWith("rybbit-user-id", "user-456");
+      expect(window.localStorage.setItem).toHaveBeenCalledWith(`${config.namespace}-user-id`, "user-456");
       expect(tracker.getUserId()).toBe("user-456");
     });
 
@@ -384,7 +385,7 @@ describe("Tracker", () => {
       tracker.identify("user-789");
       tracker.clearUserId();
 
-      expect(window.localStorage.removeItem).toHaveBeenCalledWith("rybbit-user-id");
+      expect(window.localStorage.removeItem).toHaveBeenCalledWith(`${config.namespace}-user-id`);
       expect(tracker.getUserId()).toBeNull();
     });
 

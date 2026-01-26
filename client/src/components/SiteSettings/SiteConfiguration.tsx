@@ -21,7 +21,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-import { deleteSite, SiteResponse, updateSiteConfig, useGetSitesFromOrg } from "@/api/admin/sites";
+import { deleteSite, updateSiteConfig, SiteResponse } from "@/api/admin/endpoints";
+import { useGetSitesFromOrg } from "@/api/admin/hooks/useSites";
 import { normalizeDomain } from "@/lib/utils";
 import { IPExclusionManager } from "./IPExclusionManager";
 import { CountryExclusionManager } from "./CountryExclusionManager";
@@ -297,7 +298,7 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
   );
 
   return (
-    <div className="pt-4 space-y-6 max-h-[70vh] overflow-y-auto">
+    <div className="pt-4 pb-6 space-y-6 max-h-[70vh] overflow-y-auto">
       {/* Privacy & Security Settings */}
       <div className="space-y-4">{renderToggleSection(privacyToggles, "Privacy & Security")}</div>
 

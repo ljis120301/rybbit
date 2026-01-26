@@ -72,22 +72,14 @@ export const metadata: Metadata = {
   },
 };
 
-const isDev = process.env.NODE_ENV === "development";
-
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Script src="https://demo.rybbit.com/api/script.js" data-site-id="21" />
       <Script
-        src="https://demo.rybbit.com/api/script.js"
-        data-site-id="21"
-        strategy="afterInteractive"
-        data-session-replay="true"
-        data-web-vitals="true"
-        data-track-errors="true"
-        data-track-outbound="true"
-        {...(isDev && {
-          "data-api-key": process.env.NEXT_PUBLIC_RYBBIT_API_KEY,
-        })}
+        src="https://demo.rybbit.com/api/script.js?ns=demo"
+        data-site-id="3b023d1a7895"
+        data-namespace="rybbit_demo"
       />
       <body className={`flex flex-col min-h-screen ${inter.variable} font-sans`}>
         <RootProvider

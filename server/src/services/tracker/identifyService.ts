@@ -21,7 +21,7 @@ const identifyPayloadSchema = z.object({
     .record(z.unknown())
     .optional()
     .refine(
-      (traits) => {
+      traits => {
         if (!traits) return true;
         const size = new TextEncoder().encode(JSON.stringify(traits)).length;
         return size <= MAX_TRAITS_SIZE;
@@ -78,8 +78,6 @@ export async function handleIdentify(request: FastifyRequest, reply: FastifyRepl
             anonymousId,
             userId: user_id,
           });
-
-          logger.info({ siteId, anonymousId, userId: user_id }, "Created new user alias");
         } else if (existingAlias[0].userId !== user_id) {
           // Anonymous ID already linked to a different user - log but don't error
           logger.warn(
@@ -114,9 +112,7 @@ export async function handleIdentify(request: FastifyRequest, reply: FastifyRepl
             ...((existingProfile[0].traits as Record<string, unknown>) || {}),
             ...traits,
           };
-          const mergedTraits = Object.fromEntries(
-            Object.entries(merged).filter(([_, value]) => value !== null)
-          );
+          const mergedTraits = Object.fromEntries(Object.entries(merged).filter(([_, value]) => value !== null));
 
           await db
             .update(userProfiles)
@@ -125,20 +121,14 @@ export async function handleIdentify(request: FastifyRequest, reply: FastifyRepl
               updatedAt: new Date().toISOString(),
             })
             .where(and(eq(userProfiles.siteId, siteId), eq(userProfiles.userId, user_id)));
-
-          logger.info({ siteId, userId: user_id }, "Updated user profile traits");
         } else {
           // Create new profile (filter out null values)
-          const filteredTraits = Object.fromEntries(
-            Object.entries(traits).filter(([_, value]) => value !== null)
-          );
+          const filteredTraits = Object.fromEntries(Object.entries(traits).filter(([_, value]) => value !== null));
           await db.insert(userProfiles).values({
             siteId,
             userId: user_id,
             traits: filteredTraits,
           });
-
-          logger.info({ siteId, userId: user_id }, "Created new user profile");
         }
       } catch (error) {
         logger.error({ siteId, userId: user_id, error }, "Error updating user profile");

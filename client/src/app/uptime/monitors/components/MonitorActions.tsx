@@ -92,7 +92,7 @@ export function MonitorActions({ monitor }: { monitor?: UptimeMonitor }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setShowDeleteDialog(true)} className="text-red-500 focus:text-red-600">
-              <Trash2 className="mr-2 h-4 w-4" />
+              <Trash2 className="h-4 w-4" />
               Delete Monitor
             </DropdownMenuItem>
           </DropdownMenuContent>

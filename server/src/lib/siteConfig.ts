@@ -33,7 +33,10 @@ class SiteConfig {
    * Helper to determine if the input is a numeric siteId or string id
    */
   private isNumericId(id: string | number): boolean {
-    return typeof id === "number" || /^\d+$/.test(id);
+    if (String(id).length > 4) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -91,10 +94,10 @@ class SiteConfig {
         sessionReplay: site.sessionReplay || false,
         webVitals: site.webVitals || false,
         trackErrors: site.trackErrors || false,
-        trackOutbound: site.trackOutbound || true,
-        trackUrlParams: site.trackUrlParams || true,
-        trackInitialPageView: site.trackInitialPageView || true,
-        trackSpaNavigation: site.trackSpaNavigation || true,
+        trackOutbound: site.trackOutbound ?? true,
+        trackUrlParams: site.trackUrlParams ?? true,
+        trackInitialPageView: site.trackInitialPageView ?? true,
+        trackSpaNavigation: site.trackSpaNavigation ?? true,
         trackIp: site.trackIp || false,
       };
 

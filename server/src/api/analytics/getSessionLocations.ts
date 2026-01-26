@@ -7,16 +7,16 @@ import { getFilterStatement } from "./utils/getFilterStatement.js";
 export async function getSessionLocations(
   req: FastifyRequest<{
     Params: {
-      site: string;
+      siteId: string;
     };
     Querystring: FilterParams<{}>;
   }>,
   res: FastifyReply
 ) {
-  const { site } = req.params;
+  const { siteId } = req.params;
 
   const timeStatement = getTimeStatement(req.query);
-  const filterStatement = getFilterStatement(req.query.filters, Number(site), timeStatement);
+  const filterStatement = getFilterStatement(req.query.filters, Number(siteId), timeStatement);
 
   const result = await clickhouse.query({
     query: `
@@ -50,7 +50,7 @@ GROUP BY
     city,
     country`,
     query_params: {
-      site,
+      site: siteId,
     },
     format: "JSONEachRow",
   });

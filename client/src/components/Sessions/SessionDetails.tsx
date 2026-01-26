@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { getTimezone } from "@/lib/store";
 import { ArrowRight, Clock, ExternalLink, Loader2, Monitor, Smartphone, Tablet, TriangleAlert } from "lucide-react";
 import { DateTime } from "luxon";
 import Link from "next/link";
@@ -38,13 +39,13 @@ function PageviewItem({
   const isEvent = item.type === "custom_event";
   const isPageview = item.type === "pageview";
   const isOutbound = item.type === "outbound";
-  const timestamp = DateTime.fromSQL(item.timestamp, { zone: "utc" }).toLocal();
+  const timestamp = DateTime.fromSQL(item.timestamp, { zone: "utc" }).setZone(getTimezone());
   const formattedTime = timestamp.toFormat(hour12 ? "h:mm:ss a" : "HH:mm:ss");
 
   // Calculate duration if this is a pageview and we have the next timestamp
   let duration = null;
   if (isPageview && nextTimestamp) {
-    const nextTime = DateTime.fromSQL(nextTimestamp, { zone: "utc" }).toLocal();
+    const nextTime = DateTime.fromSQL(nextTimestamp, { zone: "utc" }).setZone(getTimezone());
     const totalSeconds = Math.floor(nextTime.diff(timestamp).milliseconds / 1000);
     duration = formatDuration(totalSeconds);
   }
@@ -100,6 +101,7 @@ function PageviewItem({
                     maxWidth: "calc(min(100vw, 1150px) - 250px)",
                   }}
                 >
+                  {item.hostname}
                   {item.pathname}
                   {item.querystring ? `${item.querystring}` : ""}
                 </div>
@@ -321,7 +323,11 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
               <TabsTrigger value="info">Session Info</TabsTrigger>
             </TabsList>
             {!userId && (
-              <Link href={`/${site}/user/${isIdentified ? session.identified_user_id : session.user_id}`}>
+              <Link
+                href={`/${site}/user/${encodeURIComponent(
+                  isIdentified ? session.identified_user_id : session.user_id
+                )}`}
+              >
                 <Button size={"sm"} variant={"success"}>
                   View User <ArrowRight className="w-4 h-4" />
                 </Button>

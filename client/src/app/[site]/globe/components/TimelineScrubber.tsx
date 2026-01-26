@@ -3,6 +3,7 @@ import { AlertTriangle, Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TimelineSlider } from "../../../../components/ui/timeline-slider";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../components/ui/tooltip";
+import { useStore } from "../../../../lib/store";
 import { useTimelineStore, useActiveSessions } from "../timelineStore";
 import { formatTimelineTime, generateTimeWindows, getSessionCountsPerWindow } from "../timelineUtils";
 import { MAX_PAGES, PAGE_SIZE } from "../3d/hooks/timelineLayer/timelineLayerConstants";
@@ -11,6 +12,9 @@ export function TimelineScrubber() {
   const { currentTime, timeRange, windowSize, setCurrentTime, allSessions, isLoading, hasMoreData } =
     useTimelineStore();
   const activeSessions = useActiveSessions();
+  // Use reactive timezone from useStore
+  const storeTimezone = useStore(state => state.timezone);
+  const timezone = storeTimezone === "system" ? Intl.DateTimeFormat().resolvedOptions().timeZone : storeTimezone;
   const [isPlaying, setIsPlaying] = useState(false);
   const [localSliderIndex, setLocalSliderIndex] = useState(0);
   const [displayedCounts, setDisplayedCounts] = useState<number[]>([]);
@@ -92,13 +96,13 @@ export function TimelineScrubber() {
 
   // Debounced function to calculate session counts
   const debouncedCalculateCounts = useRef(
-    debounce((windows: ReturnType<typeof generateTimeWindows>, sessions: typeof allSessions, size: number) => {
+    debounce((windows: ReturnType<typeof generateTimeWindows>, sessions: typeof allSessions, size: number, tz: string) => {
       if (windows.length === 0 || sessions.length === 0) {
         setDisplayedCounts([]);
         setIsCalculating(false);
         return;
       }
-      const counts = getSessionCountsPerWindow(sessions, windows, size);
+      const counts = getSessionCountsPerWindow(sessions, windows, size, tz);
       setDisplayedCounts(counts);
       setIsCalculating(false);
     }, 200)
@@ -125,12 +129,12 @@ export function TimelineScrubber() {
   useEffect(() => {
     if (timeWindows.length > 0 && allSessions.length > 0) {
       setIsCalculating(true);
-      debouncedCalculateCounts(timeWindows, allSessions, windowSize);
+      debouncedCalculateCounts(timeWindows, allSessions, windowSize, timezone);
     } else {
       setDisplayedCounts([]);
       setIsCalculating(false);
     }
-  }, [timeWindows, allSessions, windowSize, debouncedCalculateCounts]);
+  }, [timeWindows, allSessions, windowSize, timezone, debouncedCalculateCounts]);
 
   // Get max count for scaling the histogram
   const maxCount = useMemo(() => {

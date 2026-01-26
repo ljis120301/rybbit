@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import SqlString from "sqlstring";
 import { clickhouse } from "../../db/clickhouse/clickhouse.js";
-import { getIsUserAdmin } from "../../lib/auth-utils.js";
 import { processResults } from "../analytics/utils/utils.js";
 
 type ServiceEventCountResponse = {
@@ -22,12 +21,6 @@ export async function getAdminServiceEventCount(
   }>,
   res: FastifyReply
 ) {
-  const isAdmin = await getIsUserAdmin(req);
-
-  if (!isAdmin) {
-    return res.status(401).send({ error: "Unauthorized" });
-  }
-
   const { start_date, end_date, time_zone = "UTC" } = req.query;
 
   try {

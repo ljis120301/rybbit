@@ -3,8 +3,6 @@ import { GetSessionsResponse } from "../../api/analytics/endpoints";
 import { NothingFound } from "../NothingFound";
 import { Button } from "../ui/button";
 import { SessionCard, SessionCardSkeleton } from "./SessionCard";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
 
 interface SessionsListProps {
   sessions: GetSessionsResponse;
@@ -15,8 +13,7 @@ interface SessionsListProps {
   hasPrevPage: boolean;
   emptyMessage?: string;
   userId?: string;
-  identifiedOnly?: boolean;
-  setIdentifiedOnly?: (identifiedOnly: boolean) => void;
+  headerElement?: React.ReactNode;
   pageSize?: number;
 }
 
@@ -29,31 +26,15 @@ export function SessionsList({
   hasPrevPage,
   emptyMessage = "Try a different date range or filter",
   userId,
-  identifiedOnly,
-  setIdentifiedOnly,
+  headerElement,
   pageSize,
 }: SessionsListProps) {
-  if (sessions.length === 0 && !isLoading) {
-    return (
-      <div className="overflow-auto space-y-3">
-        <NothingFound icon={<Rewind className="w-10 h-10" />} title={"No sessions found"} description={emptyMessage} />
-      </div>
-    );
-  }
-
   return (
-    <div className="overflow-auto space-y-3">
-      {/* Pagination controls */}
+    <div className="space-y-3">
+      {/* Header and pagination controls */}
       <div className="flex items-center justify-between gap-2">
-        {setIdentifiedOnly && (
-          <div className="flex items-center justify-end gap-2">
-            <Switch id="identified-only" checked={identifiedOnly} onCheckedChange={setIdentifiedOnly} />
-            <Label htmlFor="identified-only" className="text-sm text-neutral-600 dark:text-neutral-400 cursor-pointer">
-              Identified only
-            </Label>
-          </div>
-        )}
-        <div className="flex items-center justify-end gap-2">
+        {headerElement}
+        <div className="flex items-center justify-end gap-2 ml-auto">
           <Button variant="ghost" size="smIcon" onClick={() => onPageChange(page - 1)} disabled={!hasPrevPage}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -63,6 +44,10 @@ export function SessionsList({
           </Button>
         </div>
       </div>
+
+      {sessions.length === 0 && !isLoading && (
+        <NothingFound icon={<Rewind className="w-10 h-10" />} title={"No sessions found"} description={emptyMessage} />
+      )}
 
       {/* Session cards */}
       {isLoading ? (

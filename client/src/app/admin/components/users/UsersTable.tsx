@@ -38,8 +38,8 @@ import { userStore } from "@/lib/userStore";
 import { SortableHeader } from "../shared/SortableHeader";
 import { parseUtcTimestamp } from "../../../../lib/dateTimeUtils";
 import { AddToOrganizationDialog } from "./AddToOrganizationDialog";
-import { useRemoveUserFromOrganization } from "@/api/admin/organizations";
-import { useAdminOrganizations } from "@/api/admin/getAdminOrganizations";
+import { useRemoveUserFromOrganization } from "@/api/admin/hooks/useOrganizations";
+import { useAdminOrganizations } from "@/api/admin/hooks/useAdminOrganizations";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -143,7 +143,7 @@ export function UsersTable({
                 onClick={() => onImpersonate(row.original.id)}
                 disabled={row.original.id === userStore.getState().user?.id}
               >
-                <User className="mr-2 h-4 w-4" />
+                <User className="h-4 w-4" />
                 Impersonate
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -152,7 +152,7 @@ export function UsersTable({
                   setShowAddToOrgDialog(true);
                 }}
               >
-                <UserPlus className="mr-2 h-4 w-4" />
+                <UserPlus className="h-4 w-4" />
                 Add to Organization
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -163,7 +163,7 @@ export function UsersTable({
                 }}
                 className="text-orange-500 focus:text-orange-600"
               >
-                <UserMinus className="mr-2 h-4 w-4" />
+                <UserMinus className="h-4 w-4" />
                 Remove from Organization
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -291,7 +291,10 @@ export function UsersTable({
                           }}
                         >
                           <Check
-                            className={cn("mr-2 h-4 w-4", selectedOrganizationId === org.id ? "opacity-100" : "opacity-0")}
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedOrganizationId === org.id ? "opacity-100" : "opacity-0"
+                            )}
                           />
                           {org.name}
                         </CommandItem>

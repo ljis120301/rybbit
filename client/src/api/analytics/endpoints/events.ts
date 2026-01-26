@@ -1,5 +1,6 @@
 import { authedFetch } from "../../utils";
-import { CommonApiParams, PaginationParams, toQueryParams } from "./types";
+import { BucketedParams, CommonApiParams, PaginationParams, toBucketedQueryParams, toQueryParams } from "./types";
+
 
 // Event type
 export type Event = {
@@ -50,9 +51,21 @@ export type OutboundLink = {
   lastClicked: string;
 };
 
+// Event counts over time
+export type EventBucketedPoint = {
+  time: string;
+  event_name: string;
+  event_count: number;
+};
+
 export interface EventsParams extends CommonApiParams, PaginationParams {
   pageSize?: number;
 }
+
+export interface EventBucketedParams extends BucketedParams {
+  limit?: number;
+}
+
 
 export interface EventPropertiesParams extends CommonApiParams {
   eventName: string;
@@ -73,7 +86,7 @@ export async function fetchEvents(
   };
 
   const response = await authedFetch<EventsResponse>(
-    `/events/${site}`,
+    `/sites/${site}/events`,
     queryParams
   );
   return response;
@@ -88,7 +101,7 @@ export async function fetchEventNames(
   params: CommonApiParams
 ): Promise<EventName[]> {
   const response = await authedFetch<{ data: EventName[] }>(
-    `/events/names/${site}`,
+    `/sites/${site}/events/names`,
     toQueryParams(params)
   );
   return response.data;
@@ -108,7 +121,7 @@ export async function fetchEventProperties(
   };
 
   const response = await authedFetch<{ data: EventProperty[] }>(
-    `/events/properties/${site}`,
+    `/sites/${site}/events/properties`,
     queryParams
   );
   return response.data;
@@ -123,8 +136,29 @@ export async function fetchOutboundLinks(
   params: CommonApiParams
 ): Promise<OutboundLink[]> {
   const response = await authedFetch<{ data: OutboundLink[] }>(
-    `/events/outbound/${site}`,
+    `/sites/${site}/events/outbound`,
     toQueryParams(params)
   );
   return response.data;
 }
+
+/**
+ * Fetch bucketed event counts for top custom events
+ * GET /sites/:site/events/bucketed
+ */
+export async function fetchEventBucketed(
+  site: string | number,
+  params: EventBucketedParams
+): Promise<EventBucketedPoint[]> {
+  const queryParams = {
+    ...toBucketedQueryParams(params),
+    limit: params.limit,
+  };
+
+  const response = await authedFetch<{ data: EventBucketedPoint[] }>(
+    `/sites/${site}/events/bucketed`,
+    queryParams
+  );
+  return response.data;
+}
+

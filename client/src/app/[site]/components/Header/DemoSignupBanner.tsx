@@ -25,7 +25,7 @@ export function DemoSignupBanner() {
   return (
     <div className="mt-4 px-4 py-3 rounded-lg border border-emerald-300 dark:border-emerald-400/30 bg-emerald-200/80 dark:bg-emerald-900/20 text-sm flex gap-4 items-center">
       <div className="text-emerald-700 dark:text-emerald-300 flex items-center font-medium">
-        <Sparkles className="mr-2 h-4 w-4" />
+        <Sparkles className="h-4 w-4" />
         <span>Enjoying the demo? Get started with your own analytics dashboard!</span>
       </div>
       <Button variant="success" size="sm" asChild>

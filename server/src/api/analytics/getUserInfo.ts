@@ -43,15 +43,15 @@ export interface UserInfoResponse {
 export async function getUserInfo(
   req: FastifyRequest<{
     Params: {
-      site: string;
+      siteId: string;
       userId: string;
     };
   }>,
   res: FastifyReply
 ) {
-  const { userId, site } = req.params;
+  const { userId, siteId } = req.params;
 
-  const siteId = Number(site);
+  const numericSiteId = Number(siteId);
 
   try {
     // Run ClickHouse query and Postgres queries in parallel
@@ -119,7 +119,7 @@ export async function getUserInfo(
       `,
         query_params: {
           userId,
-          site,
+          site: siteId,
         },
         format: "JSONEachRow",
       }),
@@ -127,7 +127,7 @@ export async function getUserInfo(
       db
         .select()
         .from(userProfiles)
-        .where(and(eq(userProfiles.siteId, siteId), eq(userProfiles.userId, userId)))
+        .where(and(eq(userProfiles.siteId, numericSiteId), eq(userProfiles.userId, userId)))
         .limit(1),
       // Get linked devices (all anonymous IDs for this user) from Postgres
       db
@@ -136,7 +136,7 @@ export async function getUserInfo(
           created_at: userAliases.createdAt,
         })
         .from(userAliases)
-        .where(and(eq(userAliases.siteId, siteId), eq(userAliases.userId, userId))),
+        .where(and(eq(userAliases.siteId, numericSiteId), eq(userAliases.userId, userId))),
     ]);
 
     const data = await processResults<UserPageviewData>(queryResult);

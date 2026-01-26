@@ -356,7 +356,7 @@ function ToolCard({ tool }: { tool: { href: string; icon: any; title: string; de
 export default function ToolsPage() {
   return (
     <div className="min-h-screen">
-      <div className="max-w-[1300px] mx-auto px-6 py-20">
+      <div className="max-w-[1200px] mx-auto px-6 py-20">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-4">{totalToolCount} Free Marketing Tools</h1>

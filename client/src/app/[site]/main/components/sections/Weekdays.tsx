@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "../../../../../components/ui/basic-
 import { Card, CardContent, CardLoader } from "../../../../../components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../../components/ui/select";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../../components/ui/tooltip";
-import { StatType, useStore } from "../../../../../lib/store";
+import { getTimezone, StatType, useStore } from "../../../../../lib/store";
 import { cn } from "../../../../../lib/utils";
 
 import { formatLocalTime, hourLabels, longDayNames, shortDayNames } from "../../../../../lib/dateTimeUtils";
@@ -14,6 +14,7 @@ import { formatLocalTime, hourLabels, longDayNames, shortDayNames } from "../../
 export function Weekdays() {
   const { site, time } = useStore();
   const [metric, setMetric] = useState<StatType>("users");
+  const timezone = getTimezone();
 
   const { data, isFetching, error } = useGetOverviewBucketed({
     site,
@@ -38,8 +39,8 @@ export function Weekdays() {
     data.data.forEach(item => {
       if (!item || !item.time) return;
 
-      // Parse the timestamp
-      const date = DateTime.fromSQL(item.time);
+      // Parse the timestamp in the selected timezone
+      const date = DateTime.fromSQL(item.time, { zone: timezone });
       if (!date.isValid) return;
 
       const dayOfWeek = (date.weekday - 1) % 7; // Luxon uses 1 for Monday, 7 for Sunday
@@ -63,7 +64,7 @@ export function Weekdays() {
     }
 
     return aggregated;
-  }, [data, metric]);
+  }, [data, metric, timezone]);
 
   // Find max value for color intensity scaling
   const maxValue = useMemo(() => {
@@ -207,7 +208,7 @@ export function Weekdays() {
                         heatmapData[day].length > hour
                           ? heatmapData[day][hour]
                           : 0;
-                      const colorClass = value > 0 ? getColorIntensity(value) : "bg-neutral-200 dark:bg-neutral-800";
+                      const colorClass = value > 0 ? getColorIntensity(value) : "bg-neutral-50 dark:bg-neutral-850";
                       return (
                         <Tooltip key={day}>
                           <TooltipTrigger asChild>

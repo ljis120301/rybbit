@@ -1,7 +1,7 @@
 import { ChevronDown, Plus } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, Suspense } from "react";
-import { useGetSite, useGetSitesFromOrg } from "../../../../api/admin/sites";
+import { useGetSite, useGetSitesFromOrg } from "../../../../api/admin/hooks/useSites";
 import { Favicon } from "../../../../components/Favicon";
 import { Button } from "../../../../components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../../components/ui/popover";
@@ -31,10 +31,10 @@ function SiteSelectorContent({ onSiteSelect }: { onSiteSelect: () => void }) {
       <PopoverContent align="start" className="w-52 p-2">
         <div className="max-h-96 overflow-y-auto">
           {[
-            {
-              siteId: 21,
-              domain: "rybbit.com",
-            },
+            // {
+            //   siteId: 21,
+            //   domain: "rybbit.com",
+            // },
             {
               siteId: 1,
               domain: "tomato.gg",

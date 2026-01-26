@@ -2,14 +2,15 @@ import { randomBytes } from "crypto";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { db } from "../../db/postgres/postgres.js";
 import { sites } from "../../db/postgres/schema.js";
-import { getSessionFromReq } from "../../lib/auth-utils.js";
 
 export async function addSite(
   request: FastifyRequest<{
+    Params: {
+      organizationId: string;
+    };
     Body: {
       domain: string;
       name: string;
-      organizationId: string;
       public?: boolean;
       saltUserIds?: boolean;
       blockBots?: boolean;
@@ -17,7 +18,8 @@ export async function addSite(
   }>,
   reply: FastifyReply
 ) {
-  const { domain, name, organizationId, public: isPublic, saltUserIds, blockBots } = request.body;
+  const { organizationId } = request.params;
+  const { domain, name, public: isPublic, saltUserIds, blockBots } = request.body;
 
   // Validate domain format using regex
   const domainRegex = /^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
@@ -28,41 +30,8 @@ export async function addSite(
   }
 
   try {
-    const session = await getSessionFromReq(request);
-
-    if (!session?.user?.id) {
-      return reply.status(401).send({
-        error: "Unauthorized",
-        message: "You must be logged in to add a site",
-      });
-    }
-
-    // Check if the organization exists
-    if (!organizationId) {
-      return reply.status(400).send({
-        error: "Organization ID is required",
-      });
-    }
-
-    // Check if the user is an owner or admin of the organization
-    // First, get the user's role in the organization
-    const member = await db.query.member.findFirst({
-      where: (member, { and, eq }) =>
-        and(eq(member.userId, session.user.id), eq(member.organizationId, organizationId)),
-    });
-
-    if (!member) {
-      return reply.status(403).send({
-        error: "You are not a member of this organization",
-      });
-    }
-
-    // Check if the user's role is admin or owner
-    if (member.role !== "admin" && member.role !== "owner") {
-      return reply.status(403).send({
-        error: "You must be an admin or owner to add sites to this organization",
-      });
-    }
+    // Auth and org admin check handled by requireOrgAdminFromBody middleware
+    const userId = request.user?.id;
 
     // Generate a random 12-character hex ID
     const id = randomBytes(6).toString("hex");
@@ -74,7 +43,7 @@ export async function addSite(
         id,
         domain,
         name,
-        createdBy: session.user.id,
+        createdBy: userId,
         organizationId,
         public: isPublic || false,
         saltUserIds: saltUserIds || false,

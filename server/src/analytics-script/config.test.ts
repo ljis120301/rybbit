@@ -57,10 +57,21 @@ describe("parseScriptConfig", () => {
       sessionReplayBatchInterval: 5000,
       sessionReplayBatchSize: 250,
       sessionReplayMaskTextSelectors: [],
+      // rrweb options (undefined when not set)
+      sessionReplayBlockClass: undefined,
+      sessionReplayBlockSelector: undefined,
+      sessionReplayIgnoreClass: undefined,
+      sessionReplayIgnoreSelector: undefined,
+      sessionReplayMaskTextClass: undefined,
+      sessionReplayMaskAllInputs: undefined,
+      sessionReplayMaskInputOptions: undefined,
+      sessionReplayCollectFonts: undefined,
+      sessionReplaySampling: undefined,
+      sessionReplaySlimDOMOptions: undefined,
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      "https://analytics.example.com/site/123/tracking-config",
+      "https://analytics.example.com/site/tracking-config/123",
       {
         method: "GET",
         credentials: "omit",
@@ -96,6 +107,16 @@ describe("parseScriptConfig", () => {
       sessionReplayBatchInterval: 5000,
       sessionReplayBatchSize: 250,
       sessionReplayMaskTextSelectors: [],
+      sessionReplayBlockClass: undefined,
+      sessionReplayBlockSelector: undefined,
+      sessionReplayIgnoreClass: undefined,
+      sessionReplayIgnoreSelector: undefined,
+      sessionReplayMaskTextClass: undefined,
+      sessionReplayMaskAllInputs: undefined,
+      sessionReplayMaskInputOptions: undefined,
+      sessionReplayCollectFonts: undefined,
+      sessionReplaySampling: undefined,
+      sessionReplaySlimDOMOptions: undefined,
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -128,6 +149,16 @@ describe("parseScriptConfig", () => {
       sessionReplayBatchInterval: 5000,
       sessionReplayBatchSize: 250,
       sessionReplayMaskTextSelectors: [],
+      sessionReplayBlockClass: undefined,
+      sessionReplayBlockSelector: undefined,
+      sessionReplayIgnoreClass: undefined,
+      sessionReplayIgnoreSelector: undefined,
+      sessionReplayMaskTextClass: undefined,
+      sessionReplayMaskAllInputs: undefined,
+      sessionReplayMaskInputOptions: undefined,
+      sessionReplayCollectFonts: undefined,
+      sessionReplaySampling: undefined,
+      sessionReplaySlimDOMOptions: undefined,
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -330,5 +361,162 @@ describe("parseScriptConfig", () => {
 
     const config = await parseScriptConfig(mockScriptTag);
     expect(config?.sessionReplayMaskTextSelectors).toEqual([".user-name", ".email-address", "[data-sensitive]"]);
+  });
+
+  it("should parse rrweb block and ignore options", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-block-class", "my-block-class");
+    mockScriptTag.setAttribute("data-replay-block-selector", ".sensitive-content");
+    mockScriptTag.setAttribute("data-replay-ignore-class", "my-ignore-class");
+    mockScriptTag.setAttribute("data-replay-ignore-selector", "input[type='password']");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayBlockClass).toBe("my-block-class");
+    expect(config?.sessionReplayBlockSelector).toBe(".sensitive-content");
+    expect(config?.sessionReplayIgnoreClass).toBe("my-ignore-class");
+    expect(config?.sessionReplayIgnoreSelector).toBe("input[type='password']");
+  });
+
+  it("should parse rrweb mask text class option", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-mask-text-class", "custom-mask-class");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayMaskTextClass).toBe("custom-mask-class");
+  });
+
+  it("should parse rrweb maskAllInputs option", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-mask-all-inputs", "true");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayMaskAllInputs).toBe(true);
+  });
+
+  it("should parse rrweb maskAllInputs as false", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-mask-all-inputs", "false");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayMaskAllInputs).toBe(false);
+  });
+
+  it("should parse rrweb maskInputOptions", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-mask-input-options", '{"password":true,"email":true,"tel":true}');
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayMaskInputOptions).toEqual({ password: true, email: true, tel: true });
+  });
+
+  it("should parse rrweb collectFonts option", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-collect-fonts", "false");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplayCollectFonts).toBe(false);
+  });
+
+  it("should parse rrweb sampling options", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-sampling", '{"mousemove":100,"scroll":200}');
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplaySampling).toEqual({ mousemove: 100, scroll: 200 });
+  });
+
+  it("should parse rrweb slimDOMOptions as object", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-slim-dom-options", '{"script":true,"comment":true}');
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplaySlimDOMOptions).toEqual({ script: true, comment: true });
+  });
+
+  it("should parse rrweb slimDOMOptions as boolean", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-slim-dom-options", "true");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    expect(config?.sessionReplaySlimDOMOptions).toBe(true);
+  });
+
+  it("should handle invalid JSON in rrweb options gracefully", async () => {
+    mockScriptTag.setAttribute("src", "https://analytics.example.com/script.js");
+    mockScriptTag.setAttribute("data-site-id", "123");
+    mockScriptTag.setAttribute("data-replay-sampling", "invalid-json");
+
+    // Mock successful API response
+    (global.fetch as any).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({}),
+    });
+
+    const config = await parseScriptConfig(mockScriptTag);
+    // Should fallback to empty object for invalid JSON
+    expect(config?.sessionReplaySampling).toEqual({});
   });
 });

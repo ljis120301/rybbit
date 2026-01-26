@@ -243,7 +243,7 @@ export function Funnel({ data, steps, isError, error, isPending }: FunnelProps) 
       ) : (
         <div className="h-[400px] flex items-center justify-center">
           <div className="text-neutral-500 dark:text-neutral-400 text-sm">
-            {isPending ? "Analyzing funnel..." : "Configure your funnel steps and click 'Analyze Funnel'"}
+            {isPending ? "Analyzing funnel..." : "Configure your funnel steps"}
           </div>
         </div>
       )}

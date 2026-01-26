@@ -1,12 +1,29 @@
+import { CTASection } from "@/components/CTASection";
+import { FAQAccordion } from "@/components/FAQAccordion";
 import { GitHubStarButton } from "@/components/GitHubStarButton";
-import { Integrations } from "@/components/Integration";
-import { PricingSection } from "@/components/PricingSection";
+import { IntegrationsGrid } from "@/components/Integration";
+import { Marquee } from "@/components/magicui/marquee";
 import { SectionBadge } from "@/components/SectionBadge";
 import { TrackedButton } from "@/components/TrackedButton";
 import { TweetCard } from "@/components/Tweet";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ActivityIcon } from "@/components/ui/activity";
+import { ArrowDownIcon } from "@/components/ui/arrow-down";
+import { BanIcon } from "@/components/ui/ban";
+import { BellIcon } from "@/components/ui/bell";
+import { BotIcon } from "@/components/ui/bot";
+import { CircleCheckIcon } from "@/components/ui/circle-check";
+import { DownloadIcon } from "@/components/ui/download";
+import { EarthIcon } from "@/components/ui/earth";
+import { GaugeIcon } from "@/components/ui/gauge";
+import { LayersIcon } from "@/components/ui/layers";
+import { LinkIcon } from "@/components/ui/link";
+import { PlayIcon } from "@/components/ui/play";
+import { RouteIcon } from "@/components/ui/route";
+import { ShieldCheckIcon } from "@/components/ui/shield-check";
+import { TerminalIcon } from "@/components/ui/terminal";
+import { UsersIcon } from "@/components/ui/users";
+import { ZapIcon } from "@/components/ui/zap";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Code, Cookie, MousePointer, Target, TrendingUp, Zap } from "lucide-react";
 import { Tilt_Warp } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +32,6 @@ import { RealTimeAnalytics } from "../../components/Cards/RealTimeAnalytics";
 import { SessionReplay } from "../../components/Cards/SessionReplay";
 import { UserSessions } from "../../components/Cards/UserSessions";
 import { DEFAULT_EVENT_LIMIT } from "../../lib/const";
-import { SpinningGlobe } from "@/components/SpinningGlobe";
 
 const tilt_wrap = Tilt_Warp({
   subsets: ["latin"],
@@ -85,40 +101,84 @@ export const metadata = {
 
 const features = [
   {
-    icon: TrendingUp,
-    title: "Ditch Google Analytics",
-    description:
-      "Google Analytics is bloated, confusing, and designed to sell ads. At Rybbit, our only product is web analytics, and our only goal is to help you understand your users (instead of tracking them across the web).",
-  },
-  {
-    icon: Zap,
+    icon: ZapIcon,
     title: "Setup in minutes",
-    description:
-      "Add one line of code to your site and you're done using one of our 30+ framework guides.  Start seeing real-time data within seconds of installation.",
+    description: "Add one line of code and start seeing real-time data instantly.",
   },
   {
-    icon: MousePointer,
-    title: "One click from everything",
-    description:
-      "Our dashboard is stupidly simple to use. You don't have to spend hours learning how to use it. Funnels, goals, journeys, web vitals, and session replays are all just a click away.",
+    icon: ActivityIcon,
+    title: "Realtime data",
+    description: "See what's happening on your site right now.",
   },
   {
-    icon: Target,
-    title: "See more accurate data",
-    description:
-      "Built-in bot detection filters out fake traffic automatically. No more inflated numbers from scrapers and crawlers. See only real human visitors and make decisions based on actual user behavior.",
+    icon: PlayIcon,
+    title: "Session replay",
+    description: "Watch real user sessions to spot usability issues.",
   },
   {
-    icon: Cookie,
-    title: "No more cookie banners",
-    description:
-      "We don't use cookies. Period. That means no annoying consent banners cluttering your site, no user friction, and full compliance with GDPR, CCPA, and other privacy regulations by default.",
+    icon: ArrowDownIcon,
+    title: "Funnels",
+    description: "Visualize conversion paths and find where visitors drop off.",
   },
   {
-    icon: Code,
-    title: "Open source forever",
-    description:
-      "We're bootstrapped, independent, and 100% open source. Every line of code is on GitHub for you to inspect, modify, or self-host. We're building Rybbit for the community, not for venture capitalists.",
+    icon: RouteIcon,
+    title: "User journeys",
+    description: "Map how users navigate from landing to conversion.",
+  },
+  {
+    icon: GaugeIcon,
+    title: "Web vitals",
+    description: "Monitor Core Web Vitals for fast user experiences.",
+  },
+  {
+    icon: LayersIcon,
+    title: "Custom events",
+    description: "Track sign-ups, purchases, and any user interaction.",
+  },
+  {
+    icon: BotIcon,
+    title: "Bot blocking",
+    description: "Automatically filter out bots to keep data clean.",
+  },
+  {
+    icon: BanIcon,
+    title: "No cookies",
+    description: "Zero cookies, zero banners. Cleaner visitor experiences.",
+  },
+  {
+    icon: ShieldCheckIcon,
+    title: "GDPR & CCPA",
+    description: "Privacy-first design means you're compliant out of the box.",
+  },
+  {
+    icon: EarthIcon,
+    title: "Globe views",
+    description: "Watch traffic flow with stunning 3D globe visualizations.",
+  },
+  {
+    icon: TerminalIcon,
+    title: "Open source",
+    description: "100% open source. Self-host or use our cloud.",
+  },
+  {
+    icon: LinkIcon,
+    title: "API",
+    description: "Full API access to build custom integrations.",
+  },
+  {
+    icon: DownloadIcon,
+    title: "Data export",
+    description: "Export your raw data anytime. No lock-in.",
+  },
+  {
+    icon: BellIcon,
+    title: "Email reports",
+    description: "Automated reports delivered to your inbox.",
+  },
+  {
+    icon: UsersIcon,
+    title: "Organizations",
+    description: "Manage sites and team access in one place.",
   },
 ];
 
@@ -168,7 +228,7 @@ export default function HomePage() {
               Get started
             </TrackedButton>
             <TrackedButton
-              href="https://demo.rybbit.com/1"
+              href="https://demo.rybbit.com/81"
               eventName="demo"
               target="_blank"
               rel="noopener noreferrer"
@@ -179,11 +239,11 @@ export default function HomePage() {
             </TrackedButton>
           </div>
           <p className="text-neutral-500 dark:text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2 mt-6">
-            <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
+            <CircleCheckIcon size={16} className="text-neutral-500 dark:text-neutral-400" />
             First {DEFAULT_EVENT_LIMIT.toLocaleString()} pageviews/m are free. No credit card required.
           </p>
         </div>
-        <div className="relative w-full max-w-[1300px] mb-10 px-4">
+        <div className="relative w-full max-w-[1300px] mb-10">
           {/* Background gradients - overlapping circles for organic feel */}
           <div className="absolute top-0 left-0 w-[550px] h-[550px] bg-emerald-500/30 dark:bg-emerald-500/40 rounded-full blur-[80px] opacity-80 dark:opacity-70"></div>
           <div className="absolute top-20 left-20 w-[400px] h-[400px] bg-emerald-600/20 dark:bg-emerald-600/30 rounded-full blur-[70px] opacity-60 dark:opacity-50"></div>
@@ -204,7 +264,7 @@ export default function HomePage() {
           <div className="relative z-10 rounded-2xl overflow-hidden bg-neutral-400/10 dark:bg-neutral-100/5 border-8 shadow-2xl shadow-neutral-900/20 dark:shadow-emerald-900/10">
             {/* Remove mobile message and show iframe on all devices */}
             <iframe
-              src="https://demo.rybbit.com/1/main"
+              src="https://demo.rybbit.com/81/main"
               width="1300"
               height="750"
               className="w-full h-[600px] md:h-[700px] lg:h-[750px] rounded-xl"
@@ -216,7 +276,7 @@ export default function HomePage() {
 
         {/* Logo Section */}
         <section className="py-12 md:py-16 w-full">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-[1200px] mx-auto px-4">
             <div className="text-center mb-10 md:mb-12">
               <p className="text-neutral-500 dark:text-neutral-400 text-sm uppercase tracking-wider font-medium">
                 Trusted by 4,000+ organizations worldwide
@@ -312,31 +372,41 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="py-14 md:py-20 w-full max-w-6xl px-8">
-          {/* <div className="bg-neutral-900/30 backdrop-blur-sm border border-neutral-800/50 rounded-2xl p-4 md:p-8"> */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
+        <section className="py-14 md:py-20 w-full max-w-[1200px] px-4">
+          <div className="text-center mb-10 md:mb-12">
+            <SectionBadge className="mb-4">Why Rybbit</SectionBadge>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Everything you need</h2>
+            <p className="mt-4 text-base md:text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto font-light">
+              Powerful analytics without the complexity. Privacy-friendly tools that just work.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {features.map(feature => {
               const Icon = feature.icon;
               return (
-                <div key={feature.title} className="space-y-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 dark:from-emerald-500/20 dark:to-emerald-600/10 border border-emerald-500/40 dark:border-emerald-500/30 shadow-md shadow-emerald-500/20 dark:shadow-emerald-500/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <h3 className="text-2xl font-medium tracking-tight">{feature.title}</h3>
-                  <p className="text-neutral-600 dark:text-neutral-300 text-base">{feature.description}</p>
+                <div
+                  key={feature.title}
+                  className="bg-neutral-100/50 dark:bg-neutral-800/20 border border-neutral-300/50 dark:border-neutral-800/50 rounded-lg p-5 transition-colors"
+                >
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <Icon size={20} className="text-neutral-600 dark:text-neutral-400" />
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
               );
             })}
           </div>
-          {/* </div> */}
         </section>
 
-        <section className="py-14 md:py-20 w-full max-w-6xl px-4">
+        <section className="py-14 md:py-20 w-full max-w-[1200px] px-4">
           <div className="text-center mb-10 md:mb-16">
-            <SectionBadge className="mb-4"> Analytics Reimagined</SectionBadge>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Features</h2>
+            <SectionBadge className="mb-4">Analytics Reimagined</SectionBadge>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">See it in action</h2>
             <p className="mt-4 text-base md:text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto font-light">
-              Everything you need to understand your audience and grow your business, without the complexity.
+              Powerful tools designed for clarity, not complexity.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -347,8 +417,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Real-Time Globe Section */}
-        <section className="py-14 md:py-20 w-full max-w-6xl">
+        {/* <section className="py-14 md:py-20 w-full max-w-[1200px]">
           <div className="text-center mb-10 md:mb-16 px-4">
             <SectionBadge className="mb-4">Real-Time Insights</SectionBadge>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">See Your Users Around the World</h2>
@@ -360,12 +429,26 @@ export default function HomePage() {
           <div className="relative h-[420px] md:h-[700px] max-w-[100vw] mx-auto rounded-2xl">
             <SpinningGlobe />
           </div>
-        </section>
+        </section> */}
 
-        <Integrations />
+        {/* Integrations Section */}
+        <section className="py-12 md:py-20 w-full">
+          <div className="max-w-[1200px] mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+              <div className="md:sticky md:top-24 md:self-start">
+                <SectionBadge className="mb-4">Seamless Integration</SectionBadge>
+                <h2 className="text-3xl md:text-4xl font-bold">Works with all your favorite platforms</h2>
+                <p className="mt-4 text-neutral-600 dark:text-neutral-300 font-light">
+                  Integrate Rybbit with any platform in minutes
+                </p>
+              </div>
+              <IntegrationsGrid />
+            </div>
+          </div>
+        </section>
         {/* Testimonial Section */}
-        <section className="py-10 md:py-16 w-full">
-          <div className="max-w-7xl mx-auto px-4">
+        <section className="py-10 md:py-16 w-full overflow-hidden">
+          <div className="max-w-[1200px] mx-auto px-4">
             <div className="text-center mb-10 md:mb-16">
               <SectionBadge className="mb-4">User Testimonials</SectionBadge>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight">People love Rybbit</h2>
@@ -373,221 +456,62 @@ export default function HomePage() {
                 See what others think about Rybbit Analytics
               </p>
             </div>
-            <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-              <TweetCard id="1934145508999877089" className="break-inside-avoid mb-4" />
-              <TweetCard id="1920470706761929048" className="break-inside-avoid mb-4" />
-              <TweetCard id="1921928423284629758" className="break-inside-avoid mb-4" />
-              <TweetCard id="1920899082253434950" className="break-inside-avoid mb-4" />
-              <TweetCard id="1982378431166963982" className="break-inside-avoid mb-4" />
-              <TweetCard id="1927817460993884321" className="break-inside-avoid mb-4" />
-              {/* <TweetCard id="1971933281324355679" className="break-inside-avoid mb-4" /> */}
+            <div className="relative bg-neutral-100/50 dark:bg-neutral-800/20 backdrop-blur-sm border border-neutral-300/50 dark:border-neutral-800/50 rounded-3xl overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[600px] md:h-[700px] p-4">
+                {/* Column 1 - visible on all screen sizes */}
+                <Marquee vertical pauseOnHover className="[--duration:60s]" repeat={2}>
+                  <TweetCard id="1991296442611184125" />
+                  <TweetCard id="1921928423284629758" />
+                  <TweetCard id="2000974573005889706" />
+                  <TweetCard id="1927817460993884321" />
+                  <TweetCard id="1977471983278535071" />
+                  <TweetCard id="1958789741635141673" />
+                </Marquee>
+
+                {/* Column 2 - hidden on mobile */}
+                <Marquee vertical pauseOnHover reverse className="hidden md:flex [--duration:60s]" repeat={2}>
+                  <TweetCard id="1920899082253434950" />
+                  <TweetCard id="2000788904778326334" />
+                  <TweetCard id="2015102995789381815" />
+                  <TweetCard id="1982378431166963982" />
+                  <TweetCard id="1980082738934993142" />
+                  <TweetCard id="1976495558480232672" />
+                </Marquee>
+
+                {/* Column 3 - hidden on mobile */}
+                <Marquee vertical pauseOnHover className="hidden md:flex [--duration:60s]" repeat={2}>
+                  <TweetCard id="2009548405488615871" />
+                  <TweetCard id="1920470706761929048" />
+                  <TweetCard id="1981795864118243355" />
+                  <TweetCard id="1979830490006974510" />
+                  <TweetCard id="1970265809122705759" />
+                </Marquee>
+              </div>
+
+              {/* Gradient overlays */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-neutral-100/90 dark:from-neutral-900/90 to-transparent"></div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-neutral-100/90 dark:from-neutral-900/90 to-transparent"></div>
             </div>
           </div>
         </section>
 
-        {/* Pricing Section */}
-        <PricingSection />
 
         {/* FAQ Section */}
-        <section className="py-16 md:py-24 w-full">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <SectionBadge className="mb-4">Common Questions</SectionBadge>
-              <h2 className="text-3xl md:text-4xl font-bold">Frequently Asked Questions</h2>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto font-light">
-                Everything you need to know about Rybbit Analytics
-              </p>
-            </div>
-
-            <div className="bg-neutral-100/50 dark:bg-neutral-800/20 backdrop-blur-sm border border-neutral-300/50 dark:border-neutral-800/50 rounded-xl overflow-hidden">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger className="md:text-lg">Is Rybbit GDPR and CCPA compliant?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, Rybbit is fully compliant with GDPR, CCPA, and other privacy regulations. We don&apos;t use
-                    cookies or collect any personal data that could identify your users. We salt user IDs daily to
-                    ensure users are not fingerprinted. You will not need to display a cookie consent banner to your
-                    users.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-2">
-                  <AccordionTrigger className="md:text-lg">Rybbit vs. Google Analytics</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
-                      Google Analytics is free because Google uses it as a funnel into their ecosystem and to sell ads.
-                      Rybbit&apos;s only goal is to provide you with high quality analytics. No more confusing
-                      dashboards pushing random AI features nobody wants.
-                    </p>
-                    <br />
-                    <p>
-                      You can see for yourself by checking out our{" "}
-                      <Link
-                        href="https://demo.rybbit.com/1"
-                        className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                      >
-                        demo site
-                      </Link>
-                      . The difference in usability is night and day.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-3">
-                  <AccordionTrigger className="md:text-lg">Rybbit vs. Plausible/Umami/Fathom</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
-                      Rybbit is similar to these simple and privacy-focused analytics platforms, but we are raising the
-                      bar when it comes to UX and the quality and scope of our feature set.
-                    </p>
-                    <br />
-                    <p>
-                      We don&apos;t want to just be a simple analytics tool, but we carefully craft every feature to be
-                      understandable without having to read pages of documentation.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-4">
-                  <AccordionTrigger className="md:text-lg">Rybbit vs. Posthog/Mixpanel/Amplitude</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
-                      Rybbit has most of the features of enterprise analytics platforms, but packaged in a way that is
-                      usable for small and medium sized teams.
-                    </p>
-                    <br />
-                    <p>
-                      We have advanced features like session replay, error tracking, web vitals, and funnels - but you
-                      don&apos;t need to spend days learning how to use them.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-5">
-                  <AccordionTrigger className="md:text-lg">Can I self-host Rybbit?</AccordionTrigger>
-                  <AccordionContent>
-                    Absolutely! Rybbit is available as a self-hosted option. You can install it on your own server and
-                    have complete control over your data.{" "}
-                    <Link
-                      href="/docs/self-hosting"
-                      className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                    >
-                      Learn more here
-                    </Link>
-                    . We also offer a cloud version if you prefer a managed solution.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-6">
-                  <AccordionTrigger className="md:text-lg">How easy is it to set up Rybbit?</AccordionTrigger>
-                  <AccordionContent>
-                    <Link
-                      href="/docs/script"
-                      className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                    >
-                      Setting up Rybbit
-                    </Link>{" "}
-                    is incredibly simple. Just add a small script to your website or install @rybbit/js from npm, and
-                    you&apos;re good to go. Most users are up and running in less than 5 minutes. We also provide
-                    comprehensive documentation and support if you need any help.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-7">
-                  <AccordionTrigger className="md:text-lg">What platforms does Rybbit support?</AccordionTrigger>
-                  <AccordionContent>
-                    Rybbit works with virtually any website platform. Whether you&apos;re using WordPress, Shopify,
-                    Next.js, React, Vue, or any other framework, our simple tracking snippet integrates seamlessly. You
-                    can also use @rybbit/js, our web SDK you can install from npm. Check out our{" "}
-                    <Link
-                      href="/docs"
-                      className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                    >
-                      documentation
-                    </Link>{" "}
-                    for setup guides.
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-8">
-                  <AccordionTrigger className="md:text-lg">Is Rybbit open source?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, Rybbit is open source under the AGPL v3.0 license. You are free to{" "}
-                    <Link
-                      href="/docs/self-hosting"
-                      className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                    >
-                      self-host Rybbit
-                    </Link>{" "}
-                    for either personal or business use.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-9">
-                  <AccordionTrigger className="md:text-lg">Can I invite my team to my organization?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, you can invite unlimited team members to your organization. Each member can have different
-                    permission levels to view or manage your analytics dashboards.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-10">
-                  <AccordionTrigger className="md:text-lg">Can I share my dashboard publicly?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, you can share your dashboard publicly in two ways: with a secret link that only people with the
-                    URL can access, or as a completely public dashboard that anyone can view.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-11">
-                  <AccordionTrigger className="md:text-lg">Does Rybbit have an API?</AccordionTrigger>
-                  <AccordionContent>
-                    Yes, Rybbit provides a comprehensive{" "}
-                    <Link
-                      href="/docs/api/getting-started"
-                      className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300"
-                    >
-                      API
-                    </Link>{" "}
-                    that allows you to programmatically access your analytics data. You can integrate Rybbit data into
-                    your own applications, dashboards, or workflows.
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+        <section className="py-10 md:py-16 w-full">
+          <div className="max-w-[1200px] mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 md:gap-16">
+              <div className="md:sticky md:top-24 md:self-start">
+                <h2 className="text-3xl md:text-4xl font-bold">Frequently Asked Questions</h2>
+                <p className="mt-4 text-neutral-600 dark:text-neutral-300 font-light">
+                  Everything you need to know about Rybbit Analytics
+                </p>
+              </div>
+              <FAQAccordion />
             </div>
           </div>
         </section>
 
-        {/* add CTA section here */}
-        <section className="py-12 md:py-20 w-full bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="relative p-6 md:p-12 flex flex-col items-center justify-center text-center">
-              <div className="mb-6 md:mb-8">
-                <Image src="/rybbit-text.svg" alt="Rybbit" width={150} height={27} className="dark:invert-0 invert" />
-              </div>
-              <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">
-                It&apos;s time to switch to analytics that&apos;s made for you
-              </h2>
-              <p className="text-base md:text-xl text-neutral-600 dark:text-neutral-300 mb-6 md:mb-10 max-w-3xl mx-auto font-light">
-                The first {DEFAULT_EVENT_LIMIT.toLocaleString()} pageviews a month are free
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-6 md:mb-8 w-full sm:w-auto">
-                <TrackedButton
-                  href="https://app.rybbit.io/signup"
-                  eventName="signup"
-                  eventProps={{ location: "bottom_cta", button_text: "Get started" }}
-                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white text-lg font-medium px-6 md:px-8 py-3 md:py-4 rounded-lg shadow-lg shadow-emerald-900/20 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 cursor-pointer"
-                >
-                  Get started
-                </TrackedButton>
-              </div>
-
-              <p className="text-neutral-500 dark:text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2">
-                <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
-                No credit card required
-              </p>
-            </div>
-          </div>
-        </section>
+        <CTASection />
       </div>
     </>
   );

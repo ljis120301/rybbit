@@ -21,7 +21,7 @@ export function CustomHeader() {
             <Image
               src="/rybbit-text.svg"
               alt="Rybbit"
-              width={100}
+              width={80}
               height={0}
               style={{ height: "auto" }}
               className="dark:invert-0 invert"
@@ -50,11 +50,17 @@ export function CustomHeader() {
             >
               Docs
             </Link>
-            <Link
+            {/* <Link
               href="/blog"
               className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               Blog
+            </Link> */}
+            <Link
+              href="/sponsors"
+              className="text-sm font-base text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              Sponsors
             </Link>
           </div>
         </div>

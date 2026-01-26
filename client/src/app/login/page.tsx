@@ -106,9 +106,11 @@ export default function Page() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   rightElement={
-                    <Link href="/reset-password" className="text-xs text-muted-foreground hover:text-primary">
-                      Forgot password?
-                    </Link>
+                    IS_CLOUD && (
+                      <Link href="/reset-password" className="text-xs text-muted-foreground hover:text-primary">
+                        Forgot password?
+                      </Link>
+                    )
                   }
                 />
 

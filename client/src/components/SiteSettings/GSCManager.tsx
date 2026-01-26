@@ -1,6 +1,8 @@
 "use client";
 
-import { useConnectGSC, useDisconnectGSC, useGSCConnection } from "@/api/gsc/useGSCConnection";
+import { useConnectGSC } from "@/api/gsc/hooks/useConnectGSC";
+import { useDisconnectGSC } from "@/api/gsc/hooks/useDisconnectGSC";
+import { useGetGSCConnection } from "@/api/gsc/hooks/useGetGSCConnection";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { Button } from "@/components/ui/button";
 import { SiGoogle } from "@icons-pack/react-simple-icons";
@@ -15,7 +17,7 @@ interface GSCManagerProps {
 
 export function GSCManager({ disabled = false }: GSCManagerProps) {
   const [gscStatus] = useQueryState("gsc", parseAsString);
-  const { data: connection, isLoading, refetch } = useGSCConnection();
+  const { data: connection, isLoading, refetch } = useGetGSCConnection();
   const { mutate: connect, isPending: isConnecting } = useConnectGSC();
   const { mutate: disconnect, isPending: isDisconnecting } = useDisconnectGSC();
   const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);

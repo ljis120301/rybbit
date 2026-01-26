@@ -3,13 +3,16 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-800 bg-neutral-900">
-      <div className="max-w-[1300px] mx-auto px-6 py-12">
+    <footer className="border-t border-neutral-200 dark:border-neutral-800">
+      <div className="max-w-[1200px] mx-auto px-4 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <Image src="/rybbit-text.svg" alt="Rybbit" width={120} height={27} />
+            <Image src="/rybbit-text.svg" alt="Rybbit" width={120} height={0} style={{ height: "auto" }}
+              className="dark:invert-0 invert"
+              
+               />
             {/* <p className="text-sm text-neutral-400 max-w-xs">
               Open source, privacy-focused web analytics platform that respects
               user privacy.
@@ -32,7 +35,7 @@ export function Footer() {
                 href="https://github.com/rybbit-io/rybbit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-white transition-colors"
+                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 aria-label="GitHub"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -43,7 +46,7 @@ export function Footer() {
                 href="https://discord.gg/DEhGb4hYBj"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-white transition-colors"
+                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 aria-label="Discord"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -54,7 +57,7 @@ export function Footer() {
                 href="https://x.com/yang_frog"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-400 hover:text-white transition-colors"
+                className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 aria-label="Twitter"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -66,48 +69,48 @@ export function Footer() {
 
           {/* Product Links */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-white">Comparisons</h3>
+            <h3 className="text-sm font-semibold">Comparisons</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/compare/google-analytics" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/google-analytics" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Google Analytics
                 </Link>
               </li>
               <li>
                 <Link
                   href="/compare/cloudflare-analytics"
-                  className="text-neutral-400 hover:text-white transition-colors"
+                  className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 >
                   vs Cloudflare Analytics
                 </Link>
               </li>
               <li>
-                <Link href="/compare/plausible" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/plausible" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Plausible
                 </Link>
               </li>
               <li>
-                <Link href="/compare/umami" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/umami" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Umami
                 </Link>
               </li>
               <li>
-                <Link href="/compare/fathom" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/fathom" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Fathom
                 </Link>
               </li>
               <li>
-                <Link href="/compare/simpleanalytics" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/simpleanalytics" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Simple Analytics
                 </Link>
               </li>
               <li>
-                <Link href="/compare/matomo" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/matomo" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs Matomo
                 </Link>
               </li>
               <li>
-                <Link href="/compare/posthog" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/compare/posthog" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   vs PostHog
                 </Link>
               </li>
@@ -116,30 +119,30 @@ export function Footer() {
 
           {/* Resources */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-white">Resources</h3>
+            <h3 className="text-sm font-semibold">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/docs" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/docs" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Documentation
                 </Link>
               </li>
               <li>
-                <Link href="/features" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/features" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/pricing" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/blog" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/tools" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/tools" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Tools
                 </Link>
               </li>
@@ -148,7 +151,7 @@ export function Footer() {
                   href="https://github.com/rybbit-io/rybbit"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-neutral-400 hover:text-white transition-colors"
+                  className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 >
                   GitHub
                 </a>
@@ -158,23 +161,23 @@ export function Footer() {
                   href="https://discord.gg/DEhGb4hYBj"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-neutral-400 hover:text-white transition-colors"
+                  className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
                 >
                   Community
                 </a>
               </li>
               <li>
-                <Link href="/docs/api/getting-started" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/docs/api/getting-started" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   API Reference
                 </Link>
               </li>
               <li>
-                <Link href="https://ipapi.is/" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="https://ipapi.is/" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Geolocation by ipapi.is
                 </Link>
               </li>
               <li>
-                <Link href="/oss-friends" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/oss-friends" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   OSS Friends
                 </Link>
               </li>
@@ -183,30 +186,35 @@ export function Footer() {
 
           {/* Company */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-white">Company</h3>
+            <h3 className="text-sm font-semibold">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/contact" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/contact" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/privacy" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms-and-conditions" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/terms-and-conditions" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Terms and Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/security" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/security" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Security
                 </Link>
               </li>
               <li>
-                <a href="mailto:hello@rybbit.com" className="text-neutral-400 hover:text-white transition-colors">
+                <Link href="/dpa" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  DPA
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:hello@rybbit.com" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
                   Support
                 </a>
               </li>
@@ -215,7 +223,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-neutral-800">
+        <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-sm text-neutral-400">© {new Date().getFullYear()} Rybbit. All rights reserved.</div>
             <div className="text-sm text-neutral-400">

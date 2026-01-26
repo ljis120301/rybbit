@@ -11,12 +11,13 @@ import { DialogFooter } from "./ui/dialog";
 import { DialogDescription } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { AlertCircle, Building2 } from "lucide-react";
+import { AlertCircle, AlertTriangle, Building2 } from "lucide-react";
 import { authClient } from "../lib/auth";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { USER_ORGANIZATIONS_QUERY_KEY } from "../api/admin/organizations";
+import { USER_ORGANIZATIONS_QUERY_KEY } from "../api/admin/hooks/useOrganizations";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { useStripeSubscription } from "../lib/subscription/useStripeSubscription";
 
 interface CreateOrganizationDialogProps {
   open: boolean;
@@ -30,6 +31,8 @@ export function CreateOrganizationDialog({ open, onOpenChange, onSuccess, trigge
   const [slug, setSlug] = useState("");
   const [error, setError] = useState<string>("");
   const queryClient = useQueryClient();
+
+  const { data: subscription } = useStripeSubscription();
 
   // Generate slug from name when name changes
   const handleNameChange = (value: string) => {
@@ -104,9 +107,9 @@ export function CreateOrganizationDialog({ open, onOpenChange, onSuccess, trigge
         <DialogHeader>
           <DialogTitle className="text-2xl flex items-center gap-2">
             <Building2 className="h-6 w-6" />
-            Create Your Organization
+            Create Organization
           </DialogTitle>
-          <DialogDescription>Set up your organization to get started with Rybbit</DialogDescription>
+          <DialogDescription>Set up a new organization to add websites and users</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
@@ -154,6 +157,16 @@ export function CreateOrganizationDialog({ open, onOpenChange, onSuccess, trigge
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {subscription?.status === "active" && (
+              <Alert variant="warning">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Subscription Will Not Carry Over</AlertTitle>
+                <AlertDescription>
+                  You can create another organization, but your current subscription only applies to your current
+                  organization.
+                </AlertDescription>
               </Alert>
             )}
           </div>

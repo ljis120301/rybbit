@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useUpdateAccountSettings } from "../../../../api/admin/accountSettings";
+import { useUpdateAccountSettings } from "../../../../api/admin/hooks/useAccountSettings";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
 import { Input } from "../../../../components/ui/input";
@@ -15,11 +15,13 @@ import { IS_CLOUD } from "../../../../lib/const";
 import { ApiKeyManager } from "./ApiKeyManager";
 import { ChangePassword } from "./ChangePassword";
 import { DeleteAccount } from "./DeleteAccount";
+import { useSignout } from "../../../../hooks/useSignout";
 
 export function AccountInner() {
   const session = authClient.useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const signout = useSignout();
   const updateAccountSettings = useUpdateAccountSettings();
 
   const [email, setEmail] = useState(session.data?.user.email ?? "");
@@ -158,15 +160,7 @@ export function AccountInner() {
               </div>
             </div>
           )}
-          <Button
-            variant="outline"
-            onClick={async () => {
-              // Clear the query cache before signing out
-              queryClient.clear();
-              await authClient.signOut();
-              router.push("/login");
-            }}
-          >
+          <Button variant="outline" onClick={signout}>
             Sign out
           </Button>
         </CardContent>

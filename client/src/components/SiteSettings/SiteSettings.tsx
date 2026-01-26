@@ -16,11 +16,12 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { SiteResponse, useGetSite } from "@/api/admin/sites";
-import { useUserOrganizations } from "@/api/admin/organizations";
 import { ScriptBuilder } from "./ScriptBuilder";
 import { SiteConfiguration } from "./SiteConfiguration";
 import { ImportManager } from "./ImportManager";
+import { useGetSite } from "../../api/admin/hooks/useSites";
+import { useUserOrganizations } from "../../api/admin/hooks/useOrganizations";
+import { SiteResponse } from "../../api/admin/endpoints";
 
 export function SiteSettings({ siteId, trigger }: { siteId: number; trigger?: React.ReactNode }) {
   const { data: siteMetadata, isLoading, error } = useGetSite(siteId);

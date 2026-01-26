@@ -5,7 +5,7 @@ import SqlString from "sqlstring";
 
 export interface GetUserSessionCountRequest {
   Params: {
-    site: string;
+    siteId: string;
   };
   Querystring: {
     user_id?: string;
@@ -19,7 +19,7 @@ export type GetUserSessionCountResponse = {
 }[];
 
 export async function getUserSessionCount(req: FastifyRequest<GetUserSessionCountRequest>, res: FastifyReply) {
-  const { site } = req.params;
+  const { siteId } = req.params;
   const { user_id: userId, time_zone: timeZone = "UTC" } = req.query;
 
   if (!userId) {
@@ -43,7 +43,7 @@ export async function getUserSessionCount(req: FastifyRequest<GetUserSessionCoun
       query,
       format: "JSONEachRow",
       query_params: {
-        siteId: Number(site),
+        siteId: Number(siteId),
         userId,
       },
     });

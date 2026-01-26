@@ -44,16 +44,17 @@ export function PricingCard({
 
   return (
     <div className="w-full flex-shrink-0">
-      <div
-        className={cn(
-          "rounded-xl border overflow-hidden backdrop-blur-sm shadow-xl h-full",
-          recommended
-            ? "bg-neutral-100/80 dark:bg-neutral-800/100 border-emerald-500 border-2"
-            : isFree
-            ? "bg-neutral-100/30 dark:bg-neutral-800/15 border-neutral-300/60 dark:border-neutral-800/60 text-neutral-600 dark:text-neutral-300"
-            : "bg-neutral-100/50 dark:bg-neutral-800/50 border-neutral-300/90 dark:border-neutral-800/90"
-        )}
-      >
+      <div className="bg-neutral-200/40 dark:bg-neutral-900/40 p-2 rounded-3xl border border-neutral-300 dark:border-neutral-800 h-full">
+        <div
+          className={cn(
+            "rounded-2xl border overflow-hidden backdrop-blur-sm shadow-xl h-full",
+            recommended
+              ? "bg-neutral-100/80 dark:bg-neutral-800/100 border-emerald-500 border-2"
+              : isFree
+              ? "bg-neutral-100/30 dark:bg-neutral-800/15 border-neutral-300/60 dark:border-neutral-800/60 text-neutral-600 dark:text-neutral-300"
+              : "bg-neutral-50 dark:bg-neutral-900 border-neutral-300 dark:border-neutral-800"
+          )}
+        >
         <div className="p-6">
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
@@ -138,6 +139,7 @@ export function PricingCard({
               {footerText}
             </p>
           )}
+        </div>
         </div>
       </div>
     </div>

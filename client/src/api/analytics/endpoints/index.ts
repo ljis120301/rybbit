@@ -11,16 +11,19 @@ export type {
 } from "./overview";
 
 // Events endpoints
-export { fetchEvents, fetchEventNames, fetchEventProperties, fetchOutboundLinks } from "./events";
+export { fetchEventBucketed, fetchEvents, fetchEventNames, fetchEventProperties, fetchOutboundLinks } from "./events";
 export type {
   Event,
+  EventBucketedPoint,
   EventsResponse,
   EventName,
   EventProperty,
   OutboundLink,
+  EventBucketedParams,
   EventsParams,
   EventPropertiesParams,
 } from "./events";
+
 
 // Errors endpoints
 export { fetchErrorNames, fetchErrorEvents, fetchErrorBucketed } from "./errors";
@@ -128,3 +131,7 @@ export type {
   GetSessionReplayEventsResponse,
   SessionReplaysParams,
 } from "./sessionReplay";
+
+// Export endpoints
+export { exportPdfReport } from "./export";
+export type { ExportPdfParams } from "./export";

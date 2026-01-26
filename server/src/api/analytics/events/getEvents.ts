@@ -23,7 +23,7 @@ export type GetEventsResponse = {
 
 interface GetEventsRequest {
   Params: {
-    site: string;
+    siteId: string;
   };
   Querystring: FilterParams<{
     page?: string;
@@ -33,7 +33,7 @@ interface GetEventsRequest {
 }
 
 export async function getEvents(req: FastifyRequest<GetEventsRequest>, res: FastifyReply) {
-  const { site } = req.params;
+  const { siteId } = req.params;
   const { start_date, end_date, time_zone, filters, page = "1", page_size: pageSize = "20", count } = req.query;
 
   // Use count if provided (for backward compatibility), otherwise use page_size
@@ -44,7 +44,7 @@ export async function getEvents(req: FastifyRequest<GetEventsRequest>, res: Fast
   const timeStatement =
     start_date || end_date ? getTimeStatement(req.query) : "AND timestamp > now() - INTERVAL 30 MINUTE"; // Default to last 30 minutes if no time range specified
 
-  const filterStatement = filters ? getFilterStatement(filters, Number(site), timeStatement) : "";
+  const filterStatement = filters ? getFilterStatement(filters, Number(siteId), timeStatement) : "";
 
   try {
     // First, get the total count for pagination metadata
@@ -63,7 +63,7 @@ export async function getEvents(req: FastifyRequest<GetEventsRequest>, res: Fast
       query: countQuery,
       format: "JSONEachRow",
       query_params: {
-        siteId: Number(site),
+        siteId: Number(siteId),
       },
     });
 
@@ -101,7 +101,7 @@ export async function getEvents(req: FastifyRequest<GetEventsRequest>, res: Fast
       query: eventsQuery,
       format: "JSONEachRow",
       query_params: {
-        siteId: Number(site),
+        siteId: Number(siteId),
         limit: Number(limit),
         offset: Number(offset),
       },

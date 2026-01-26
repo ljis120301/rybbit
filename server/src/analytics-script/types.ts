@@ -1,4 +1,5 @@
 export interface ScriptConfig {
+  namespace: string;
   analyticsHost: string;
   siteId: string;
   debounceDuration: number;
@@ -14,6 +15,18 @@ export interface ScriptConfig {
   sessionReplayMaskTextSelectors: string[];
   skipPatterns: string[];
   maskPatterns: string[];
+  // Session replay rrweb options
+  sessionReplayBlockClass?: string;
+  sessionReplayBlockSelector?: string;
+  sessionReplayIgnoreClass?: string;
+  sessionReplayIgnoreSelector?: string;
+  sessionReplayMaskTextClass?: string;
+  sessionReplayMaskAllInputs?: boolean;
+  sessionReplayMaskInputOptions?: Record<string, boolean>;
+  sessionReplayCollectFonts?: boolean;
+  sessionReplaySampling?: Record<string, any>;
+  sessionReplaySlimDOMOptions?: Record<string, boolean> | boolean;
+  sessionReplaySampleRate?: number; // 0-100, percentage of sessions to record
 }
 
 export interface BasePayload {

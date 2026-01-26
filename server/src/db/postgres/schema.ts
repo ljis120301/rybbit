@@ -41,6 +41,7 @@ export const user = pgTable(
     // deprecated
     monthlyEventCount: integer().default(0),
     sendAutoEmailReports: boolean().default(true),
+    scheduledTipEmailIds: jsonb("scheduled_tip_email_ids").$type<string[]>().default([]),
   },
   table => [unique("user_username_unique").on(table.username), unique("user_email_unique").on(table.email)]
 );
@@ -79,7 +80,7 @@ export const sites = pgTable("sites", {
   trackInitialPageView: boolean().default(true),
   trackSpaNavigation: boolean().default(true),
   trackIp: boolean().default(false),
-  apiKey: text("api_key"), // Format: rb_{32_hex_chars} = 35 chars total
+  apiKey: text("api_key"), // Format: rb_{64_hex_chars} = 67 chars total
   privateLinkKey: text("private_link_key"),
 });
 
@@ -149,6 +150,8 @@ export const member = pgTable("member", {
     .references(() => user.id, { onDelete: "cascade" }),
   role: text().notNull(),
   createdAt: timestamp({ mode: "string" }).notNull(),
+  // Site access restriction: false = all sites (default), true = only sites in member_site_access
+  hasRestrictedSiteAccess: boolean("has_restricted_site_access").default(false).notNull(),
 });
 
 // Invitation table (BetterAuth)
@@ -162,7 +165,32 @@ export const invitation = pgTable("invitation", {
   role: text().notNull(),
   status: text().notNull(),
   expiresAt: timestamp({ mode: "string" }).notNull(),
+  // Site access restriction for the invited member
+  hasRestrictedSiteAccess: boolean("has_restricted_site_access").default(false).notNull(),
+  siteIds: jsonb("site_ids").default([]).$type<number[]>(), // Array of site IDs to grant access to
 });
+
+// Member site access junction table - stores which sites a member has access to
+// Only used when member.hasRestrictedSiteAccess = true
+export const memberSiteAccess = pgTable(
+  "member_site_access",
+  {
+    id: serial("id").primaryKey().notNull(),
+    memberId: text("member_id")
+      .notNull()
+      .references(() => member.id, { onDelete: "cascade" }),
+    siteId: integer("site_id")
+      .notNull()
+      .references(() => sites.siteId, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+    createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
+  },
+  (table) => [
+    unique("member_site_access_unique").on(table.memberId, table.siteId),
+    index("member_site_access_member_idx").on(table.memberId),
+    index("member_site_access_site_idx").on(table.siteId),
+  ]
+);
 
 // Session table (BetterAuth)
 export const session = pgTable(
@@ -225,8 +253,13 @@ export const goals = pgTable(
       pathPattern?: string; // e.g., "/pricing", "/product/*/view", "/docs/**"
       // For 'event' type
       eventName?: string; // e.g., "signup_completed", "file_downloaded"
-      eventPropertyKey?: string; // Optional property key to match
-      eventPropertyValue?: string | number | boolean; // Optional property value to match (exact match)
+      // Property filters (for both path and event types)
+      eventPropertyKey?: string; // Deprecated - use propertyFilters instead
+      eventPropertyValue?: string | number | boolean; // Deprecated - use propertyFilters instead
+      propertyFilters?: Array<{
+        key: string;
+        value: string | number | boolean;
+      }>; // Array of property filters to match (all must match)
     }>(),
     createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
   },

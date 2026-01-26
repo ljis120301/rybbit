@@ -5,7 +5,7 @@ import {
   useGeneratePrivateLinkKey,
   useGetPrivateLinkConfig,
   useRevokePrivateLinkKey,
-} from "../../../../api/admin/privateLink";
+} from "../../../../api/admin/hooks/usePrivateLink";
 import { Button } from "../../../../components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../../../../components/ui/dropdown-menu";
 import { Input } from "../../../../components/ui/input";
@@ -23,7 +23,7 @@ export function ShareSite() {
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" onClick={() => {}} className="h-8 w-8">
-              <Share />
+              <Share className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
         </TooltipTrigger>

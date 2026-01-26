@@ -1,8 +1,9 @@
+import { getTimezone } from "@/lib/store";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
-import { useCurrentSite } from "../../../../api/admin/sites";
+import { useCurrentSite } from "../../../../api/admin/hooks/useSites";
 import { useGetSessionsInfinite } from "../../../../api/analytics/hooks/useGetUserSessions";
 import { GetSessionsResponse } from "../../../../api/analytics/endpoints";
 import { Avatar, generateName } from "../../../../components/Avatar";
@@ -20,16 +21,7 @@ import { Button } from "../../../../components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "../../../../components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../components/ui/tooltip";
 import { formatShortDuration, hour12, userLocale } from "../../../../lib/dateTimeUtils";
-import { cn, formatter } from "../../../../lib/utils";
-
-// Function to truncate path for display
-function truncatePath(path: string, maxLength: number = 32) {
-  if (!path) return "-";
-  if (path.length <= maxLength) return path;
-
-  // Keep the beginning of the path with ellipsis
-  return `${path.substring(0, maxLength)}...`;
-}
+import { cn, formatter, truncateString } from "../../../../lib/utils";
 
 function SessionCardSkeleton() {
   return (
@@ -65,8 +57,8 @@ function SessionCardSkeleton() {
 
 function SessionCard({ session, onClick }: { session: GetSessionsResponse[number]; onClick?: () => void }) {
   // Calculate session duration in minutes
-  const start = DateTime.fromSQL(session.session_start);
-  const end = DateTime.fromSQL(session.session_end);
+  const start = DateTime.fromSQL(session.session_start, { zone: "utc" });
+  const end = DateTime.fromSQL(session.session_end, { zone: "utc" });
   const totalSeconds = Math.floor(end.diff(start).milliseconds / 1000);
   const duration = formatShortDuration(totalSeconds);
   const siteId = useCurrentSite();
@@ -90,7 +82,7 @@ function SessionCard({ session, onClick }: { session: GetSessionsResponse[number
                 zone: "utc",
               })
                 .setLocale(userLocale)
-                .toLocal()
+                .setZone(getTimezone())
                 .toFormat(hour12 ? "MMM d, h:mm a" : "dd MMM, HH:mm")}
             </span>
             <span className="text-neutral-400">•</span>
@@ -136,7 +128,7 @@ function SessionCard({ session, onClick }: { session: GetSessionsResponse[number
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="text-xs text-neutral-400 truncate max-w-[200px] inline-block">
-              {truncatePath(session.entry_page)}
+              {truncateString(session.entry_page, 32)}
             </span>
           </TooltipTrigger>
           <TooltipContent>
@@ -149,7 +141,7 @@ function SessionCard({ session, onClick }: { session: GetSessionsResponse[number
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="text-xs text-neutral-400 truncate max-w-[200px] inline-block">
-              {truncatePath(session.exit_page)}
+              {truncateString(session.exit_page, 32)}
             </span>
           </TooltipTrigger>
           <TooltipContent>

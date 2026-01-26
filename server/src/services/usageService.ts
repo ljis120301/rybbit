@@ -37,9 +37,6 @@ class UsageService {
         { timezone: "UTC" }
       );
 
-      // Run immediately on startup
-      this.updateOrganizationsMonthlyUsage();
-
       this.logger.info("Monthly usage check cron initialized (runs every 30 minutes)");
     }
   }

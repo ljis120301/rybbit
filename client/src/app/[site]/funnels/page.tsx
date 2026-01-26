@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { GOALS_PAGE_FILTERS } from "@/lib/filterGroups";
 import { useStore } from "@/lib/store";
 import { ArrowRight, Funnel } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { useMemo, useState } from "react";
 import { useGetFunnels } from "../../../api/analytics/hooks/funnels/useGetFunnels";
 import { SavedFunnel } from "../../../api/analytics/endpoints";
@@ -17,28 +18,28 @@ import { FunnelRow } from "./components/FunnelRow";
 
 // Skeleton for the funnel row component
 const FunnelRowSkeleton = () => (
-  <div className="rounded-md shadow-sm bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 mb-4 overflow-hidden">
+  <Card className="mb-4 overflow-hidden">
     <div className="flex items-center justify-between py-2 px-5 animate-pulse">
       <div className="flex items-center grow">
-        <div className="mt-1 text-xs flex flex-col gap-3 w-full">
+        <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400 flex flex-col gap-3">
           {/* Funnel name and steps skeleton */}
-          <div className="flex flex-wrap gap-1 items-center">
-            <div className="h-5 bg-neutral-100 dark:bg-neutral-800 rounded w-32 mb-1"></div>
+          <div className="flex flex-wrap gap-1">
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-32 mr-2"></div>
             <div className="flex items-center">
-              <div className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 w-20 h-5 flex items-center">
-                <div className="w-3 h-3 bg-neutral-150 dark:bg-neutral-700 rounded-full mr-1"></div>
-                <div className="h-3 bg-neutral-150 dark:bg-neutral-700 rounded w-12 ml-1"></div>
-              </div>
-              <ArrowRight className="h-3 w-3 mx-1 text-neutral-300 dark:text-neutral-600" />
-              <div className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 w-24 h-5 flex items-center">
-                <div className="w-3 h-3 bg-neutral-150 dark:bg-neutral-700 rounded-full mr-1"></div>
-                <div className="h-3 bg-neutral-150 dark:bg-neutral-700 rounded w-16 ml-1"></div>
-              </div>
-              <ArrowRight className="h-3 w-3 mx-1 text-neutral-300 dark:text-neutral-600" />
-              <div className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 w-20 h-5 flex items-center">
-                <div className="w-3 h-3 bg-neutral-150 dark:bg-neutral-700 rounded-full mr-1"></div>
-                <div className="h-3 bg-neutral-150 dark:bg-neutral-700 rounded w-12 ml-1"></div>
-              </div>
+              <span className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 flex items-center">
+                <div className="w-3 h-3 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-16"></div>
+              </span>
+              <ArrowRight className="h-3 w-3 mx-1 text-neutral-400" />
+              <span className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 flex items-center">
+                <div className="w-3 h-3 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
+              </span>
+              <ArrowRight className="h-3 w-3 mx-1 text-neutral-400" />
+              <span className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 flex items-center">
+                <div className="w-3 h-3 bg-neutral-200 dark:bg-neutral-700 rounded mr-1"></div>
+                <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-14"></div>
+              </span>
             </div>
           </div>
         </div>
@@ -46,13 +47,14 @@ const FunnelRowSkeleton = () => (
 
       <div className="flex items-center gap-4">
         <div className="flex">
-          <div className="h-8 w-8 bg-neutral-100 dark:bg-neutral-800 rounded-md mr-1"></div>
-          <div className="h-8 w-8 bg-neutral-100 dark:bg-neutral-800 rounded-md mr-1"></div>
-          <div className="h-8 w-8 bg-neutral-100 dark:bg-neutral-800 rounded-md"></div>
+          <div className="h-9 w-9 bg-neutral-100 dark:bg-neutral-800 rounded-md"></div>
+          <div className="h-9 w-9 bg-neutral-100 dark:bg-neutral-800 rounded-md"></div>
+          <div className="h-9 w-9 bg-neutral-100 dark:bg-neutral-800 rounded-md"></div>
+          <div className="h-9 w-9 bg-neutral-100 dark:bg-neutral-800 rounded-md"></div>
         </div>
       </div>
     </div>
-  </div>
+  </Card>
 );
 
 export default function FunnelsPage() {

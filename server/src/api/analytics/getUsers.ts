@@ -25,7 +25,7 @@ export type GetUsersResponse = {
 
 export interface GetUsersRequest {
   Params: {
-    site: string;
+    siteId: string;
   };
   Querystring: FilterParams<{
     page?: string;
@@ -45,7 +45,7 @@ export async function getUsers(req: FastifyRequest<GetUsersRequest>, res: Fastif
     sort_order: sortOrder = "desc",
     identified_only: identifiedOnly = "false",
   } = req.query;
-  const site = req.params.site;
+  const site = req.params.siteId;
   const filterIdentified = identifiedOnly === "true";
 
   const pageNum = parseInt(page, 10);

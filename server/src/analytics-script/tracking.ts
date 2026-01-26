@@ -18,7 +18,7 @@ export class Tracker {
 
   private loadUserId(): void {
     try {
-      const storedUserId = localStorage.getItem("rybbit-user-id");
+      const storedUserId = localStorage.getItem(`${this.config.namespace}-user-id`);
       if (storedUserId) {
         this.customUserId = storedUserId;
       }
@@ -236,7 +236,7 @@ export class Tracker {
 
     this.customUserId = userId.trim();
     try {
-      localStorage.setItem("rybbit-user-id", this.customUserId);
+      localStorage.setItem(`${this.config.namespace}-user-id`, this.customUserId);
     } catch (e) {
       console.warn("Could not persist user ID to localStorage");
     }
@@ -293,7 +293,7 @@ export class Tracker {
   clearUserId(): void {
     this.customUserId = null;
     try {
-      localStorage.removeItem("rybbit-user-id");
+      localStorage.removeItem(`${this.config.namespace}-user-id`);
     } catch (e) {
       // localStorage not available
     }

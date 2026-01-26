@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Users } from "lucide-react";
+import { CreditCard, Plus, Users } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateOrganizationDialog } from "../../../components/CreateOrganizationDialog";
@@ -38,7 +38,11 @@ export default function OrganizationLayout({ children }: { children: React.React
           <CreateOrganizationDialog
             open={createOrgDialogOpen}
             onOpenChange={setCreateOrgDialogOpen}
-            trigger={<Button>New Organization</Button>}
+            trigger={
+              <Button variant="secondary" size="icon">
+                <Plus className="h-4 w-4" />
+              </Button>
+            }
           />
         </div>
 

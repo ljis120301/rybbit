@@ -1,10 +1,12 @@
+import { BackgroundGrid } from "@/components/BackgroundGrid";
+import { CTASection } from "@/components/CTASection";
+import { DEFAULT_EVENT_LIMIT } from "@/lib/const";
 import { CheckCircle, CircleMinus } from "lucide-react";
 import { Tilt_Warp } from "next/font/google";
 import Image from "next/image";
 import React from "react";
 import { TrackedButton } from "../../../../components/TrackedButton";
 import { cn } from "../../../../lib/utils";
-import { DEFAULT_EVENT_LIMIT } from "../../../../lib/const";
 
 const tilt_wrap = Tilt_Warp({
   subsets: ["latin"],
@@ -42,16 +44,7 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
 
   return (
     <div className="flex flex-col items-center justify-center overflow-x-hidden pt-16 md:pt-24">
-      <div
-        className={cn(
-          "absolute inset-0 -top-32 md:-top-48",
-          "[background-size:40px_40px]",
-          "[background-image:linear-gradient(to_right,#d4d4d4_1px,transparent_1px),linear-gradient(to_bottom,#d4d4d4_1px,transparent_1px)]",
-          "dark:[background-image:linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
-          "[mask-image:linear-gradient(to_bottom,black,transparent_80%),linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]",
-          "[mask-composite:intersect]"
-        )}
-      />
+      <BackgroundGrid />
       <div className="relative flex flex-col py-8">
         {/* Grid background with fade */}
 
@@ -198,37 +191,10 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
         </section>
       )}
 
-      <section className="py-12 md:py-20 w-full bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="relative p-6 md:p-12 flex flex-col items-center justify-center text-center">
-            <div className="mb-6 md:mb-8">
-              <Image src="/rybbit-text.svg" alt="Rybbit" width={150} height={27} className="dark:invert-0 invert" />
-            </div>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">
-              It&apos;s time to switch to analytics that&apos;s made for you
-            </h2>
-            <p className="text-base md:text-xl text-neutral-600 dark:text-neutral-300 mb-6 md:mb-10 max-w-3xl mx-auto font-light">
-              The first {DEFAULT_EVENT_LIMIT.toLocaleString()} events a month are free
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mb-6 md:mb-8 w-full sm:w-auto">
-              <TrackedButton
-                href="https://app.rybbit.io/signup"
-                eventName="signup"
-                eventProps={{ location: "bottom_cta", button_text: "Get started" }}
-                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white text-lg font-medium px-6 md:px-8 py-3 md:py-4 rounded-lg shadow-lg shadow-emerald-900/20 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 cursor-pointer"
-              >
-                Get started
-              </TrackedButton>
-            </div>
-
-            <p className="text-neutral-500 dark:text-neutral-400 text-xs md:text-sm flex items-center justify-center gap-2">
-              <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
-              No credit card required
-            </p>
-          </div>
-        </div>
-      </section>
+      <CTASection
+        title="It's time to switch to analytics that's made for you"
+        eventLocation="comparison_bottom_cta"
+      />
     </div>
   );
 }

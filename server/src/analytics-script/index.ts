@@ -8,6 +8,7 @@ declare global {
   interface Window {
     __RYBBIT_OPTOUT__?: boolean;
     rybbit: RybbitAPI;
+    [key: string]: any;
   }
 }
 
@@ -18,10 +19,14 @@ declare global {
     return;
   }
 
+  // Parse namespace early for opt-out check
+  const namespace = scriptTag.getAttribute("data-namespace") || "rybbit";
+  const optOutKey = `disable-${namespace}`;
+
   // Check if user has opted out
-  if (window.__RYBBIT_OPTOUT__ || localStorage.getItem("disable-rybbit") !== null) {
+  if (window.__RYBBIT_OPTOUT__ || localStorage.getItem(optOutKey) !== null) {
     // Create no-op implementation
-    window.rybbit = {
+    window[namespace] = {
       pageview: () => {},
       event: () => {},
       error: () => {},
@@ -141,8 +146,8 @@ declare global {
     }
   }
 
-  // Setup public API
-  window.rybbit = {
+  // Setup public API on the configured namespace
+  window[config.namespace] = {
     pageview: () => tracker.trackPageview(),
     event: (name: string, properties: Record<string, any> = {}) => tracker.trackEvent(name, properties),
     error: (error: Error, properties: ErrorProperties = {}) => tracker.trackError(error, properties),

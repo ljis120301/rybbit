@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart, ShieldUser, User } from "lucide-react";
+import { BarChart, Building2, HomeIcon, LogOut, Settings, ShieldUser, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -10,12 +10,31 @@ import { IS_CLOUD } from "../lib/const";
 import { cn } from "../lib/utils";
 import { RybbitLogo } from "./RybbitLogo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { authClient } from "../lib/auth";
+import { useSignout } from "../hooks/useSignout";
+
+function AdminLink({ isExpanded }: { isExpanded: boolean }) {
+  const pathname = usePathname();
+  const { isAdmin } = useAdminPermission();
+  if (!IS_CLOUD || !isAdmin) return null;
+
+  return (
+    <SidebarLink
+      href="/admin"
+      icon={<ShieldUser className="w-5 h-5" />}
+      label="Admin"
+      active={pathname.startsWith("/admin")}
+      expanded={isExpanded}
+    />
+  );
+}
 
 function AppSidebarContent() {
   const pathname = usePathname();
-  const { isAdmin } = useAdminPermission();
+  const { data: session } = authClient.useSession();
   const [isExpanded, setIsExpanded] = useState(false);
   const embed = useEmbedablePage();
+  const signout = useSignout();
 
   if (embed) return null;
 
@@ -29,14 +48,16 @@ function AppSidebarContent() {
       onMouseLeave={() => setIsExpanded(false)}
     >
       <div className="flex flex-col items-start gap-2">
-        <Link href="/" className="mb-3 mt-1 ml-0.5 flex items-center justify-center">
+        {/* <Link href="/" className="mb-3 mt-1 ml-0.5 flex items-center justify-center">
           <RybbitLogo width={24} height={18} />
-        </Link>
+          <HomeIcon className="w-5 h-5" />
+        </Link> */}
         <SidebarLink
           href="/"
-          icon={<BarChart className="w-5 h-5" />}
-          label="Analytics"
-          active={pathname === "/" || !isNaN(Number(pathname.split("/")[1]))}
+          icon={<HomeIcon className="w-5 h-5" />}
+          label="Home"
+          // active={!isNaN(Number(pathname.split("/")[1]))}
+          active={false}
           expanded={isExpanded}
         />
         {/* <SidebarLink
@@ -46,27 +67,48 @@ function AppSidebarContent() {
           active={pathname.startsWith("/uptime")}
           expanded={isExpanded}
         /> */}
-        {isAdmin && IS_CLOUD && (
-          <SidebarLink
-            href="/admin"
-            icon={<ShieldUser className="w-5 h-5" />}
-            label="Admin"
-            active={pathname.startsWith("/admin")}
-            expanded={isExpanded}
-          />
-        )}
+        {session?.user.role === "admin" && <AdminLink isExpanded={isExpanded} />}
       </div>
       <div className="flex flex-col items-start gap-2 w-full">
         <div className={cn("flex items-center w-full px-0.5", isExpanded ? "justify-start" : "hidden")}>
           <ThemeSwitcher />
         </div>
-        <SidebarLink
-          href="/settings/account"
-          icon={<User className="w-5 h-5" />}
-          label="Account"
-          active={pathname.startsWith("/settings/account")}
-          expanded={isExpanded}
-        />
+
+        {isExpanded ? (
+          <>
+            <SidebarLink
+              href="/settings/account"
+              icon={<User className="w-5 h-5" />}
+              label="Account"
+              active={pathname.startsWith("/settings/account")}
+              expanded={isExpanded}
+            />
+            <SidebarLink
+              href="/settings/organization"
+              icon={<Building2 className="w-5 h-5" />}
+              label="Organization"
+              active={pathname.startsWith("/settings/organization")}
+              expanded={isExpanded}
+            />
+            <SidebarLink
+              onClick={signout}
+              icon={<LogOut className="w-5 h-5" />}
+              label="Sign out"
+              expanded={isExpanded}
+            />
+          </>
+        ) : (
+          <div
+            className={cn(
+              "p-1 rounded-md transition-all duration-200 flex items-center gap-2",
+              "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-150 dark:hover:bg-neutral-800/80"
+            )}
+          >
+            <div className="flex items-center justify-center w-5 h-5 shrink-0">
+              <Settings className="w-5 h-5" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -86,13 +128,32 @@ function SidebarLink({
   icon,
   label,
   expanded = false,
+  onClick,
 }: {
   active?: boolean;
-  href: string;
+  href?: string;
   icon?: React.ReactNode;
   label?: string;
   expanded?: boolean;
+  onClick?: () => void;
 }) {
+  if (!href) {
+    return (
+      <div
+        onClick={onClick}
+        className={cn(
+          "p-1 rounded-md transition-all duration-200 flex items-center gap-2",
+          "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-150 dark:hover:bg-neutral-800/80"
+        )}
+      >
+        <div className="flex items-center justify-center w-5 h-5 shrink-0">{icon}</div>
+        {expanded && label && (
+          <span className="text-sm font-medium whitespace-nowrap overflow-hidden w-[120px]">{label}</span>
+        )}
+      </div>
+    );
+  }
+
   return (
     <Link href={href} className="focus:outline-none">
       <div
@@ -101,7 +162,6 @@ function SidebarLink({
           active
             ? "bg-neutral-150 dark:bg-neutral-800 text-neutral-800 dark:text-white"
             : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-150 dark:hover:bg-neutral-800/80"
-          // expanded ? "w-40" : "w-12"
         )}
       >
         <div className="flex items-center justify-center w-5 h-5 shrink-0">{icon}</div>
