@@ -90,7 +90,7 @@ export async function batchImportEvents(request: FastifyRequest<BatchImportReque
       } else if (importRecord.platform === "simple_analytics") {
         transformedEvents = SimpleAnalyticsImportMapper.transform(events as SimpleAnalyticsEvent[], siteId, importId);
       } else if (importRecord.platform === "matomo") {
-        transformedEvents = MatomoImportMapper.transform(events as MatomoEvent[], site, importId);
+        transformedEvents = MatomoImportMapper.transform(events as MatomoEvent[], siteId, importId);
       } else {
         return reply.status(400).send({ error: "Unsupported platform" });
       }
