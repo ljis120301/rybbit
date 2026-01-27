@@ -1,6 +1,8 @@
 import { parseScriptConfig } from "./config.js";
 import { Tracker } from "./tracking.js";
 import { WebVitalsCollector } from "./webVitals.js";
+import { ClickTrackingManager } from "./clickTracking.js";
+import { CopyTrackingManager } from "./copyTracking.js";
 import { debounce, isOutboundLink } from "./utils.js";
 import { RybbitAPI, WebVitalsData, ErrorProperties } from "./types.js";
 
@@ -57,6 +59,18 @@ declare global {
       tracker.trackWebVitals(vitals);
     });
     webVitalsCollector.initialize();
+  }
+
+  // Initialize click tracking if any click feature is enabled
+  if (config.trackButtonClicks || config.trackRageClicks || config.trackDeadClicks) {
+    const clickManager = new ClickTrackingManager(tracker, config);
+    clickManager.initialize();
+  }
+
+  // Initialize copy tracking if enabled
+  if (config.trackCopy) {
+    const copyManager = new CopyTrackingManager(tracker);
+    copyManager.initialize();
   }
 
   // Initialize error tracking if enabled

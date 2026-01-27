@@ -102,6 +102,10 @@ export async function parseScriptConfig(scriptTag: HTMLScriptElement): Promise<S
     enableWebVitals: false,
     trackErrors: false,
     enableSessionReplay: false,
+    trackButtonClicks: false,
+    trackRageClicks: false,
+    trackDeadClicks: false,
+    trackCopy: false,
     // rrweb session replay options (undefined means use rrweb defaults)
     sessionReplayBlockClass,
     sessionReplayBlockSelector,
@@ -139,6 +143,10 @@ export async function parseScriptConfig(scriptTag: HTMLScriptElement): Promise<S
         enableWebVitals: apiConfig.webVitals ?? defaultConfig.enableWebVitals,
         trackErrors: apiConfig.trackErrors ?? defaultConfig.trackErrors,
         enableSessionReplay: apiConfig.sessionReplay ?? defaultConfig.enableSessionReplay,
+        trackButtonClicks: apiConfig.trackButtonClicks ?? defaultConfig.trackButtonClicks,
+        trackRageClicks: apiConfig.trackRageClicks ?? defaultConfig.trackRageClicks,
+        trackDeadClicks: apiConfig.trackDeadClicks ?? defaultConfig.trackDeadClicks,
+        trackCopy: apiConfig.trackCopy ?? defaultConfig.trackCopy,
       };
     } else {
       // If API call fails, log warning and use defaults

@@ -80,6 +80,10 @@ export const sites = pgTable("sites", {
   trackInitialPageView: boolean().default(true),
   trackSpaNavigation: boolean().default(true),
   trackIp: boolean().default(false),
+  trackButtonClicks: boolean().default(false),
+  trackRageClicks: boolean().default(false),
+  trackDeadClicks: boolean().default(false),
+  trackCopy: boolean().default(false),
   apiKey: text("api_key"), // Format: rb_{64_hex_chars} = 67 chars total
   privateLinkKey: text("private_link_key"),
   tags: jsonb("tags").default([]).$type<string[]>(),

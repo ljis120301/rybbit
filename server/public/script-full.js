@@ -120,6 +120,10 @@
       enableWebVitals: false,
       trackErrors: false,
       enableSessionReplay: false,
+      trackButtonClicks: false,
+      trackRageClicks: false,
+      trackDeadClicks: false,
+      trackCopy: false,
       // rrweb session replay options (undefined means use rrweb defaults)
       sessionReplayBlockClass,
       sessionReplayBlockSelector,
@@ -151,7 +155,11 @@
           trackOutbound: apiConfig.trackOutbound ?? defaultConfig.trackOutbound,
           enableWebVitals: apiConfig.webVitals ?? defaultConfig.enableWebVitals,
           trackErrors: apiConfig.trackErrors ?? defaultConfig.trackErrors,
-          enableSessionReplay: apiConfig.sessionReplay ?? defaultConfig.enableSessionReplay
+          enableSessionReplay: apiConfig.sessionReplay ?? defaultConfig.enableSessionReplay,
+          trackButtonClicks: apiConfig.trackButtonClicks ?? defaultConfig.trackButtonClicks,
+          trackRageClicks: apiConfig.trackRageClicks ?? defaultConfig.trackRageClicks,
+          trackDeadClicks: apiConfig.trackDeadClicks ?? defaultConfig.trackDeadClicks,
+          trackCopy: apiConfig.trackCopy ?? defaultConfig.trackCopy
         };
       } else {
         console.warn("Failed to fetch tracking config from API, using defaults");
@@ -465,11 +473,12 @@
       if (!basePayload) {
         return;
       }
+      const typesWithProperties = ["custom_event", "outbound", "error", "button_click", "rage_click", "dead_click", "copy"];
       const payload = {
         ...basePayload,
         type: eventType,
         event_name: eventName,
-        properties: eventType === "custom_event" || eventType === "outbound" || eventType === "error" ? JSON.stringify(properties) : void 0
+        properties: typesWithProperties.includes(eventType) ? JSON.stringify(properties) : void 0
       };
       this.sendTrackingData(payload);
     }
@@ -539,6 +548,18 @@
         }
       }
       this.track("error", error.name || "Error", errorProperties);
+    }
+    trackButtonClick(properties) {
+      this.track("button_click", "", properties);
+    }
+    trackRageClick(properties) {
+      this.track("rage_click", "", properties);
+    }
+    trackDeadClick(properties) {
+      this.track("dead_click", "", properties);
+    }
+    trackCopy(properties) {
+      this.track("copy", "", properties);
     }
     identify(userId, traits) {
       if (typeof userId !== "string" || userId.trim() === "") {
@@ -925,6 +946,270 @@
     }
   };
 
+  // clickTracking.ts
+  var ClickTrackingManager = class {
+    constructor(tracker, config) {
+      this.clickHistory = [];
+      this.rageClickThreshold = 3;
+      // Minimum clicks to detect rage
+      this.rageClickTimeWindow = 500;
+      // ms
+      this.rageClickRadiusThreshold = 30;
+      // px
+      this.deadClickObserverTimeout = 100;
+      // ms to wait for DOM changes
+      this.isProcessingClick = false;
+      this.tracker = tracker;
+      this.config = config;
+    }
+    initialize() {
+      document.addEventListener("click", this.handleClick.bind(this), true);
+    }
+    handleClick(event) {
+      if (this.isProcessingClick) return;
+      this.isProcessingClick = true;
+      const target = event.target;
+      const now = Date.now();
+      if (this.config.trackRageClicks) {
+        this.trackRageClickIfDetected(event, now);
+      }
+      if (this.config.trackButtonClicks && this.isButton(target)) {
+        this.trackButtonClick(target);
+      }
+      if (this.config.trackDeadClicks && !this.isInteractiveElement(target)) {
+        this.trackDeadClickIfDetected(target);
+      }
+      this.isProcessingClick = false;
+    }
+    isButton(element) {
+      if (element.tagName === "BUTTON") return true;
+      if (element.getAttribute("role") === "button") return true;
+      if (element.tagName === "INPUT") {
+        const type = element.type?.toLowerCase();
+        if (type === "submit" || type === "button") return true;
+      }
+      let parent = element.parentElement;
+      let depth = 0;
+      while (parent && depth < 3) {
+        if (parent.tagName === "BUTTON") return true;
+        if (parent.getAttribute("role") === "button") return true;
+        parent = parent.parentElement;
+        depth++;
+      }
+      return false;
+    }
+    isInteractiveElement(element) {
+      const interactiveTags = ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA", "VIDEO", "AUDIO"];
+      const interactiveRoles = ["button", "link", "checkbox", "radio", "tab", "menuitem", "option"];
+      if (interactiveTags.includes(element.tagName)) return true;
+      if (element.hasAttribute("onclick")) return true;
+      if (element.hasAttribute("tabindex")) return true;
+      const role = element.getAttribute("role");
+      if (role && interactiveRoles.includes(role)) return true;
+      if (element.style.cursor === "pointer") return true;
+      const computedStyle = window.getComputedStyle(element);
+      if (computedStyle.cursor === "pointer") return true;
+      let parent = element.parentElement;
+      let depth = 0;
+      while (parent && depth < 3) {
+        if (interactiveTags.includes(parent.tagName)) return true;
+        if (parent.hasAttribute("onclick")) return true;
+        const parentRole = parent.getAttribute("role");
+        if (parentRole && interactiveRoles.includes(parentRole)) return true;
+        parent = parent.parentElement;
+        depth++;
+      }
+      return false;
+    }
+    trackButtonClick(element) {
+      const buttonElement = this.findButton(element);
+      if (!buttonElement) return;
+      const properties = {
+        element: buttonElement.tagName.toLowerCase(),
+        selector: this.getSelector(buttonElement),
+        pathname: window.location.pathname,
+        text: this.getElementText(buttonElement),
+        id: buttonElement.id || void 0,
+        className: buttonElement.className || void 0
+      };
+      this.tracker.trackButtonClick(properties);
+    }
+    findButton(element) {
+      if (element.tagName === "BUTTON") return element;
+      if (element.getAttribute("role") === "button") return element;
+      if (element.tagName === "INPUT") {
+        const type = element.type?.toLowerCase();
+        if (type === "submit" || type === "button") return element;
+      }
+      let parent = element.parentElement;
+      let depth = 0;
+      while (parent && depth < 3) {
+        if (parent.tagName === "BUTTON") return parent;
+        if (parent.getAttribute("role") === "button") return parent;
+        parent = parent.parentElement;
+        depth++;
+      }
+      return null;
+    }
+    trackRageClickIfDetected(event, now) {
+      const { clientX: x2, clientY: y2 } = event;
+      this.clickHistory.push({ x: x2, y: y2, timestamp: now });
+      this.clickHistory = this.clickHistory.filter(
+        (click) => now - click.timestamp <= this.rageClickTimeWindow
+      );
+      if (this.clickHistory.length >= this.rageClickThreshold) {
+        const nearbyClicks = this.clickHistory.filter((click) => {
+          const distance = Math.sqrt(Math.pow(click.x - x2, 2) + Math.pow(click.y - y2, 2));
+          return distance <= this.rageClickRadiusThreshold;
+        });
+        if (nearbyClicks.length >= this.rageClickThreshold) {
+          const target = event.target;
+          const properties = {
+            clickCount: nearbyClicks.length,
+            element: target.tagName.toLowerCase(),
+            selector: this.getSelector(target),
+            x: Math.round(x2),
+            y: Math.round(y2),
+            pathname: window.location.pathname
+          };
+          this.tracker.trackRageClick(properties);
+          this.clickHistory = [];
+        }
+      }
+    }
+    trackDeadClickIfDetected(element) {
+      let domChanged = false;
+      const observer = new MutationObserver(() => {
+        domChanged = true;
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        characterData: true
+      });
+      setTimeout(() => {
+        observer.disconnect();
+        if (!domChanged) {
+          const properties = {
+            element: element.tagName.toLowerCase(),
+            selector: this.getSelector(element),
+            tagName: element.tagName.toLowerCase(),
+            pathname: window.location.pathname,
+            text: this.getElementText(element)
+          };
+          this.tracker.trackDeadClick(properties);
+        }
+      }, this.deadClickObserverTimeout);
+    }
+    getSelector(element) {
+      if (element.id) {
+        return `#${element.id}`;
+      }
+      const parts = [];
+      let current = element;
+      let depth = 0;
+      while (current && current !== document.body && depth < 5) {
+        let selector = current.tagName.toLowerCase();
+        if (current.id) {
+          selector = `#${current.id}`;
+          parts.unshift(selector);
+          break;
+        }
+        if (current.className) {
+          const classes = current.className.split(/\s+/).filter((c2) => c2 && !c2.includes(":")).slice(0, 2);
+          if (classes.length > 0) {
+            selector += "." + classes.join(".");
+          }
+        }
+        const parent = current.parentElement;
+        if (parent) {
+          const siblings = Array.from(parent.children).filter((s2) => s2.tagName === current.tagName);
+          if (siblings.length > 1) {
+            const index = siblings.indexOf(current) + 1;
+            selector += `:nth-child(${index})`;
+          }
+        }
+        parts.unshift(selector);
+        current = current.parentElement;
+        depth++;
+      }
+      return parts.join(" > ").substring(0, 200);
+    }
+    getElementText(element) {
+      const text = element.textContent?.trim().substring(0, 100);
+      return text || void 0;
+    }
+    cleanup() {
+      document.removeEventListener("click", this.handleClick.bind(this), true);
+      this.clickHistory = [];
+    }
+  };
+
+  // copyTracking.ts
+  var CopyTrackingManager = class {
+    constructor(tracker) {
+      this.tracker = tracker;
+    }
+    initialize() {
+      document.addEventListener("copy", this.handleCopy.bind(this));
+    }
+    handleCopy() {
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed) return;
+      const text = selection.toString();
+      const textLength = text.length;
+      if (textLength === 0) return;
+      const anchorNode = selection.anchorNode;
+      const sourceElement = anchorNode instanceof HTMLElement ? anchorNode : anchorNode?.parentElement;
+      if (!sourceElement) return;
+      const properties = {
+        textLength,
+        sourceElement: sourceElement.tagName.toLowerCase(),
+        selector: this.getSelector(sourceElement),
+        pathname: window.location.pathname
+      };
+      this.tracker.trackCopy(properties);
+    }
+    getSelector(element) {
+      if (element.id) {
+        return `#${element.id}`;
+      }
+      const parts = [];
+      let current = element;
+      let depth = 0;
+      while (current && current !== document.body && depth < 5) {
+        let selector = current.tagName.toLowerCase();
+        if (current.id) {
+          selector = `#${current.id}`;
+          parts.unshift(selector);
+          break;
+        }
+        if (current.className) {
+          const classes = current.className.split(/\s+/).filter((c2) => c2 && !c2.includes(":")).slice(0, 2);
+          if (classes.length > 0) {
+            selector += "." + classes.join(".");
+          }
+        }
+        const parent = current.parentElement;
+        if (parent) {
+          const siblings = Array.from(parent.children).filter((s2) => s2.tagName === current.tagName);
+          if (siblings.length > 1) {
+            const index = siblings.indexOf(current) + 1;
+            selector += `:nth-child(${index})`;
+          }
+        }
+        parts.unshift(selector);
+        current = current.parentElement;
+        depth++;
+      }
+      return parts.join(" > ").substring(0, 200);
+    }
+    cleanup() {
+      document.removeEventListener("copy", this.handleCopy.bind(this));
+    }
+  };
+
   // index.ts
   (async function() {
     const scriptTag = document.currentScript;
@@ -969,6 +1254,14 @@
         tracker.trackWebVitals(vitals);
       });
       webVitalsCollector.initialize();
+    }
+    if (config.trackButtonClicks || config.trackRageClicks || config.trackDeadClicks) {
+      const clickManager = new ClickTrackingManager(tracker, config);
+      clickManager.initialize();
+    }
+    if (config.trackCopy) {
+      const copyManager = new CopyTrackingManager(tracker);
+      copyManager.initialize();
     }
     if (config.trackErrors) {
       window.addEventListener("error", (event) => {

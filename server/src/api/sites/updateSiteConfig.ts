@@ -43,6 +43,10 @@ const updateSiteConfigSchema = z.object({
   trackInitialPageView: z.boolean().optional(),
   trackSpaNavigation: z.boolean().optional(),
   trackIp: z.boolean().optional(),
+  trackButtonClicks: z.boolean().optional(),
+  trackRageClicks: z.boolean().optional(),
+  trackDeadClicks: z.boolean().optional(),
+  trackCopy: z.boolean().optional(),
 });
 
 type UpdateSiteConfigRequest = z.infer<typeof updateSiteConfigSchema>;
@@ -121,6 +125,10 @@ export async function updateSiteConfig(
       "trackInitialPageView",
       "trackSpaNavigation",
       "trackIp",
+      "trackButtonClicks",
+      "trackRageClicks",
+      "trackDeadClicks",
+      "trackCopy",
     ];
 
     for (const field of directMappings) {

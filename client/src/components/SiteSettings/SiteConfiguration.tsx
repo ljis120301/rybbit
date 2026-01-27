@@ -70,6 +70,10 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
     trackInitialPageView: siteMetadata.trackInitialPageView ?? true,
     trackSpaNavigation: siteMetadata.trackSpaNavigation ?? true,
     trackIp: siteMetadata.trackIp ?? false,
+    trackButtonClicks: siteMetadata.trackButtonClicks ?? false,
+    trackRageClicks: siteMetadata.trackRageClicks ?? false,
+    trackDeadClicks: siteMetadata.trackDeadClicks ?? false,
+    trackCopy: siteMetadata.trackCopy ?? false,
   });
 
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
@@ -264,6 +268,42 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
       key: "trackSpaNavigation",
       enabledMessage: "SPA navigation tracking enabled",
       disabledMessage: "SPA navigation tracking disabled",
+    },
+    {
+      id: "trackButtonClicks",
+      label: "Track Button Clicks",
+      description: "Automatically track clicks on all buttons",
+      value: toggleStates.trackButtonClicks,
+      key: "trackButtonClicks",
+      enabledMessage: "Button click tracking enabled",
+      disabledMessage: "Button click tracking disabled",
+    },
+    {
+      id: "trackRageClicks",
+      label: "Track Rage Clicks",
+      description: "Detect frustrated rapid clicking (3+ clicks in 500ms)",
+      value: toggleStates.trackRageClicks,
+      key: "trackRageClicks",
+      enabledMessage: "Rage click tracking enabled",
+      disabledMessage: "Rage click tracking disabled",
+    },
+    {
+      id: "trackDeadClicks",
+      label: "Track Dead Clicks",
+      description: "Detect clicks on non-interactive elements that do nothing",
+      value: toggleStates.trackDeadClicks,
+      key: "trackDeadClicks",
+      enabledMessage: "Dead click tracking enabled",
+      disabledMessage: "Dead click tracking disabled",
+    },
+    {
+      id: "trackCopy",
+      label: "Track Copy Events",
+      description: "Track when users copy text from your site",
+      value: toggleStates.trackCopy,
+      key: "trackCopy",
+      enabledMessage: "Copy tracking enabled",
+      disabledMessage: "Copy tracking disabled",
     },
   ];
 

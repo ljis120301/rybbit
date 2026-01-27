@@ -1,9 +1,9 @@
 "use client";
 
-import { Eye, ExternalLink, MousePointerClick, TriangleAlert } from "lucide-react";
+import { Angry, CircleOff, Copy, Eye, ExternalLink, MousePointerClick, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type EventType = "pageview" | "custom_event" | "error" | "outbound";
+export type EventType = "pageview" | "custom_event" | "error" | "outbound" | "button_click" | "rage_click" | "dead_click" | "copy";
 
 interface EventTypeOption {
   value: EventType;
@@ -37,6 +37,30 @@ const EVENT_TYPE_OPTIONS: EventTypeOption[] = [
     color: "rgb(239, 68, 68)", // red-500
     icon: <TriangleAlert className="h-3 w-3" />,
   },
+  {
+    value: "button_click",
+    label: "Button Clicks",
+    color: "rgb(34, 197, 94)", // green-500
+    icon: <MousePointerClick className="h-3 w-3" />,
+  },
+  {
+    value: "rage_click",
+    label: "Rage Clicks",
+    color: "rgb(249, 115, 22)", // orange-500
+    icon: <Angry className="h-3 w-3" />,
+  },
+  {
+    value: "dead_click",
+    label: "Dead Clicks",
+    color: "rgb(156, 163, 175)", // gray-400
+    icon: <CircleOff className="h-3 w-3" />,
+  },
+  {
+    value: "copy",
+    label: "Copies",
+    color: "rgb(14, 165, 233)", // sky-500
+    icon: <Copy className="h-3 w-3" />,
+  },
 ];
 
 interface EventTypeFilterProps {
@@ -47,6 +71,10 @@ interface EventTypeFilterProps {
     custom_event?: number;
     error?: number;
     outbound?: number;
+    button_click?: number;
+    rage_click?: number;
+    dead_click?: number;
+    copy?: number;
   };
 }
 

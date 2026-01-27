@@ -146,6 +146,116 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
         ),
     })
     .strict(),
+  z
+    .object({
+      type: z.literal("button_click"),
+      ...baseEventFields,
+      event_name: z.string().max(256).optional(),
+      properties: z
+        .string()
+        .max(2048)
+        .refine(
+          val => {
+            try {
+              const parsed = JSON.parse(val);
+              if (typeof parsed.element !== "string") return false;
+              if (typeof parsed.selector !== "string") return false;
+              if (typeof parsed.pathname !== "string") return false;
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          {
+            message: "Properties must be valid JSON with button_click fields (element, selector, pathname required)",
+          }
+        ),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("rage_click"),
+      ...baseEventFields,
+      event_name: z.string().max(256).optional(),
+      properties: z
+        .string()
+        .max(2048)
+        .refine(
+          val => {
+            try {
+              const parsed = JSON.parse(val);
+              if (typeof parsed.clickCount !== "number" || parsed.clickCount < 3) return false;
+              if (typeof parsed.element !== "string") return false;
+              if (typeof parsed.selector !== "string") return false;
+              if (typeof parsed.x !== "number") return false;
+              if (typeof parsed.y !== "number") return false;
+              if (typeof parsed.pathname !== "string") return false;
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          {
+            message:
+              "Properties must be valid JSON with rage_click fields (clickCount>=3, element, selector, x, y, pathname required)",
+          }
+        ),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("dead_click"),
+      ...baseEventFields,
+      event_name: z.string().max(256).optional(),
+      properties: z
+        .string()
+        .max(2048)
+        .refine(
+          val => {
+            try {
+              const parsed = JSON.parse(val);
+              if (typeof parsed.element !== "string") return false;
+              if (typeof parsed.selector !== "string") return false;
+              if (typeof parsed.tagName !== "string") return false;
+              if (typeof parsed.pathname !== "string") return false;
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          {
+            message: "Properties must be valid JSON with dead_click fields (element, selector, tagName, pathname required)",
+          }
+        ),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal("copy"),
+      ...baseEventFields,
+      event_name: z.string().max(256).optional(),
+      properties: z
+        .string()
+        .max(2048)
+        .refine(
+          val => {
+            try {
+              const parsed = JSON.parse(val);
+              if (typeof parsed.textLength !== "number" || parsed.textLength < 0) return false;
+              if (typeof parsed.sourceElement !== "string") return false;
+              if (typeof parsed.selector !== "string") return false;
+              if (typeof parsed.pathname !== "string") return false;
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          {
+            message: "Properties must be valid JSON with copy fields (textLength>=0, sourceElement, selector, pathname required)",
+          }
+        ),
+    })
+    .strict(),
 ]);
 
 const logger = createServiceLogger("track-event");

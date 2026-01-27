@@ -27,6 +27,10 @@ export interface ScriptConfig {
   sessionReplaySampling?: Record<string, any>;
   sessionReplaySlimDOMOptions?: Record<string, boolean> | boolean;
   sessionReplaySampleRate?: number; // 0-100, percentage of sessions to record
+  trackButtonClicks: boolean;
+  trackRageClicks: boolean;
+  trackDeadClicks: boolean;
+  trackCopy: boolean;
 }
 
 export interface BasePayload {
@@ -43,7 +47,7 @@ export interface BasePayload {
 }
 
 export interface TrackingPayload extends BasePayload {
-  type: "pageview" | "custom_event" | "outbound" | "performance" | "error";
+  type: "pageview" | "custom_event" | "outbound" | "performance" | "error" | "button_click" | "rage_click" | "dead_click" | "copy";
   event_name?: string;
   properties?: string;
   // Web vitals metrics
@@ -52,6 +56,39 @@ export interface TrackingPayload extends BasePayload {
   inp?: number | null;
   fcp?: number | null;
   ttfb?: number | null;
+}
+
+export interface ButtonClickProperties {
+  element: string;
+  selector: string;
+  pathname: string;
+  text?: string;
+  id?: string;
+  className?: string;
+}
+
+export interface RageClickProperties {
+  clickCount: number;
+  element: string;
+  selector: string;
+  x: number;
+  y: number;
+  pathname: string;
+}
+
+export interface DeadClickProperties {
+  element: string;
+  selector: string;
+  tagName: string;
+  pathname: string;
+  text?: string;
+}
+
+export interface CopyProperties {
+  textLength: number;
+  sourceElement: string;
+  selector: string;
+  pathname: string;
 }
 
 export interface WebVitalsData {

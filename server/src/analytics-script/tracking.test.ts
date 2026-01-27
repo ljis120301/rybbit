@@ -91,6 +91,10 @@ describe("Tracker", () => {
       sessionReplayMaskTextSelectors: [],
       skipPatterns: [],
       maskPatterns: [],
+      trackButtonClicks: false,
+      trackRageClicks: false,
+      trackDeadClicks: false,
+      trackCopy: false,
     };
 
     tracker = new Tracker(config);
