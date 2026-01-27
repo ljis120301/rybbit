@@ -71,8 +71,6 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
     trackSpaNavigation: siteMetadata.trackSpaNavigation ?? true,
     trackIp: siteMetadata.trackIp ?? false,
     trackButtonClicks: siteMetadata.trackButtonClicks ?? false,
-    trackRageClicks: siteMetadata.trackRageClicks ?? false,
-    trackDeadClicks: siteMetadata.trackDeadClicks ?? false,
     trackCopy: siteMetadata.trackCopy ?? false,
   });
 
@@ -277,24 +275,6 @@ export function SiteConfiguration({ siteMetadata, disabled = false, onClose }: S
       key: "trackButtonClicks",
       enabledMessage: "Button click tracking enabled",
       disabledMessage: "Button click tracking disabled",
-    },
-    {
-      id: "trackRageClicks",
-      label: "Track Rage Clicks",
-      description: "Detect frustrated rapid clicking (3+ clicks in 500ms)",
-      value: toggleStates.trackRageClicks,
-      key: "trackRageClicks",
-      enabledMessage: "Rage click tracking enabled",
-      disabledMessage: "Rage click tracking disabled",
-    },
-    {
-      id: "trackDeadClicks",
-      label: "Track Dead Clicks",
-      description: "Detect clicks on non-interactive elements that do nothing",
-      value: toggleStates.trackDeadClicks,
-      key: "trackDeadClicks",
-      enabledMessage: "Dead click tracking enabled",
-      disabledMessage: "Dead click tracking disabled",
     },
     {
       id: "trackCopy",

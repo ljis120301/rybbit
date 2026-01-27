@@ -40,8 +40,6 @@ export type GetSessionsResponse = {
   errors: number;
   outbound: number;
   button_clicks: number;
-  rage_clicks: number;
-  dead_clicks: number;
   copies: number;
   ip: string;
   lat: number;
@@ -135,8 +133,6 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
           countIf(type = 'error') AS errors,
           countIf(type = 'outbound') AS outbound,
           countIf(type = 'button_click') AS button_clicks,
-          countIf(type = 'rage_click') AS rage_clicks,
-          countIf(type = 'dead_click') AS dead_clicks,
           countIf(type = 'copy') AS copies,
           argMax(ip, timestamp) AS ip,
           argMax(lat, timestamp) AS lat,

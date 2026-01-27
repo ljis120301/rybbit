@@ -44,8 +44,6 @@ const updateSiteConfigSchema = z.object({
   trackSpaNavigation: z.boolean().optional(),
   trackIp: z.boolean().optional(),
   trackButtonClicks: z.boolean().optional(),
-  trackRageClicks: z.boolean().optional(),
-  trackDeadClicks: z.boolean().optional(),
   trackCopy: z.boolean().optional(),
 });
 
@@ -126,8 +124,6 @@ export async function updateSiteConfig(
       "trackSpaNavigation",
       "trackIp",
       "trackButtonClicks",
-      "trackRageClicks",
-      "trackDeadClicks",
       "trackCopy",
     ];
 

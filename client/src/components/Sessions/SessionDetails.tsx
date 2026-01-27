@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { getTimezone } from "@/lib/store";
-import { Angry, ArrowRight, CircleOff, Clock, Copy, ExternalLink, Loader2, Monitor, MousePointerClick, Smartphone, Tablet, TriangleAlert } from "lucide-react";
+import { ArrowRight, Clock, Copy, ExternalLink, Loader2, Monitor, MousePointerClick, Smartphone, Tablet, TriangleAlert } from "lucide-react";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -41,8 +41,6 @@ function PageviewItem({
   const isPageview = item.type === "pageview";
   const isOutbound = item.type === "outbound";
   const isButtonClick = item.type === "button_click";
-  const isRageClick = item.type === "rage_click";
-  const isDeadClick = item.type === "dead_click";
   const isCopy = item.type === "copy";
   const timestamp = DateTime.fromSQL(item.timestamp, { zone: "utc" }).setZone(getTimezone());
   const formattedTime = timestamp.toFormat(hour12 ? "h:mm:ss a" : "HH:mm:ss");
@@ -89,10 +87,6 @@ function PageviewItem({
               <ExternalLink className="w-4 h-4 text-purple-500" />
             ) : isButtonClick ? (
               <MousePointerClick className="w-4 h-4 text-green-500" />
-            ) : isRageClick ? (
-              <Angry className="w-4 h-4 text-orange-500" />
-            ) : isDeadClick ? (
-              <CircleOff className="w-4 h-4 text-gray-400" />
             ) : isCopy ? (
               <Copy className="w-4 h-4 text-sky-500" />
             ) : (
@@ -136,8 +130,6 @@ function PageviewItem({
                 {item.event_name ||
                   (isOutbound ? "Outbound Click" :
                    isButtonClick ? "Button Click" :
-                   isRageClick ? "Rage Click" :
-                   isDeadClick ? "Dead Click" :
                    isCopy ? "Copy" :
                    "Event")}
               </div>
@@ -238,7 +230,7 @@ function PageviewItem({
             </div>
           </div>
         )}
-        {(isButtonClick || isRageClick || isDeadClick || isCopy) && (
+        {(isButtonClick || isCopy) && (
           <div className="flex items-center pl-7 mt-1">
             <div className="text-xs text-neutral-500 dark:text-neutral-400">
               {item.props && Object.keys(item.props).length > 0 ? (
@@ -355,21 +347,13 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
     return allEvents.filter((p: SessionEvent) => p.type === "button_click").length;
   }, [allEvents]);
 
-  const totalRageClicks = useMemo(() => {
-    return allEvents.filter((p: SessionEvent) => p.type === "rage_click").length;
-  }, [allEvents]);
-
-  const totalDeadClicks = useMemo(() => {
-    return allEvents.filter((p: SessionEvent) => p.type === "dead_click").length;
-  }, [allEvents]);
-
   const totalCopies = useMemo(() => {
     return allEvents.filter((p: SessionEvent) => p.type === "copy").length;
   }, [allEvents]);
 
   // Event type filter state
   const [visibleEventTypes, setVisibleEventTypes] = useState<Set<string>>(
-    new Set(["pageview", "custom_event", "outbound", "button_click", "rage_click", "dead_click", "copy"])
+    new Set(["pageview", "custom_event", "outbound", "button_click", "copy"])
   );
 
   const toggleEventType = (type: string) => {
@@ -432,8 +416,6 @@ export function SessionDetails({ session, userId }: SessionDetailsProps) {
                   error: totalErrors,
                   outbound: totalOutbound,
                   button_click: totalButtonClicks,
-                  rage_click: totalRageClicks,
-                  dead_click: totalDeadClicks,
                   copy: totalCopies,
                 }}
               />

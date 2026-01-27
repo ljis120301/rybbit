@@ -21,8 +21,6 @@ export async function getTrackingConfig(request: FastifyRequest<{ Params: { site
       trackInitialPageView: config.trackInitialPageView ?? true,
       trackSpaNavigation: config.trackSpaNavigation ?? true,
       trackButtonClicks: config.trackButtonClicks || false,
-      trackRageClicks: config.trackRageClicks || false,
-      trackDeadClicks: config.trackDeadClicks || false,
       trackCopy: config.trackCopy || false,
     });
   } catch (error) {

@@ -172,56 +172,6 @@ export const trackingPayloadSchema = z.discriminatedUnion("type", [
     .strict(),
   z
     .object({
-      type: z.literal("rage_click"),
-      ...baseEventFields,
-      event_name: z.string().max(256).optional(),
-      properties: z
-        .string()
-        .max(2048)
-        .refine(
-          val => {
-            try {
-              const parsed = JSON.parse(val);
-              if (typeof parsed.clickCount !== "number" || parsed.clickCount < 3) return false;
-              if (typeof parsed.element !== "string") return false;
-              return true;
-            } catch {
-              return false;
-            }
-          },
-          {
-            message:
-              "Properties must be valid JSON with rage_click fields (clickCount>=3, element required)",
-          }
-        ),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal("dead_click"),
-      ...baseEventFields,
-      event_name: z.string().max(256).optional(),
-      properties: z
-        .string()
-        .max(2048)
-        .refine(
-          val => {
-            try {
-              const parsed = JSON.parse(val);
-              if (typeof parsed.element !== "string") return false;
-              return true;
-            } catch {
-              return false;
-            }
-          },
-          {
-            message: "Properties must be valid JSON with dead_click fields (element required)",
-          }
-        ),
-    })
-    .strict(),
-  z
-    .object({
       type: z.literal("copy"),
       ...baseEventFields,
       event_name: z.string().max(256).optional(),

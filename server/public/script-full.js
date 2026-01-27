@@ -121,8 +121,6 @@
       trackErrors: false,
       enableSessionReplay: false,
       trackButtonClicks: false,
-      trackRageClicks: false,
-      trackDeadClicks: false,
       trackCopy: false,
       // rrweb session replay options (undefined means use rrweb defaults)
       sessionReplayBlockClass,
@@ -157,8 +155,6 @@
           trackErrors: apiConfig.trackErrors ?? defaultConfig.trackErrors,
           enableSessionReplay: apiConfig.sessionReplay ?? defaultConfig.enableSessionReplay,
           trackButtonClicks: apiConfig.trackButtonClicks ?? defaultConfig.trackButtonClicks,
-          trackRageClicks: apiConfig.trackRageClicks ?? defaultConfig.trackRageClicks,
-          trackDeadClicks: apiConfig.trackDeadClicks ?? defaultConfig.trackDeadClicks,
           trackCopy: apiConfig.trackCopy ?? defaultConfig.trackCopy
         };
       } else {
@@ -473,7 +469,7 @@
       if (!basePayload) {
         return;
       }
-      const typesWithProperties = ["custom_event", "outbound", "error", "button_click", "rage_click", "dead_click", "copy"];
+      const typesWithProperties = ["custom_event", "outbound", "error", "button_click", "copy"];
       const payload = {
         ...basePayload,
         type: eventType,
@@ -551,12 +547,6 @@
     }
     trackButtonClick(properties) {
       this.track("button_click", "", properties);
-    }
-    trackRageClick(properties) {
-      this.track("rage_click", "", properties);
-    }
-    trackDeadClick(properties) {
-      this.track("dead_click", "", properties);
     }
     trackCopy(properties) {
       this.track("copy", "", properties);
@@ -949,16 +939,6 @@
   // clickTracking.ts
   var ClickTrackingManager = class {
     constructor(tracker, config) {
-      this.clickHistory = [];
-      this.rageClickThreshold = 3;
-      // Minimum clicks to detect rage
-      this.rageClickTimeWindow = 500;
-      // ms
-      this.rageClickRadiusThreshold = 30;
-      // px
-      this.deadClickObserverTimeout = 100;
-      // ms to wait for DOM changes
-      this.isProcessingClick = false;
       this.tracker = tracker;
       this.config = config;
     }
@@ -966,20 +946,10 @@
       document.addEventListener("click", this.handleClick.bind(this), true);
     }
     handleClick(event) {
-      if (this.isProcessingClick) return;
-      this.isProcessingClick = true;
       const target = event.target;
-      const now = Date.now();
-      if (this.config.trackRageClicks) {
-        this.trackRageClickIfDetected(event, now);
-      }
       if (this.config.trackButtonClicks && this.isButton(target)) {
         this.trackButtonClick(target);
       }
-      if (this.config.trackDeadClicks && !this.isInteractiveElement(target)) {
-        this.trackDeadClickIfDetected(target);
-      }
-      this.isProcessingClick = false;
     }
     isButton(element) {
       if (element.tagName === "BUTTON") return true;
@@ -993,29 +963,6 @@
       while (parent && depth < 3) {
         if (parent.tagName === "BUTTON") return true;
         if (parent.getAttribute("role") === "button") return true;
-        parent = parent.parentElement;
-        depth++;
-      }
-      return false;
-    }
-    isInteractiveElement(element) {
-      const interactiveTags = ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA", "VIDEO", "AUDIO"];
-      const interactiveRoles = ["button", "link", "checkbox", "radio", "tab", "menuitem", "option"];
-      if (interactiveTags.includes(element.tagName)) return true;
-      if (element.hasAttribute("onclick")) return true;
-      if (element.hasAttribute("tabindex")) return true;
-      const role = element.getAttribute("role");
-      if (role && interactiveRoles.includes(role)) return true;
-      if (element.style.cursor === "pointer") return true;
-      const computedStyle = window.getComputedStyle(element);
-      if (computedStyle.cursor === "pointer") return true;
-      let parent = element.parentElement;
-      let depth = 0;
-      while (parent && depth < 3) {
-        if (interactiveTags.includes(parent.tagName)) return true;
-        if (parent.hasAttribute("onclick")) return true;
-        const parentRole = parent.getAttribute("role");
-        if (parentRole && interactiveRoles.includes(parentRole)) return true;
         parent = parent.parentElement;
         depth++;
       }
@@ -1047,58 +994,12 @@
       }
       return null;
     }
-    trackRageClickIfDetected(event, now) {
-      const { clientX: x2, clientY: y2 } = event;
-      this.clickHistory.push({ x: x2, y: y2, timestamp: now });
-      this.clickHistory = this.clickHistory.filter(
-        (click) => now - click.timestamp <= this.rageClickTimeWindow
-      );
-      if (this.clickHistory.length >= this.rageClickThreshold) {
-        const nearbyClicks = this.clickHistory.filter((click) => {
-          const distance = Math.sqrt(Math.pow(click.x - x2, 2) + Math.pow(click.y - y2, 2));
-          return distance <= this.rageClickRadiusThreshold;
-        });
-        if (nearbyClicks.length >= this.rageClickThreshold) {
-          const target = event.target;
-          const properties = {
-            clickCount: nearbyClicks.length,
-            element: target.tagName.toLowerCase(),
-            text: this.getElementText(target)
-          };
-          this.tracker.trackRageClick(properties);
-          this.clickHistory = [];
-        }
-      }
-    }
-    trackDeadClickIfDetected(element) {
-      let domChanged = false;
-      const observer = new MutationObserver(() => {
-        domChanged = true;
-      });
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        characterData: true
-      });
-      setTimeout(() => {
-        observer.disconnect();
-        if (!domChanged) {
-          const properties = {
-            element: element.tagName.toLowerCase(),
-            text: this.getElementText(element)
-          };
-          this.tracker.trackDeadClick(properties);
-        }
-      }, this.deadClickObserverTimeout);
-    }
     getElementText(element) {
       const text = element.textContent?.trim().substring(0, 100);
       return text || void 0;
     }
     cleanup() {
       document.removeEventListener("click", this.handleClick.bind(this), true);
-      this.clickHistory = [];
     }
   };
 
@@ -1175,7 +1076,7 @@
       });
       webVitalsCollector.initialize();
     }
-    if (config.trackButtonClicks || config.trackRageClicks || config.trackDeadClicks) {
+    if (config.trackButtonClicks) {
       const clickManager = new ClickTrackingManager(tracker, config);
       clickManager.initialize();
     }

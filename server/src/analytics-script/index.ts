@@ -61,8 +61,8 @@ declare global {
     webVitalsCollector.initialize();
   }
 
-  // Initialize click tracking if any click feature is enabled
-  if (config.trackButtonClicks || config.trackRageClicks || config.trackDeadClicks) {
+  // Initialize click tracking if enabled
+  if (config.trackButtonClicks) {
     const clickManager = new ClickTrackingManager(tracker, config);
     clickManager.initialize();
   }

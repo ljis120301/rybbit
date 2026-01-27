@@ -92,8 +92,6 @@ describe("Tracker", () => {
       skipPatterns: [],
       maskPatterns: [],
       trackButtonClicks: false,
-      trackRageClicks: false,
-      trackDeadClicks: false,
       trackCopy: false,
     };
 

@@ -24,8 +24,6 @@ export interface SiteConfigData {
   trackSpaNavigation: boolean;
   trackIp: boolean;
   trackButtonClicks: boolean;
-  trackRageClicks: boolean;
-  trackDeadClicks: boolean;
   trackCopy: boolean;
   tags: string[];
 }
@@ -78,8 +76,6 @@ class SiteConfig {
           trackSpaNavigation: sites.trackSpaNavigation,
           trackIp: sites.trackIp,
           trackButtonClicks: sites.trackButtonClicks,
-          trackRageClicks: sites.trackRageClicks,
-          trackDeadClicks: sites.trackDeadClicks,
           trackCopy: sites.trackCopy,
           tags: sites.tags,
         })
@@ -110,8 +106,6 @@ class SiteConfig {
         trackSpaNavigation: site.trackSpaNavigation ?? true,
         trackIp: site.trackIp || false,
         trackButtonClicks: site.trackButtonClicks || false,
-        trackRageClicks: site.trackRageClicks || false,
-        trackDeadClicks: site.trackDeadClicks || false,
         trackCopy: site.trackCopy || false,
         tags: Array.isArray(site.tags) ? site.tags : [],
       };

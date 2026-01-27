@@ -1,4 +1,4 @@
-import { BasePayload, ScriptConfig, TrackingPayload, WebVitalsData, SessionReplayBatch, ButtonClickProperties, RageClickProperties, DeadClickProperties, CopyProperties } from "./types.js";
+import { BasePayload, ScriptConfig, TrackingPayload, WebVitalsData, SessionReplayBatch, ButtonClickProperties, CopyProperties } from "./types.js";
 import { findMatchingPattern } from "./utils.js";
 import { SessionReplayRecorder } from "./sessionReplay.js";
 
@@ -121,7 +121,7 @@ export class Tracker {
       return; // Skip tracking
     }
 
-    const typesWithProperties = ["custom_event", "outbound", "error", "button_click", "rage_click", "dead_click", "copy"];
+    const typesWithProperties = ["custom_event", "outbound", "error", "button_click", "copy"];
     const payload: TrackingPayload = {
       ...basePayload,
       type: eventType,
@@ -230,14 +230,6 @@ export class Tracker {
 
   trackButtonClick(properties: ButtonClickProperties): void {
     this.track("button_click", "", properties);
-  }
-
-  trackRageClick(properties: RageClickProperties): void {
-    this.track("rage_click", "", properties);
-  }
-
-  trackDeadClick(properties: DeadClickProperties): void {
-    this.track("dead_click", "", properties);
   }
 
   trackCopy(properties: CopyProperties): void {
