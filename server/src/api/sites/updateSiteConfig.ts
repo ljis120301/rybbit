@@ -31,6 +31,9 @@ const updateSiteConfigSchema = z.object({
     .max(250)
     .optional(),
 
+  // Tags
+  tags: z.array(z.string().trim().min(1).max(50)).max(20).optional(),
+
   // Analytics features
   sessionReplay: z.boolean().optional(),
   webVitals: z.boolean().optional(),
@@ -109,6 +112,7 @@ export async function updateSiteConfig(
       "domain",
       "excludedIPs",
       "excludedCountries",
+      "tags",
       "sessionReplay",
       "webVitals",
       "trackErrors",

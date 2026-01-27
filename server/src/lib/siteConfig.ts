@@ -23,6 +23,7 @@ export interface SiteConfigData {
   trackInitialPageView: boolean;
   trackSpaNavigation: boolean;
   trackIp: boolean;
+  tags: string[];
 }
 
 class SiteConfig {
@@ -72,6 +73,7 @@ class SiteConfig {
           trackInitialPageView: sites.trackInitialPageView,
           trackSpaNavigation: sites.trackSpaNavigation,
           trackIp: sites.trackIp,
+          tags: sites.tags,
         })
         .from(sites)
         .where(isNumeric ? eq(sites.siteId, Number(siteIdOrId)) : eq(sites.id, String(siteIdOrId)))
@@ -99,6 +101,7 @@ class SiteConfig {
         trackInitialPageView: site.trackInitialPageView ?? true,
         trackSpaNavigation: site.trackSpaNavigation ?? true,
         trackIp: site.trackIp || false,
+        tags: Array.isArray(site.tags) ? site.tags : [],
       };
 
       this.cache.set(cacheKey, {

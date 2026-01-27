@@ -22,6 +22,7 @@ export type SiteResponse = {
   trackInitialPageView?: boolean;
   trackSpaNavigation?: boolean;
   trackIp?: boolean;
+  tags?: string[];
 };
 
 export type GetSitesFromOrgResponse = {
@@ -50,6 +51,7 @@ export type GetSitesFromOrgResponse = {
     blockBots: boolean;
     sessionsLast24Hours: number;
     isOwner: boolean;
+    tags?: string[] | null;
   }>;
   subscription: {
     monthlyEventCount: number;
@@ -113,6 +115,7 @@ export function updateSiteConfig(
     trackUrlParams?: boolean;
     trackInitialPageView?: boolean;
     trackSpaNavigation?: boolean;
+    tags?: string[];
   }
 ) {
   return authedFetch(`/sites/${siteId}/config`, undefined, {
