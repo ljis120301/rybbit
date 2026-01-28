@@ -2,66 +2,19 @@
 
 import { Copy, Eye, ExternalLink, FileInput, MousePointerClick, TextCursorInput, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EVENT_TYPE_CONFIG, EventType } from "@/lib/events";
 
-export type EventType = "pageview" | "custom_event" | "error" | "outbound" | "button_click" | "copy" | "form_submit" | "input_change";
-
-interface EventTypeOption {
-  value: EventType;
-  label: string;
-  color: string;
-  icon: React.ReactNode;
-}
-
-const EVENT_TYPE_OPTIONS: EventTypeOption[] = [
-  {
-    value: "pageview",
-    label: "Pageviews",
-    color: "rgb(96, 165, 250)", // blue-400
-    icon: <Eye className="h-3 w-3" />,
-  },
-  {
-    value: "custom_event",
-    label: "Events",
-    color: "rgb(251, 191, 36)", // amber-400
-    icon: <MousePointerClick className="h-3 w-3" />,
-  },
-  {
-    value: "outbound",
-    label: "Outbound",
-    color: "rgb(168, 85, 247)", // purple-500
-    icon: <ExternalLink className="h-3 w-3" />,
-  },
-  {
-    value: "error",
-    label: "Errors",
-    color: "rgb(239, 68, 68)", // red-500
-    icon: <TriangleAlert className="h-3 w-3" />,
-  },
-  {
-    value: "button_click",
-    label: "Button Clicks",
-    color: "rgb(34, 197, 94)", // green-500
-    icon: <MousePointerClick className="h-3 w-3" />,
-  },
-  {
-    value: "copy",
-    label: "Copies",
-    color: "rgb(14, 165, 233)", // sky-500
-    icon: <Copy className="h-3 w-3" />,
-  },
-  {
-    value: "form_submit",
-    label: "Form Submits",
-    color: "rgb(168, 85, 247)", // purple-500
-    icon: <FileInput className="h-3 w-3" />,
-  },
-  {
-    value: "input_change",
-    label: "Input Changes",
-    color: "rgb(245, 158, 11)", // amber-500
-    icon: <TextCursorInput className="h-3 w-3" />,
-  },
-];
+// Icon mapping for event types
+const EVENT_TYPE_ICONS: Record<EventType, React.ReactNode> = {
+  pageview: <Eye className="h-3 w-3" />,
+  custom_event: <MousePointerClick className="h-3 w-3" />,
+  outbound: <ExternalLink className="h-3 w-3" />,
+  error: <TriangleAlert className="h-3 w-3" />,
+  button_click: <MousePointerClick className="h-3 w-3" />,
+  copy: <Copy className="h-3 w-3" />,
+  form_submit: <FileInput className="h-3 w-3" />,
+  input_change: <TextCursorInput className="h-3 w-3" />,
+};
 
 interface EventTypeFilterProps {
   visibleTypes: Set<string>;
@@ -81,7 +34,7 @@ interface EventTypeFilterProps {
 export function EventTypeFilter({ visibleTypes, onToggle, counts }: EventTypeFilterProps) {
   return (
     <div className="flex items-center space-x-2">
-      {EVENT_TYPE_OPTIONS.map((option) => {
+      {EVENT_TYPE_CONFIG.map((option) => {
         const isSelected = visibleTypes.has(option.value);
         const count = counts?.[option.value];
 
@@ -99,11 +52,11 @@ export function EventTypeFilter({ visibleTypes, onToggle, counts }: EventTypeFil
             <div
               className={cn(
                 "w-3 h-3 rounded-sm flex items-center justify-center transition-opacity",
+                option.colorClass,
                 isSelected ? "opacity-100" : "opacity-30"
               )}
-              style={{ color: option.color }}
             >
-              {option.icon}
+              {EVENT_TYPE_ICONS[option.value]}
             </div>
             <span>{option.label}</span>
             {count !== undefined && count > 0 && (
