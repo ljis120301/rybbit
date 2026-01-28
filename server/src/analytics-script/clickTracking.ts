@@ -49,6 +49,9 @@ export class ClickTrackingManager {
     const buttonElement = this.findButton(element);
     if (!buttonElement) return;
 
+    // Skip if button has custom event tracking
+    if (buttonElement.hasAttribute("data-rybbit-event")) return;
+
     const properties: ButtonClickProperties = {
       text: this.getElementText(buttonElement),
     };

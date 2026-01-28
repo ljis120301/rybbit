@@ -979,6 +979,7 @@
     trackButtonClick(element) {
       const buttonElement = this.findButton(element);
       if (!buttonElement) return;
+      if (buttonElement.hasAttribute("data-rybbit-event")) return;
       const properties = {
         text: this.getElementText(buttonElement)
       };
