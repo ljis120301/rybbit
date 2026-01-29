@@ -11,11 +11,150 @@ import { formatDuration, hour12 } from "../../../lib/dateTimeUtils";
 import { cn } from "../../../lib/utils";
 import { EventTypeIcon } from "../../EventIcons";
 
+function PropBadge({ label, value }: { label: string; value: unknown }) {
+  const display =
+    typeof value === "object" ? JSON.stringify(value) : String(value);
+  return (
+    <Badge variant="outline">
+      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
+        {label}:
+      </span>{" "}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="truncate">{display}</span>
+        </TooltipTrigger>
+        <TooltipContent>
+          <span className="max-w-7xl">{display}</span>
+        </TooltipContent>
+      </Tooltip>
+    </Badge>
+  );
+}
+
+function DetailsRow({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center pl-7 mt-1">
+      <div className="text-xs text-neutral-500 dark:text-neutral-400">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function renderDetails(
+  item: SessionEvent,
+  flags: {
+    isPageview: boolean;
+    isOutbound: boolean;
+    isEvent: boolean;
+    isError: boolean;
+    isButtonClick: boolean;
+    isCopy: boolean;
+    isFormSubmit: boolean;
+    isInputChange: boolean;
+    duration: string | null;
+  }
+) {
+  const {
+    isPageview,
+    isOutbound,
+    isEvent,
+    isError,
+    isButtonClick,
+    isCopy,
+    isFormSubmit,
+    isInputChange,
+    duration,
+  } = flags;
+
+  if (isPageview && duration) {
+    return (
+      <DetailsRow>
+        <Clock className="w-3 h-3 inline mr-1 text-neutral-500 dark:text-neutral-400" />
+        {duration}
+      </DetailsRow>
+    );
+  }
+
+  if (isEvent && item.props && Object.keys(item.props).length > 0) {
+    return (
+      <DetailsRow>
+        <span className="flex flex-wrap gap-2 mt-1">
+          {Object.entries(item.props).map(([key, value]) => (
+            <PropBadge key={key} label={key} value={value} />
+          ))}
+        </span>
+      </DetailsRow>
+    );
+  }
+
+  if (isOutbound && item.props && Object.keys(item.props).length > 0) {
+    return (
+      <DetailsRow>
+        <span className="flex flex-wrap gap-2 mt-1">
+          {item.props.text ? (
+            <PropBadge label="text" value={item.props.text} />
+          ) : null}
+          {item.props.target ? (
+            <PropBadge label="target" value={item.props.target} />
+          ) : null}
+        </span>
+      </DetailsRow>
+    );
+  }
+
+  if (isError && item.props) {
+    return (
+      <DetailsRow>
+        <span>
+          {item.props.message && (
+            <PropBadge label="message" value={item.props.message} />
+          )}
+          {item.props.stack && (
+            <div>
+              <p className="mt-2 mb-1 text-neutral-600 dark:text-neutral-300 font-light">
+                Stack Trace:
+              </p>
+              <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap wrap-break-word">
+                {item.props.stack}
+              </pre>
+            </div>
+          )}
+        </span>
+      </DetailsRow>
+    );
+  }
+
+  if (isButtonClick || isCopy || isFormSubmit || isInputChange) {
+    const propsToHide = PROPS_TO_HIDE[item.type] || [];
+    const remainingProps = item.props
+      ? Object.entries(item.props).filter(
+          ([key]) => !propsToHide.includes(key)
+        )
+      : [];
+
+    if (remainingProps.length === 0) return null;
+
+    return (
+      <DetailsRow>
+        <span className="flex flex-wrap gap-2 mt-1">
+          {remainingProps.map(([key, value]) => (
+            <PropBadge key={key} label={key} value={value} />
+          ))}
+        </span>
+      </DetailsRow>
+    );
+  }
+
+  return null;
+}
+
 interface PageviewItemProps {
   item: SessionEvent;
   index: number;
   isLast?: boolean;
   nextTimestamp?: string;
+  showHostname?: boolean;
 }
 
 export function PageviewItem({
@@ -23,6 +162,7 @@ export function PageviewItem({
   index,
   isLast = false,
   nextTimestamp,
+  showHostname = true,
 }: PageviewItemProps) {
   const isPageview = item.type === "pageview";
   const isOutbound = item.type === "outbound";
@@ -90,9 +230,13 @@ export function PageviewItem({
                     maxWidth: "calc(min(100vw, 1150px) - 250px)",
                   }}
                 >
-                  {item.hostname}
+                  {showHostname && item.hostname}
                   {item.pathname}
-                  {item.querystring ? `${item.querystring}` : ""}
+                  {item.querystring && (
+                    <span className="text-neutral-400 dark:text-neutral-500">
+                      {item.querystring}
+                    </span>
+                  )}
                 </div>
               </Link>
             ) : isOutbound && item.props?.url ? (
@@ -120,158 +264,17 @@ export function PageviewItem({
             {formattedTime}
           </div>
         </div>
-        {isPageview && duration && (
-          <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              <Clock className="w-3 h-3 inline mr-1 text-neutral-500 dark:text-neutral-400" />
-              {duration}
-            </div>
-          </div>
-        )}
-        {isEvent && (
-          <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              {item.props && Object.keys(item.props).length > 0 ? (
-                <span className="flex flex-wrap gap-2 mt-1">
-                  {Object.entries(item.props).map(([key, value]) => (
-                    <Badge
-                      key={key}
-                      variant="outline"
-                                          >
-                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
-                        {key}:
-                      </span>{" "}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="truncate">
-                            {typeof value === "object"
-                              ? JSON.stringify(value)
-                              : String(value)}
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <span className="max-w-7xl">
-                            {typeof value === "object"
-                              ? JSON.stringify(value)
-                              : String(value)}
-                          </span>
-                        </TooltipContent>
-                      </Tooltip>
-                    </Badge>
-                  ))}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        )}
-        {isOutbound && (
-          <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              {item.props && Object.keys(item.props).length > 0 ? (
-                <span className="flex flex-wrap gap-2 mt-1">
-                  {item.props.text ? (
-                    <Badge
-                      variant="outline"
-                                          >
-                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
-                        text:
-                      </span>{" "}
-                      {String(item.props.text)}
-                    </Badge>
-                  ) : null}
-                  {item.props.target ? (
-                    <Badge
-                      variant="outline"
-                                          >
-                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
-                        target:
-                      </span>{" "}
-                      {String(item.props.target)}
-                    </Badge>
-                  ) : null}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        )}
-        {isError && (
-          <div className="flex items-center pl-7 mt-1">
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              {item.props ? (
-                <span>
-                  {item.props.message && (
-                    <Badge
-                      key="message"
-                      variant="outline"
-                                          >
-                      <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
-                        message:
-                      </span>{" "}
-                      {String(item.props.message)}
-                    </Badge>
-                  )}
-
-                  {item.props.stack && (
-                    <div>
-                      <p className="mt-2 mb-1 text-neutral-600 dark:text-neutral-300 font-light">
-                        Stack Trace:
-                      </p>
-                      <pre className="text-xs text-neutral-900 dark:text-neutral-100 bg-neutral-200 dark:bg-neutral-800 p-2 rounded overflow-x-auto whitespace-pre-wrap wrap-break-word">
-                        {item.props.stack}
-                      </pre>
-                    </div>
-                  )}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        )}
-        {(isButtonClick || isCopy || isFormSubmit || isInputChange) &&
-          (() => {
-            const propsToHide = PROPS_TO_HIDE[item.type] || [];
-            const remainingProps = item.props
-              ? Object.entries(item.props).filter(
-                ([key]) => !propsToHide.includes(key)
-              )
-              : [];
-
-            if (remainingProps.length === 0) return null;
-
-            return (
-              <div className="flex items-center pl-7 mt-1">
-                <div className="text-xs text-neutral-500 dark:text-neutral-400">
-                  <span className="flex flex-wrap gap-2 mt-1">
-                    {remainingProps.map(([key, value]) => (
-                      <Badge
-                        key={key}
-                        variant="outline"
-                                              >
-                        <span className="text-neutral-600 dark:text-neutral-300 font-light mr-1">
-                          {key}:
-                        </span>{" "}
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="truncate">
-                              {typeof value === "object"
-                                ? JSON.stringify(value)
-                                : String(value)}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <span className="max-w-7xl">
-                              {typeof value === "object"
-                                ? JSON.stringify(value)
-                                : String(value)}
-                            </span>
-                          </TooltipContent>
-                        </Tooltip>
-                      </Badge>
-                    ))}
-                  </span>
-                </div>
-              </div>
-            );
-          })()}
+        {renderDetails(item, {
+          isPageview,
+          isOutbound,
+          isEvent,
+          isError,
+          isButtonClick,
+          isCopy,
+          isFormSubmit,
+          isInputChange,
+          duration,
+        })}
       </div>
     </div>
   );

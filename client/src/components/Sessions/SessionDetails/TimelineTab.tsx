@@ -1,4 +1,5 @@
 import { Loader2 } from "lucide-react";
+import { useMemo } from "react";
 import { SessionEvent } from "../../../api/analytics/endpoints";
 import { EventTypeFilter } from "../../EventTypeFilter";
 import { Button } from "../../ui/button";
@@ -27,6 +28,15 @@ export function TimelineTab({
   fetchNextPage,
   totalEvents,
 }: TimelineTabProps) {
+  const showHostname = useMemo(() => {
+    const hostnames = new Set(
+      allEvents
+        .filter((e) => e.type === "pageview")
+        .map((e) => e.hostname)
+    );
+    return hostnames.size > 1;
+  }, [allEvents]);
+
   return (
     <>
       <div className="mb-4">
@@ -52,6 +62,7 @@ export function TimelineTab({
               index={index}
               isLast={index === filteredEvents.length - 1 && !hasNextPage}
               nextTimestamp={nextTimestamp}
+              showHostname={showHostname}
             />
           );
         })}
