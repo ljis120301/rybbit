@@ -126,7 +126,7 @@ export async function verifyScript(
 
       // If there are issues, use AI to analyze the HTML for deeper diagnosis
       let aiAnalysis: string | null = null;
-      if (issues.length > 0) {
+      if (issues.length > 0 && process.env.OPENROUTER_API_KEY) {
         try {
           // Extract the <head> and any rybbit-related script tags from the page
           const htmlContext = await page.evaluate(() => {
@@ -156,6 +156,7 @@ export async function verifyScript(
 
             return { head: head.substring(0, 15000), bodyScripts, cspMeta };
           });
+          console.log(htmlContext);
 
           aiAnalysis = await callOpenRouter(
             [
@@ -195,6 +196,7 @@ ${htmlContext.cspMeta ? `CSP meta tags:\n${htmlContext.cspMeta}` : ""}`,
             ],
             { temperature: 0.2, maxTokens: 500 }
           );
+          console.log(aiAnalysis);
         } catch (aiError) {
           // AI analysis is best-effort, don't fail the whole check
           console.error("AI analysis failed:", aiError);
