@@ -15,7 +15,8 @@ import { getCountryName, getUserDisplayName } from "../../../../../lib/utils";
 import { Browser } from "../../../components/shared/icons/Browser";
 import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
 import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
-import { buildEventPath, DeviceIcon, getEventTypeLabel, parseEventProperties } from "./eventLogUtils";
+import { buildEventPath, getEventTypeLabel, parseEventProperties } from "./eventLogUtils";
+import { DeviceIcon } from "../../../components/shared/icons/Device";
 
 interface EventDetailsSheetProps {
   open: boolean;
