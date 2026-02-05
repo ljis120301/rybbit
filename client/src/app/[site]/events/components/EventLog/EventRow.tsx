@@ -12,7 +12,8 @@ import { getCountryName, getUserDisplayName, truncateString } from "../../../../
 import { Browser } from "../../../components/shared/icons/Browser";
 import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
 import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
-import { DeviceIcon, getEventTypeLabel, getMainData, parseEventProperties } from "./eventLogUtils";
+import { getEventTypeLabel, getMainData, parseEventProperties } from "./eventLogUtils";
+import { DeviceIcon } from "../../../components/shared/icons/Device";
 
 interface EventRowProps {
   event: Event;
