@@ -1,6 +1,6 @@
 "use client";
 
-import { useIntersectionObserver } from "@uidotdev/usehooks";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Event } from "../../../../api/analytics/endpoints";
@@ -20,14 +20,10 @@ export function EventLog() {
     refetchIntervalMs: 3000,
   });
 
-  const [ref, entry] = useIntersectionObserver({
-    threshold: 0,
-    root: null,
-    rootMargin: "0px 0px 100px 0px",
-  });
 
   const { site } = useParams();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const prevFirstKeyRef = useRef<string | null>(null);
   const prevScrollHeightRef = useRef(0);
@@ -36,20 +32,32 @@ export function EventLog() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  useEffect(() => {
-    if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage && !isLoading) {
-      fetchNextPage();
-    }
-  }, [entry?.isIntersecting, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading]);
-
   const allEvents = data?.pages.flatMap(page => page.data) || [];
   const firstEventKey = allEvents[0] ? getEventKey(allEvents[0]) : null;
+
+  const rowVirtualizer = useVirtualizer({
+    count: allEvents.length,
+    getScrollElement: () => scrollElement,
+    estimateSize: () => 28,
+    overscan: 12,
+  });
+
+  const virtualItems = rowVirtualizer.getVirtualItems();
+
+  useEffect(() => {
+    if (!virtualItems.length) return;
+    const lastItem = virtualItems[virtualItems.length - 1];
+    if (lastItem.index >= allEvents.length - 5 && hasNextPage && !isFetchingNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [virtualItems, allEvents.length, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading]);
 
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>("[data-slot=\"scroll-area-viewport\"]");
     if (!viewport) return;
     viewportRef.current = viewport;
+    setScrollElement(viewport);
 
     const handleScroll = () => {
       lastScrollTopRef.current = viewport.scrollTop;
@@ -121,24 +129,44 @@ export function EventLog() {
             </div>
           </div>
 
-          <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
-            {allEvents.map((event, index) => (
-              <EventRow
-                key={`${event.timestamp}-${index}`}
-                event={event}
-                site={site as string}
-                onClick={(selected) => {
-                  setSelectedEvent(selected);
-                  setSheetOpen(true);
-                }}
-              />
-            ))}
+          <div className="relative">
+            <div style={{ height: rowVirtualizer.getTotalSize(), position: "relative" }}>
+              {virtualItems.map(virtualRow => {
+                const event = allEvents[virtualRow.index];
+                if (!event) return null;
+
+                return (
+                  <div
+                    key={`${event.timestamp}-${virtualRow.index}`}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      transform: `translateY(${virtualRow.start}px)`,
+                    }}
+                  >
+                    <EventRow
+                      event={event}
+                      site={site as string}
+                      onClick={(selected) => {
+                        setSelectedEvent(selected);
+                        setSheetOpen(true);
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div ref={ref} className="py-2">
-            {isFetchingNextPage &&
-              Array.from({ length: 3 }).map((_, index) => <EventLogItemSkeleton key={`next-page-${index}`} />)}
-          </div>
+          {isFetchingNextPage && (
+            <div className="py-2">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <EventLogItemSkeleton key={`next-page-${index}`} />
+              ))}
+            </div>
+          )}
         </div>
       </ScrollArea>
 

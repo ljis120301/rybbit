@@ -34,37 +34,37 @@ export function EventRow({ event, site, onClick }: EventRowProps) {
 
   return (
     <div
-      className="grid grid-cols-[140px_220px_160px_160px_minmax(240px,1fr)] hover:bg-neutral-50/60 dark:hover:bg-neutral-800/40 cursor-pointer"
+      className="grid grid-cols-[140px_220px_160px_160px_minmax(240px,1fr)] border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50/60 dark:hover:bg-neutral-800/40 cursor-pointer"
       onClick={() => onClick(event)}
     >
-      <div className="text-neutral-500 dark:text-neutral-400 border-r border-neutral-100 dark:border-neutral-800 px-2 py-1">
+      <div className="text-neutral-500 dark:text-neutral-400 px-2 py-1 flex items-center">
         <Tooltip>
           <TooltipTrigger asChild>
-            <span>{eventTime.toRelative()}</span>
+            <span>{eventTime.toFormat(hour12 ? "MMM d, h:mm:ss a" : "dd MMM, HH:mm:ss")}</span>
           </TooltipTrigger>
           <TooltipContent>
-            <span>{eventTime.toFormat(hour12 ? "MMM d, h:mm:ss a" : "dd MMM, HH:mm:ss")}</span>
+            <span>{eventTime.toRelative()}</span>
           </TooltipContent>
         </Tooltip>
       </div>
 
-      <div className="px-2 py-1 border-r border-neutral-100 dark:border-neutral-800">
+      <div className="px-2 py-1">
         <Link
           href={`/${site}/user/${encodeURIComponent(userProfileId)}`}
           onClick={e => e.stopPropagation()}
           className="flex items-center gap-2"
         >
           <Avatar size={18} id={event.user_id} lastActiveTime={eventTime} />
-          <div className="text-neutral-700 dark:text-neutral-200 truncate max-w-[160px]">{displayName}</div>
+          <div className="text-neutral-700 dark:text-neutral-200 truncate max-w-[160px] hover:underline">{displayName}</div>
         </Link>
       </div>
 
-      <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 px-2 py-1 border-r border-neutral-100 dark:border-neutral-800">
+      <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 px-2 py-1">
         <EventTypeIcon type={event.type} />
         <span>{getEventTypeLabel(event.type)}</span>
       </div>
 
-      <div className="flex space-x-1 items-center px-2 py-1 border-r border-neutral-100 dark:border-neutral-800">
+      <div className="flex space-x-1 items-center px-2 py-1">
         {event.country && (
           <Tooltip>
             <TooltipTrigger asChild>
