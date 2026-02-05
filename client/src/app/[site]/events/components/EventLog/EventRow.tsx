@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { DateTime } from "luxon";
-import { Event } from "../../../../api/analytics/endpoints";
-import { Avatar } from "../../../../components/Avatar";
-import { EventTypeIcon } from "../../../../components/EventIcons";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../components/ui/tooltip";
-import { hour12, userLocale } from "../../../../lib/dateTimeUtils";
-import { getTimezone } from "../../../../lib/store";
-import { getCountryName, getUserDisplayName, truncateString } from "../../../../lib/utils";
-import { Browser } from "../../components/shared/icons/Browser";
-import { CountryFlag } from "../../components/shared/icons/CountryFlag";
-import { OperatingSystem } from "../../components/shared/icons/OperatingSystem";
+import { Event } from "../../../../../api/analytics/endpoints";
+import { Avatar } from "../../../../../components/Avatar";
+import { EventTypeIcon } from "../../../../../components/EventIcons";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../../../components/ui/tooltip";
+import { hour12, userLocale } from "../../../../../lib/dateTimeUtils";
+import { getTimezone } from "../../../../../lib/store";
+import { getCountryName, getUserDisplayName, truncateString } from "../../../../../lib/utils";
+import { Browser } from "../../../components/shared/icons/Browser";
+import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
+import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
 import { DeviceIcon, getEventTypeLabel, getMainData, parseEventProperties } from "./eventLogUtils";
 
 interface EventRowProps {

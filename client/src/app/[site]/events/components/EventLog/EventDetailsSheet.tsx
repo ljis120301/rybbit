@@ -3,18 +3,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import Link from "next/link";
-import { Event } from "../../../../api/analytics/endpoints";
-import { fetchSession } from "../../../../api/analytics/endpoints/sessions";
-import { CopyText } from "../../../../components/CopyText";
-import { EventTypeIcon } from "../../../../components/EventIcons";
-import { Badge } from "../../../../components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../../../components/ui/sheet";
-import { hour12, userLocale } from "../../../../lib/dateTimeUtils";
-import { getTimezone } from "../../../../lib/store";
-import { getCountryName, getUserDisplayName } from "../../../../lib/utils";
-import { Browser } from "../../components/shared/icons/Browser";
-import { CountryFlag } from "../../components/shared/icons/CountryFlag";
-import { OperatingSystem } from "../../components/shared/icons/OperatingSystem";
+import { Event } from "../../../../../api/analytics/endpoints";
+import { fetchSession } from "../../../../../api/analytics/endpoints/sessions";
+import { CopyText } from "../../../../../components/CopyText";
+import { EventTypeIcon } from "../../../../../components/EventIcons";
+import { Badge } from "../../../../../components/ui/badge";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../../../../components/ui/sheet";
+import { hour12, userLocale } from "../../../../../lib/dateTimeUtils";
+import { getTimezone } from "../../../../../lib/store";
+import { getCountryName, getUserDisplayName } from "../../../../../lib/utils";
+import { Browser } from "../../../components/shared/icons/Browser";
+import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
+import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
 import { buildEventPath, DeviceIcon, getEventTypeLabel, parseEventProperties } from "./eventLogUtils";
 
 interface EventDetailsSheetProps {
@@ -71,7 +71,7 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
                       .toFormat(hour12 ? "MMM d, h:mm:ss a" : "dd MMM, HH:mm:ss")}
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <span className="text-neutral-500 dark:text-neutral-400">User</span>
                   <Link
                     href={`/${site}/user/${encodeURIComponent(event.identified_user_id || event.user_id)}`}
@@ -82,7 +82,7 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
                       user_id: event.user_id,
                     })}
                   </Link>
-                </div>
+                </div> */}
                 <div className="flex items-center justify-between">
                   <span className="text-neutral-500 dark:text-neutral-400">User ID</span>
                   <CopyText text={event.user_id} maxLength={24} />

@@ -8,13 +8,13 @@ import { DateTime } from "luxon";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { memo } from "react";
-import { Event } from "../../../../api/analytics/endpoints";
-import { EventTypeIcon } from "../../../../components/EventIcons";
-import { getEventDisplayName, PROPS_TO_HIDE } from "../../../../lib/events";
-import { getCountryName, truncateString } from "../../../../lib/utils";
-import { Browser } from "../../components/shared/icons/Browser";
-import { CountryFlag } from "../../components/shared/icons/CountryFlag";
-import { OperatingSystem } from "../../components/shared/icons/OperatingSystem";
+import { Event } from "../../../../../api/analytics/endpoints";
+import { EventTypeIcon } from "../../../../../components/EventIcons";
+import { getEventDisplayName, PROPS_TO_HIDE } from "../../../../../lib/events";
+import { getCountryName, truncateString } from "../../../../../lib/utils";
+import { Browser } from "../../../components/shared/icons/Browser";
+import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
+import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
 
 // DeviceIcon component for displaying mobile/desktop icons
 function DeviceIcon({ deviceType }: { deviceType: string }) {
@@ -206,12 +206,6 @@ export function EventLogItem({ event }: EventLogItemProps) {
 }
 
 export const EventLogItemSkeleton = memo(() => {
-  // Function to get a random width class for skeletons
-  const getRandomWidth = () => {
-    const widths = ["w-16", "w-20", "w-24", "w-28", "w-32", "w-36", "w-40"];
-    return widths[Math.floor(Math.random() * widths.length)];
-  };
-
   return (
     <div className="mb-3 rounded-lg bg-neutral-50 dark:bg-neutral-850/50 border border-neutral-100 dark:border-neutral-800 overflow-hidden p-3">
       <div className="flex flex-col space-y-2">

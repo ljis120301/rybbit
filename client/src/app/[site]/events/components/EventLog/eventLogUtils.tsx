@@ -1,7 +1,7 @@
 "use client";
 
-import { Event } from "../../../../api/analytics/endpoints";
-import { getEventDisplayName, EVENT_TYPE_CONFIG } from "../../../../lib/events";
+import { Event } from "../../../../../api/analytics/endpoints";
+import { getEventDisplayName, EVENT_TYPE_CONFIG } from "../../../../../lib/events";
 import { Laptop, Smartphone } from "lucide-react";
 
 export function DeviceIcon({ deviceType }: { deviceType: string }) {
