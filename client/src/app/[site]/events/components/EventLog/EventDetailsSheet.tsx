@@ -2,16 +2,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
-import Link from "next/link";
 import { Event } from "../../../../../api/analytics/endpoints";
-import { fetchSession } from "../../../../../api/analytics/endpoints/sessions";
+import { fetchSessions } from "../../../../../api/analytics/endpoints/sessions";
 import { CopyText } from "../../../../../components/CopyText";
 import { EventTypeIcon } from "../../../../../components/EventIcons";
+import { SessionCard, SessionCardSkeleton } from "../../../../../components/Sessions/SessionCard";
 import { Badge } from "../../../../../components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../../../../components/ui/sheet";
 import { hour12, userLocale } from "../../../../../lib/dateTimeUtils";
 import { getTimezone } from "../../../../../lib/store";
-import { getCountryName, getUserDisplayName } from "../../../../../lib/utils";
+import { getCountryName } from "../../../../../lib/utils";
 import { Browser } from "../../../components/shared/icons/Browser";
 import { CountryFlag } from "../../../components/shared/icons/CountryFlag";
 import { OperatingSystem } from "../../../components/shared/icons/OperatingSystem";
@@ -31,11 +31,14 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
   const sessionQuery = useQuery({
     queryKey: ["event-session", site, event?.session_id],
     queryFn: () =>
-      fetchSession(site, {
+      fetchSessions(site, {
         sessionId: event?.session_id || "",
         limit: 1,
-        offset: 0,
-      }).then(res => res.data),
+        page: 1,
+        startDate: "2020-01-01",
+        endDate: "2099-12-31",
+        timeZone: getTimezone(),
+      }).then(res => res.data[0] ?? null),
     enabled: open && !!event?.session_id && !!site,
     staleTime: 30000,
   });
@@ -47,7 +50,7 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
         onOpenChange(nextOpen);
       }}
     >
-      <SheetContent side="right" className="w-full sm:max-w-[520px] overflow-y-auto">
+      <SheetContent side="right" className="w-full sm:max-w-[1000px] overflow-y-auto">
         <SheetHeader className="mb-4">
           <SheetTitle>Event Details</SheetTitle>
         </SheetHeader>
@@ -151,48 +154,9 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
             <div>
               <div className="text-sm font-medium mb-2">Session</div>
               {sessionQuery.isLoading ? (
-                <div className="text-xs text-neutral-500 dark:text-neutral-400">Loading session...</div>
-              ) : sessionQuery.data?.session ? (
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Start</span>
-                    <span>
-                      {DateTime.fromSQL(sessionQuery.data.session.session_start, { zone: "utc" })
-                        .setLocale(userLocale)
-                        .setZone(getTimezone())
-                        .toFormat(hour12 ? "MMM d, h:mm a" : "dd MMM, HH:mm")}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">End</span>
-                    <span>
-                      {DateTime.fromSQL(sessionQuery.data.session.session_end, { zone: "utc" })
-                        .setLocale(userLocale)
-                        .setZone(getTimezone())
-                        .toFormat(hour12 ? "MMM d, h:mm a" : "dd MMM, HH:mm")}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Duration</span>
-                    <span>{Math.round(sessionQuery.data.session.session_duration / 60)} min</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Pageviews</span>
-                    <span>{sessionQuery.data.session.pageviews}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Events</span>
-                    <span>{sessionQuery.data.session.events}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Entry</span>
-                    <span className="truncate max-w-[260px]">{sessionQuery.data.session.entry_page || "-"}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-500 dark:text-neutral-400">Exit</span>
-                    <span className="truncate max-w-[260px]">{sessionQuery.data.session.exit_page || "-"}</span>
-                  </div>
-                </div>
+                <SessionCardSkeleton count={1} />
+              ) : sessionQuery.data ? (
+                <SessionCard session={sessionQuery.data} expandedByDefault />
               ) : (
                 <div className="text-xs text-neutral-500 dark:text-neutral-400">No session data</div>
               )}

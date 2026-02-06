@@ -164,7 +164,6 @@ export function EventsChart() {
           <div className="hidden items-center gap-2 sm:flex">{controls}</div>
         </div>
         <div className="mt-2 flex w-full flex-wrap items-center gap-2 sm:-mt-1">
-          <CardDescription className="mt-0">{eventLimit === 1 ? "Top event" : `Top ${eventLimit} events`}</CardDescription>
           <div className="ml-auto flex items-center gap-2 sm:hidden">{controls}</div>
         </div>
       </CardHeader>
@@ -179,9 +178,8 @@ export function EventsChart() {
                   key={item.id}
                   type="button"
                   onClick={() => toggleEventVisibility(item.id)}
-                  className={`flex items-center gap-2 max-w-[200px] text-left transition-opacity cursor-pointer ${
-                    isHidden ? "opacity-40" : "opacity-100"
-                  }`}
+                  className={`flex items-center gap-2 max-w-[200px] text-left transition-opacity cursor-pointer ${isHidden ? "opacity-40" : "opacity-100"
+                    }`}
                 >
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className={`truncate ${isHidden ? "line-through" : ""}`} title={item.id}>

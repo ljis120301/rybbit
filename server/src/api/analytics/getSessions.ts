@@ -57,6 +57,7 @@ export interface GetSessionsRequest {
     limit: number;
     page: number;
     user_id?: string;
+    session_id?: string;
     identified_only?: string;
     min_pageviews?: string;
     min_events?: string;
@@ -78,6 +79,7 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
     filters,
     page = 1,
     user_id: userId,
+    session_id: sessionId,
     limit = 100,
     identified_only: identifiedOnly = "false",
     min_pageviews: minPageviewsStr,
@@ -145,6 +147,7 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       WHERE
           site_id = {siteId:Int32}
           ${userId ? ` AND (events.user_id = {user_id:String} OR events.identified_user_id = {user_id:String})` : ""}
+          ${sessionId ? ` AND events.session_id = {session_id:String}` : ""}
           ${timeStatement}
       GROUP BY
           session_id
@@ -177,6 +180,7 @@ export async function getSessions(req: FastifyRequest<GetSessionsRequest>, res: 
       query_params: {
         siteId: Number(site),
         user_id: userId,
+        session_id: sessionId,
         limit: limit || 100,
         offset: (page - 1) * (limit || 100),
         minPageviews: minPageviews ?? 0,

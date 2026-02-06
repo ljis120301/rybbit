@@ -89,7 +89,7 @@ export function EventLog() {
         {isRealtime && !isLive && bufferedCount > 0 && (
           <button
             onClick={flushAndScrollToTop}
-            className="absolute top-12 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full bg-accent-500 text-white text-xs font-medium shadow-lg hover:bg-accent-600 transition-colors cursor-pointer"
+            className="absolute top-12 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full bg-accent-400 dark:bg-accent-600 text-white text-xs font-medium shadow-lg hover:bg-accent-300 dark:hover:bg-accent-500 transition-colors cursor-pointer"
           >
             ↑ {bufferedCount} new event{bufferedCount !== 1 ? "s" : ""}
           </button>
