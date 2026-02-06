@@ -156,16 +156,14 @@ export function EventDetailsSheet({ open, onOpenChange, event, site }: EventDeta
               </div>
             </div>
 
-            <div>
-              <div className="text-sm font-medium mb-2">Properties</div>
-              {Object.keys(selectedEventProperties).length > 0 ? (
-                <pre className="text-xs bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-md p-3 overflow-auto max-h-64">
+            {Object.keys(selectedEventProperties).length > 0 &&
+              <div>
+                <div className="text-sm font-medium mb-2">Properties</div>
+                <pre className="text-xs bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-md p-3 overflow-auto max-h-64">
                   {JSON.stringify(selectedEventProperties, null, 2)}
                 </pre>
-              ) : (
-                <div className="text-xs text-neutral-500 dark:text-neutral-400">No properties</div>
-              )}
-            </div>
+              </div>
+            }
 
             <div>
               <div className="text-sm font-medium mb-2">Session</div>
