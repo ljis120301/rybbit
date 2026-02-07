@@ -18,7 +18,7 @@ export function EventsChart() {
   const [eventLimit, setEventLimit] = useState(5);
 
   return (
-    <Card>
+    <Card className="overflow-visible">
       <Tabs value={tab} onValueChange={v => setTab(v as ChartTab)}>
         <CardHeader className="flex flex-col gap-0 pb-0">
           <div className="flex items-start gap-2">

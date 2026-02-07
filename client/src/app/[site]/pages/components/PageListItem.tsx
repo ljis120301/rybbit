@@ -83,7 +83,7 @@ export function PageListItem({ pageData, isLoading = false }: PageListItemProps)
   };
 
   return (
-    <Card className="w-full mb-3" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+    <Card className="w-full mb-3 overflow-visible" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
       <CardContent className="p-3">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
           {/* Left side: Page title/path with thumbnail */}
