@@ -64,7 +64,7 @@ export function EventsChart() {
             </div>
           </div>
         </CardHeader>
-        <div className="px-2 md:px-4 pb-2 md:pb-4">
+        <div className="px-2 md:px-4 pb-2 md:pb-4 relative">
           <TabsContent value="custom_events">
             <CustomEventsChart eventLimit={eventLimit} />
           </TabsContent>

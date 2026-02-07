@@ -12,6 +12,7 @@ import { formatChartDateTime, hour12, userLocale } from "@/lib/dateTimeUtils";
 import { useNivoTheme } from "@/lib/nivo";
 import { getTimezone, useStore } from "@/lib/store";
 import { formatter } from "@/lib/utils";
+import { CardLoader } from "../../../../components/ui/card";
 
 const EVENT_TYPE_CONFIG = [
   { key: "pageview_count", label: "Pageviews", color: "#60a5fa" },
@@ -134,6 +135,11 @@ export function EventTypesChart() {
 
   return (
     <>
+      {isLoading && (
+        <div className="absolute top-[-54px] left-0 w-full h-full">
+          <CardLoader />
+        </div>
+      )}
       <div className="h-[260px] w-full">
         <ResponsiveLine
           data={visibleSeries}

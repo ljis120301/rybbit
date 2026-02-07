@@ -41,7 +41,7 @@ type EventSeries = {
 
 export function CustomEventsChart({ eventLimit }: { eventLimit: number }) {
   const { bucket } = useStore();
-  const { data, isLoading, isFetching } = useGetEventBucketed({ limit: eventLimit });
+  const { data, isLoading } = useGetEventBucketed({ limit: eventLimit });
   const { width } = useWindowSize();
   const nivoTheme = useNivoTheme();
   const timezone = getTimezone();
@@ -134,8 +134,8 @@ export function CustomEventsChart({ eventLimit }: { eventLimit: number }) {
 
   return (
     <>
-      {isFetching && (
-        <div className="absolute top-[-42px] left-0 w-full h-full">
+      {isLoading && (
+        <div className="absolute top-[-54px] left-0 w-full h-full">
           <CardLoader />
         </div>
       )}
