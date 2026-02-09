@@ -43,7 +43,7 @@ export function useGetUserTraitValues(key: string | null) {
 
 export function useGetUserTraitValueUsers(key: string | null, value: string | null) {
   const { site } = useStore();
-  const limit = 50;
+  const limit = 250;
 
   return useInfiniteQuery<TraitValueUsersResponse>({
     queryKey: ["user-trait-value-users", site, key, value],

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
+import { Input } from "../../../../components/ui/input";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useGetUserTraitValueUsers } from "../../../../api/analytics/hooks/useGetUserTraits";
@@ -25,6 +26,7 @@ export function TraitValueUsersList({
   value: string;
   userCount: number;
 }) {
+  const [searchTerm, setSearchTerm] = useState("");
   const { site } = useParams();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetUserTraitValueUsers(traitKey, value);
@@ -39,6 +41,14 @@ export function TraitValueUsersList({
     if (!data) return [];
     return data.pages.flatMap((page) => page.users);
   }, [data]);
+
+  const filteredUsers = useMemo(() => {
+    if (!searchTerm) return flattenedUsers;
+    const lower = searchTerm.toLowerCase();
+    return flattenedUsers.filter((user) =>
+      getUserDisplayName(user).toLowerCase().includes(lower)
+    );
+  }, [flattenedUsers, searchTerm]);
 
   useEffect(() => {
     if (
@@ -96,7 +106,20 @@ export function TraitValueUsersList({
 
   return (
     <div className="border-l border-neutral-150 dark:border-neutral-750 ml-[19px]">
-      {flattenedUsers.map((user, index) => {
+      {flattenedUsers.length > 5 && (
+        <div className="px-3 py-1.5">
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+            <Input
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="h-7 pl-7 text-xs"
+            />
+          </div>
+        </div>
+      )}
+      {filteredUsers.map((user, index) => {
         const isIdentified = !!user.identified_user_id;
         const linkId = isIdentified ? user.identified_user_id : user.user_id;
         const encodedLinkId = encodeURIComponent(linkId);

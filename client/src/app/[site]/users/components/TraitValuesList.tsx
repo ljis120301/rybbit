@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { ChevronRight, Loader2, Search } from "lucide-react";
+import { Input } from "../../../../components/ui/input";
 import { useGetUserTraitValues } from "../../../../api/analytics/hooks/useGetUserTraits";
 import { TraitValueUsersList } from "./TraitValueUsersList";
 
@@ -41,6 +42,7 @@ function TraitValueRow({
 }
 
 export function TraitValuesList({ traitKey }: { traitKey: string }) {
+  const [searchTerm, setSearchTerm] = useState("");
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetUserTraitValues(traitKey);
 
@@ -54,6 +56,14 @@ export function TraitValuesList({ traitKey }: { traitKey: string }) {
     if (!data) return [];
     return data.pages.flatMap((page) => page.values);
   }, [data]);
+
+  const filteredValues = useMemo(() => {
+    if (!searchTerm) return flattenedValues;
+    const lower = searchTerm.toLowerCase();
+    return flattenedValues.filter((item) =>
+      item.value.toLowerCase().includes(lower)
+    );
+  }, [flattenedValues, searchTerm]);
 
   useEffect(() => {
     if (
@@ -96,7 +106,20 @@ export function TraitValuesList({ traitKey }: { traitKey: string }) {
 
   return (
     <div className="border-l border-neutral-150 dark:border-neutral-750 ml-[23px]">
-      {flattenedValues.map((item, index) => (
+      {flattenedValues.length > 5 && (
+        <div className="px-3 py-1.5">
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+            <Input
+              placeholder="Search values..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="h-7 pl-7 text-xs"
+            />
+          </div>
+        </div>
+      )}
+      {filteredValues.map((item, index) => (
         <TraitValueRow
           key={`${item.value}-${index}`}
           traitKey={traitKey}
