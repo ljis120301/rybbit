@@ -150,7 +150,7 @@ export function PricingCards({ isLoggedIn }: { isLoggedIn: boolean }) {
                 </button>
               </div>
               <span className="absolute -top-3 -right-12 text-xs text-white bg-emerald-500 border border-emerald-500 rounded-full px-2 py-0.5 whitespace-nowrap">
-                2 months free
+                4 months free
               </span>
             </div>
           </div>

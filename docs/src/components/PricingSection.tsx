@@ -98,8 +98,8 @@ function getFormattedPrice(eventLimit: number | string, planType: "standard" | "
     else return { custom: true };
   }
 
-  // Annual prices are 10x monthly (2 months free)
-  const annualPrice = monthlyPrice * 10;
+  // Annual prices are 8 monthly (4 months free)
+  const annualPrice = monthlyPrice * 8;
   return {
     monthly: monthlyPrice,
     annual: annualPrice,
@@ -174,7 +174,7 @@ export function PricingSection({ isAnnual, setIsAnnual }: { isAnnual: boolean, s
                   Annual
                 </button>
                 <div className="text-xs text-white absolute top-0 right-0 -translate-y-3 translate-x-1/2 bg-emerald-500 dark:bg-emerald-500 rounded-full px-2 py-0.5">
-                  2 months free
+                  4 months free
                 </div>
               </div>
             </div>

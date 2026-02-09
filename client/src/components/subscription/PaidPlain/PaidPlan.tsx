@@ -148,7 +148,7 @@ export function PaidPlan() {
                 </p>
                 {isAnnualPlan && (
                   <div className="mt-2 text-sm text-emerald-400">
-                    <p>You save by paying annually (2 months free)</p>
+                    <p>You save by paying annually (4 months free)</p>
                   </div>
                 )}
                 <p className="text-neutral-400 text-sm">{formatRenewalDate()}</p>

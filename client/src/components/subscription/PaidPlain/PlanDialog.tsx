@@ -1,13 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/sonner";
 import { authClient } from "@/lib/auth";
 import { BACKEND_URL } from "@/lib/const";
 import { getStripePrices, STRIPE_TIERS } from "@/lib/stripe";
 import { usePreviewSubscriptionUpdate, useUpdateSubscription } from "@/lib/subscription/useSubscriptionMutations";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { toast } from "@/components/ui/sonner";
-import { Badge } from "../../ui/badge";
 import { PlanChangePreviewDialog } from "./PlanChangePreviewDialog";
 
 interface PlanDialogProps {
@@ -161,7 +159,7 @@ export function PlanDialog({ open, onOpenChange, currentPlanName, hasActiveSubsc
                 )}
               >
                 Annual
-                <span className="ml-1 text-xs text-emerald-500">-17%</span>
+                <span className="ml-1 text-xs text-emerald-500">-33%</span>
               </button>
             </div>
           </div>
@@ -191,7 +189,7 @@ export function PlanDialog({ open, onOpenChange, currentPlanName, hasActiveSubsc
                           "flex flex-col gap-2 justify-between p-3 rounded-lg border cursor-pointer",
                           isCurrent
                             ? "bg-emerald-500/10 border-emerald-500"
-                            : "bg-neutral-100 dark:bg-neutral-800/20 border-neutral-300 dark:border-neutral-700/50 hover:bg-neutral-200 dark:hover:bg-neutral-800/30",
+                            : "bg-neutral-50 dark:bg-neutral-800/20 border-neutral-100 dark:border-neutral-700/50 hover:bg-neutral-200 dark:hover:bg-neutral-800/30",
                           isLoading && "opacity-50"
                         )}
                         onClick={() => handlePlanSelection(plan.priceId, plan.name)}
