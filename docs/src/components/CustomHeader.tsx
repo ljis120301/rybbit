@@ -22,9 +22,9 @@ export function CustomHeader() {
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image
-              src="/rybbit-text.svg"
+              src="/rybbit1.svg"
               alt="Rybbit"
-              width={80}
+              width={120}
               height={0}
               style={{ height: "auto" }}
               className="dark:invert-0 invert"

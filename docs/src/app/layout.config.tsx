@@ -13,9 +13,9 @@ export const baseOptions: BaseLayoutProps = {
     title: (
       <>
         <Image
-          src="/rybbit-text.svg"
+          src="/rybbit1.svg"
           alt="Rybbit"
-          width={90}
+          width={120}
           height={0}
           style={{ height: "auto" }}
           className="mr-2 invert dark:invert-0"
