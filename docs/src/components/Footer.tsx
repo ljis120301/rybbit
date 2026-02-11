@@ -186,6 +186,11 @@ export function Footer() {
                   OSS Friends
                 </Link>
               </li>
+              <li>
+                <Link href="/affiliate" className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  50% Affiliate Program
+                </Link>
+              </li>
             </ul>
           </div>
 

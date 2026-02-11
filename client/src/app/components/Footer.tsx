@@ -119,6 +119,14 @@ export function Footer() {
                   API Reference
                 </a>
               </li>
+              <li>
+                <a
+                  href="https://rybbit.com/affiliate"
+                  className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
+                >
+                  50% Affiliate Program
+                </a>
+              </li>
             </ul>
           </div>
 
