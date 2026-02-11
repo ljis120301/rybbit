@@ -78,9 +78,9 @@ export function MainSection() {
               {!isWhiteLabel && (
                 <Link
                   href={session.data ? "/" : "https://rybbit.com"}
-                  className={cn("text-lg font-semibold flex items-center gap-1.5 opacity-75", tilt_wrap.className)}
+                  className={cn("text-lg font-semibold flex items-center gap-1 opacity-75", tilt_wrap.className)}
                 >
-                  <RybbitLogo width={20} height={20} />
+                  <RybbitLogo width={24} height={24} />
                   rybbit
                 </Link>
               )}

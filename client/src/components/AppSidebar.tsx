@@ -1,18 +1,18 @@
 "use client";
 
-import { BarChart, BookOpen, Building2, HomeIcon, LogOut, Settings, ShieldUser, User, HelpCircle, Lightbulb } from "lucide-react";
+import { BookOpen, Building2, HelpCircle, LogOut, Settings, ShieldUser, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useState } from "react";
 import { useEmbedablePage } from "../app/[site]/utils";
 import { useAdminPermission } from "../app/admin/hooks/useAdminPermission";
+import { useSignout } from "../hooks/useSignout";
+import { authClient } from "../lib/auth";
 import { IS_CLOUD } from "../lib/const";
+import { useStripeSubscription } from "../lib/subscription/useStripeSubscription";
 import { cn } from "../lib/utils";
 import { RybbitLogo } from "./RybbitLogo";
 import { ThemeSwitcher } from "./ThemeSwitcher";
-import { authClient } from "../lib/auth";
-import { useSignout } from "../hooks/useSignout";
-import { useStripeSubscription } from "../lib/subscription/useStripeSubscription";
 
 function AdminLink({ isExpanded }: { isExpanded: boolean }) {
   const pathname = usePathname();
@@ -51,18 +51,9 @@ function AppSidebarContent() {
       onMouseLeave={() => setIsExpanded(false)}
     >
       <div className="flex flex-col items-start gap-2">
-        {/* <Link href="/" className="mb-3 mt-1 ml-0.5 flex items-center justify-center">
+        <Link href="/" className="mb-3 mt-1 ml-0.5 flex items-center justify-center">
           <RybbitLogo width={24} height={18} />
-          <HomeIcon className="w-5 h-5" />
-        </Link> */}
-        <SidebarLink
-          href="/"
-          icon={<HomeIcon className="w-5 h-5" />}
-          label="Home"
-          // active={!isNaN(Number(pathname.split("/")[1]))}
-          active={false}
-          expanded={isExpanded}
-        />
+        </Link>
         <SidebarLink
           href="https://rybbit.com/docs"
           icon={<BookOpen className="w-5 h-5" />}

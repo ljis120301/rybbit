@@ -133,7 +133,7 @@ export function ComparisonPage({ competitorName, sections, comparisonContent }: 
                     <div className="flex flex-col items-center gap-2">
                       <span className="font-semibold">
                         <Image
-                          src="/rybbit-text.svg"
+                          src="/rybbit1.svg"
                           alt="Rybbit"
                           width={100}
                           height={27}
