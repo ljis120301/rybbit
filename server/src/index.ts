@@ -221,7 +221,7 @@ server.register(
 
 // Serve analytics scripts with generic names to avoid ad-blocker detection
 server.get("/api/script.js", async (_, reply) => reply.sendFile("script.js"));
-server.get("/api/ad.js", async (_, reply) => reply.sendFile("ad.js"));
+server.get("/api/frog.js", async (_, reply) => reply.sendFile("frog.js"));
 server.get("/api/replay.js", async (_, reply) => reply.sendFile("rrweb.min.js"));
 server.get("/api/metrics.js", async (_, reply) => reply.sendFile("web-vitals.iife.js"));
 
