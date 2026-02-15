@@ -15,9 +15,7 @@ export function Footer() {
   return (
     <footer className="border-t border-neutral-200 dark:border-neutral-850 bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-[1100px] mx-auto px-4 py-12">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-          {/* Company Info */}
           <div className="space-y-4">
             <Image src="/rybbit-text.svg" alt="Rybbit" width={120} height={27} className="dark:invert-0 invert" />
             {!IS_CLOUD && (
@@ -33,7 +31,6 @@ export function Footer() {
                 </a>
               </div>
             )}
-            {/* Social Media Links */}
             <div className="flex gap-4">
               <a
                 href="https://github.com/rybbit-io/rybbit"
@@ -70,8 +67,6 @@ export function Footer() {
               </a>
             </div>
           </div>
-
-          {/* Resources */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">Resources</h3>
             <ul className="space-y-2 text-sm">

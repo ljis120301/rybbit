@@ -8,6 +8,7 @@ import {
   Gauge,
   Globe2,
   LayoutDashboard,
+  Megaphone,
   MousePointerClick,
   Rewind,
   Settings,
@@ -75,7 +76,7 @@ function SidebarContent() {
           label="Ads"
           active={isActiveTab("ads")}
           href={getTabPath("ads")}
-          icon={<LayoutDashboard className="w-4 h-4" />}
+          icon={<Megaphone className="w-4 h-4" />}
         />
         <SidebarComponents.Item
           label="Main"
